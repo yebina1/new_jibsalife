@@ -1,0 +1,1848 @@
+.health_camera_page {
+  position: relative;
+  display: grid;
+  min-height: calc(100dvh - var(--layout-status-bar-height, 0px));
+  grid-template-rows: 108px minmax(0, 1fr) 242px;
+  gap: 0;
+  align-items: stretch;
+  justify-content: stretch;
+  padding: 0;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.health_camera_period_inline {
+  gap: 14px;
+}
+
+.health_camera_period_editor {
+  display: grid;
+  gap: 12px;
+  padding: 4px 0 0;
+}
+
+.health_camera_period_field {
+  display: grid;
+  gap: 8px;
+}
+
+.health_camera_period_field span {
+  color: #767676;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.health_camera_period_field input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid #e5e5ec;
+  border-radius: 14px;
+  background: #ffffff;
+  color: #111111;
+  font-size: 16px;
+  font-weight: 600;
+  box-sizing: border-box;
+}
+
+.health_camera_page_guide {
+  display: flex;
+  height: auto;
+  min-height: calc(100dvh - var(--layout-header-height, 97px) - var(--layout-footer-height, 90px));
+  grid-template-rows: none;
+  overflow: auto;
+  background: #ffffff;
+}
+
+.health_camera_notification {
+  position: relative;
+}
+
+.health_camera_notification::after {
+  position: absolute;
+  top: 3px;
+  right: 2px;
+  display: none;
+  width: 7px;
+  height: 7px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  background: #ff3b30;
+  content: '';
+}
+
+.health_camera_notification.is_active::after {
+  display: block;
+}
+
+.health_camera_guide {
+  display: grid;
+  width: 100%;
+  min-height: 100%;
+  align-content: stretch;
+  grid-template-rows: auto 1fr auto;
+  padding: clamp(12px, 2dvh, 24px) 22px max(14px, env(safe-area-inset-bottom));
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.health_camera_guide_copy {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 900px);
+  justify-self: center;
+  box-sizing: border-box;
+  margin-top: 0;
+  padding: 0;
+}
+
+.health_camera_guide_copy_top {
+  display: block;
+  min-height: 28px;
+  margin-bottom: 8px;
+  padding-right: 74px;
+}
+
+.health_camera_guide_copy p {
+  min-width: 0;
+  margin: 0;
+  color: #9a7cf2;
+  font-size: clamp(15px, 2.6vw, 24px);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+}
+
+.health_camera_guide_copy h1 {
+  margin: 0;
+  color: #12132f;
+  font-size: clamp(26px, 4.4vw, 40px);
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.055em;
+  white-space: normal;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.health_camera_guide_copy h1 span {
+  color: #8c63e7;
+}
+
+.health_camera_guide_panel {
+  display: grid;
+  width: min(100%, 900px);
+  grid-template-columns: 1fr;
+  gap: 0;
+  align-items: stretch;
+  justify-self: center;
+  margin-top: 14px;
+  padding: 14px 18px;
+  border-radius: 24px;
+  background: linear-gradient(90deg, rgb(153 114 245 / 10%), rgb(153 114 245 / 4%));
+  box-sizing: border-box;
+}
+
+.health_camera_page_guide_photo .health_camera_guide_panel {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: 20px;
+  padding: 18px;
+  background: transparent;
+}
+
+.health_camera_example {
+  position: relative;
+  min-height: clamp(220px, 34dvh, 300px);
+  overflow: hidden;
+  border-radius: 22px;
+  background: linear-gradient(135deg, rgb(153 114 245 / 9%), rgb(153 114 245 / 3%));
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.health_camera_example span {
+  position: absolute;
+  top: 26px;
+  left: 26px;
+  z-index: 1;
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  padding: 0 18px;
+  border-radius: 12px;
+  background: #a77cf1;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.health_camera_example img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: clamp(180px, 28dvh, 256px);
+  border-radius: 16px;
+  object-fit: cover;
+}
+
+.health_camera_page_guide_photo .health_camera_guide_list {
+  align-content: center;
+}
+
+.health_camera_page_guide_photo .health_camera_guide_item {
+  grid-template-columns: 82px minmax(0, 1fr);
+  gap: 22px;
+  padding: 24px 0;
+}
+
+.health_camera_page_guide_photo .health_camera_guide_card_icon {
+  width: 66px;
+  height: 66px;
+  border: 0;
+  background: rgb(140 99 231 / 10%);
+}
+
+.health_camera_page_guide_photo .health_camera_guide_card_icon svg {
+  width: 42px;
+  height: 42px;
+  stroke-width: 3;
+}
+
+.health_camera_page_guide_photo .health_camera_guide_item h2 {
+  margin-bottom: 8px;
+  font-size: clamp(20px, 2.6vw, 28px);
+}
+
+.health_camera_page_guide_photo .health_camera_guide_item p {
+  font-size: clamp(15px, 2vw, 20px);
+}
+
+.health_camera_page_guide_audio .health_camera_guide_panel {
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 20px;
+  padding: 18px;
+  background: transparent;
+}
+
+.health_camera_audio_visual {
+  position: relative;
+  display: grid;
+  min-height: clamp(220px, 34dvh, 300px);
+  place-items: center;
+  overflow: hidden;
+  border-radius: 22px;
+  background: linear-gradient(135deg, rgb(153 114 245 / 9%), rgb(153 114 245 / 3%));
+}
+
+.health_camera_audio_bubble {
+  position: absolute;
+  top: 44px;
+  left: 50%;
+  z-index: 2;
+  min-width: min(72%, 320px);
+  padding: 18px 28px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #12132f;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.2;
+  text-align: center;
+  box-shadow: 0 10px 26px rgb(31 32 62 / 10%);
+  transform: translateX(-50%);
+}
+
+.health_camera_audio_bubble::after {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  width: 34px;
+  height: 34px;
+  background: #ffffff;
+  content: '';
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.health_camera_audio_wave {
+  position: absolute;
+  right: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  color: #8c63e7;
+}
+
+.health_camera_audio_wave span {
+  width: 5px;
+  height: var(--wave-h);
+  border-radius: 999px;
+  background: currentColor;
+  opacity: var(--wave-op);
+}
+
+.health_camera_audio_meter {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: 128px;
+  height: 128px;
+  place-items: center;
+  align-content: center;
+  gap: 8px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #8c63e7;
+  box-shadow: 0 12px 28px rgb(31 32 62 / 10%);
+}
+
+.health_camera_audio_meter svg {
+  width: 46px;
+  height: 46px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.health_camera_audio_meter strong {
+  color: #8c63e7;
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.health_camera_audio_recording {
+  position: absolute;
+  bottom: 34px;
+  left: 50%;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: rgb(140 99 231 / 10%);
+  color: #8c63e7;
+  font-size: 17px;
+  font-weight: 800;
+  transform: translateX(-50%);
+}
+
+.health_camera_audio_recording span {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.health_camera_page_guide_audio .health_camera_guide_list {
+  align-content: center;
+}
+
+.health_camera_page_guide_audio .health_camera_guide_item {
+  grid-template-columns: 82px minmax(0, 1fr);
+  gap: 22px;
+  padding: 24px 0;
+}
+
+.health_camera_page_guide_audio .health_camera_guide_card_icon {
+  width: 66px;
+  height: 66px;
+  border: 0;
+  background: rgb(140 99 231 / 10%);
+}
+
+.health_camera_page_guide_audio .health_camera_guide_card_icon svg {
+  width: 42px;
+  height: 42px;
+  stroke-width: 3;
+}
+
+.health_camera_page_guide_audio .health_camera_guide_item h2 {
+  margin-bottom: 8px;
+  font-size: clamp(20px, 2.6vw, 28px);
+}
+
+.health_camera_page_guide_audio .health_camera_guide_item p {
+  font-size: clamp(15px, 2vw, 20px);
+}
+
+.health_camera_page_guide_memo .health_camera_guide_panel {
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.9fr);
+  gap: 22px;
+  padding: 18px;
+  background: transparent;
+}
+
+.health_camera_memo_example {
+  display: grid;
+  gap: 14px;
+  min-height: 100%;
+  padding: 24px 24px 20px;
+  border-radius: 26px;
+  background:
+    radial-gradient(circle at top center, rgb(255 255 255 / 72%), transparent 58%),
+    linear-gradient(135deg, rgb(153 114 245 / 12%), rgb(153 114 245 / 5%));
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 65%);
+  box-sizing: border-box;
+}
+
+.health_camera_memo_example_label {
+  color: #8c63e7;
+  font-size: clamp(22px, 2.5vw, 30px);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.04em;
+}
+
+.health_camera_memo_example_cards {
+  display: grid;
+  gap: 14px;
+}
+
+.health_camera_memo_example_card {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: 22px;
+  align-items: center;
+  min-height: 108px;
+  padding: 18px 20px;
+  border-radius: 24px;
+  background: rgb(255 255 255 / 92%);
+  box-shadow: 0 12px 28px rgb(55 44 97 / 8%);
+  box-sizing: border-box;
+}
+
+.health_camera_memo_example_icon {
+  display: grid;
+  width: 84px;
+  height: 84px;
+  place-items: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgb(140 99 231 / 18%), rgb(140 99 231 / 10%));
+  color: #8c63e7;
+}
+
+.health_camera_memo_example_icon svg {
+  width: 54px;
+  height: 54px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.health_camera_guide_asset_icon {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  color: currentColor;
+  line-height: 0;
+  flex: 0 0 auto;
+}
+
+.health_camera_guide_asset_icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.health_camera_guide_asset_icon svg [stroke] {
+  stroke: currentColor !important;
+}
+
+.health_camera_guide_asset_icon svg [fill]:not([fill='none']) {
+  fill: currentColor !important;
+}
+
+.health_camera_guide_asset_icon_camera,
+.health_camera_guide_asset_icon_video,
+.health_camera_guide_asset_icon_note,
+.health_camera_guide_asset_icon_calendar {
+  transform: translate(-2.5px, -3px);
+}
+
+.health_camera_guide_asset_icon_camera {
+  transform: translate(-2.5px, -4.5px);
+}
+
+.health_camera_guide_asset_icon_video {
+  transform: translate(-3px, -3px);
+}
+
+.health_camera_guide_asset_icon_chat {
+  transform: translate(-2.5px, -2px);
+  transform-origin: center;
+}
+
+.health_camera_memo_example_card h2 {
+  margin: 0 0 10px;
+  color: #12132f;
+  font-size: clamp(22px, 2.8vw, 34px);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.05em;
+}
+
+.health_camera_memo_example_card p {
+  margin: 0;
+  color: #60647b;
+  font-size: clamp(17px, 1.8vw, 22px);
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.03em;
+}
+
+.health_camera_page_guide_memo .health_camera_guide_list {
+  align-content: stretch;
+}
+
+.health_camera_page_guide_memo .health_camera_guide_item {
+  grid-template-columns: 104px minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+  padding: 30px 0;
+}
+
+.health_camera_page_guide_memo .health_camera_guide_card_icon {
+  width: 92px;
+  height: 92px;
+  border: 0;
+  background: linear-gradient(135deg, rgb(140 99 231 / 12%), rgb(140 99 231 / 6%));
+}
+
+.health_camera_page_guide_memo .health_camera_guide_card_icon svg {
+  width: 50px;
+  height: 50px;
+  stroke-width: 2.8;
+}
+
+.health_camera_page_guide_memo .health_camera_guide_item h2 {
+  margin-bottom: 10px;
+  font-size: clamp(24px, 3vw, 38px);
+  line-height: 1.2;
+}
+
+.health_camera_page_guide_memo .health_camera_guide_item p {
+  font-size: clamp(17px, 2vw, 24px);
+  line-height: 1.45;
+}
+
+.health_camera_page_guide_photo .health_camera_guide_panel,
+.health_camera_page_guide_audio .health_camera_guide_panel,
+.health_camera_page_guide_video .health_camera_guide_panel,
+.health_camera_page_guide_memo .health_camera_guide_panel {
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  gap: 20px;
+  padding: 18px;
+  background: transparent;
+}
+
+.health_camera_page_guide_photo .health_camera_guide_list,
+.health_camera_page_guide_audio .health_camera_guide_list,
+.health_camera_page_guide_video .health_camera_guide_list,
+.health_camera_page_guide_memo .health_camera_guide_list {
+  align-content: center;
+}
+
+.health_camera_page_guide_photo .health_camera_guide_item,
+.health_camera_page_guide_audio .health_camera_guide_item,
+.health_camera_page_guide_video .health_camera_guide_item,
+.health_camera_page_guide_memo .health_camera_guide_item {
+  grid-template-columns: 82px minmax(0, 1fr);
+  gap: 18px;
+  align-items: center;
+  padding: 18px 0;
+}
+
+.health_camera_page_guide_photo .health_camera_guide_card_icon,
+.health_camera_page_guide_audio .health_camera_guide_card_icon,
+.health_camera_page_guide_video .health_camera_guide_card_icon,
+.health_camera_page_guide_memo .health_camera_guide_card_icon {
+  width: 66px;
+  height: 66px;
+  border: 0;
+  background: rgb(140 99 231 / 10%);
+}
+
+.health_camera_page_guide_photo .health_camera_guide_card_icon svg,
+.health_camera_page_guide_audio .health_camera_guide_card_icon svg,
+.health_camera_page_guide_video .health_camera_guide_card_icon svg,
+.health_camera_page_guide_memo .health_camera_guide_card_icon svg {
+  width: 42px;
+  height: 42px;
+  stroke-width: 3;
+}
+
+.health_camera_page_guide_photo .health_camera_guide_card_icon .health_camera_guide_asset_icon,
+.health_camera_page_guide_audio .health_camera_guide_card_icon .health_camera_guide_asset_icon,
+.health_camera_page_guide_video .health_camera_guide_card_icon .health_camera_guide_asset_icon,
+.health_camera_page_guide_memo .health_camera_guide_card_icon .health_camera_guide_asset_icon {
+  width: 32px;
+  height: 32px;
+}
+
+.health_camera_page_guide_photo .health_camera_guide_card_icon .health_camera_guide_asset_icon_chat,
+.health_camera_page_guide_audio .health_camera_guide_card_icon .health_camera_guide_asset_icon_chat,
+.health_camera_page_guide_video .health_camera_guide_card_icon .health_camera_guide_asset_icon_chat,
+.health_camera_page_guide_memo .health_camera_guide_card_icon .health_camera_guide_asset_icon_chat {
+  width: 30px;
+  height: 30px;
+}
+
+.health_camera_page_guide_photo .health_camera_guide_item h2,
+.health_camera_page_guide_audio .health_camera_guide_item h2,
+.health_camera_page_guide_video .health_camera_guide_item h2,
+.health_camera_page_guide_memo .health_camera_guide_item h2 {
+  margin-bottom: 8px;
+  font-size: clamp(20px, 2.6vw, 28px);
+  line-height: 1.25;
+}
+
+.health_camera_page_guide_photo .health_camera_guide_item p,
+.health_camera_page_guide_audio .health_camera_guide_item p,
+.health_camera_page_guide_video .health_camera_guide_item p,
+.health_camera_page_guide_memo .health_camera_guide_item p {
+  font-size: clamp(15px, 2vw, 20px);
+  line-height: 1.4;
+}
+
+.health_camera_video_visual {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  padding: 20px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, rgb(153 114 245 / 9%), rgb(153 114 245 / 3%));
+  box-sizing: border-box;
+}
+
+.health_camera_video_preview {
+  position: relative;
+  min-height: clamp(220px, 34dvh, 300px);
+  overflow: hidden;
+  border-radius: 16px;
+  background: transparent;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.health_camera_video_preview img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: clamp(180px, 28dvh, 256px);
+  border-radius: 16px;
+  object-fit: cover;
+  filter: saturate(0.92) contrast(0.92);
+}
+
+.health_camera_video_preview span {
+  position: absolute;
+  top: 26px;
+  left: 26px;
+  z-index: 1;
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  padding: 0 18px;
+  border-radius: 12px;
+  background: #a77cf1;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.health_camera_video_overlay {
+  position: absolute;
+  inset: 0;
+  color: #ffffff;
+}
+
+.health_camera_video_rec,
+.health_camera_video_timer,
+.health_camera_video_battery {
+  position: absolute;
+  top: 22px;
+  z-index: 1;
+}
+
+.health_camera_video_rec {
+  left: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.health_camera_video_rec i {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #ff6b6b;
+}
+
+.health_camera_video_timer {
+  left: 50%;
+  padding: 9px 22px;
+  border-radius: 999px;
+  background: rgb(20 22 39 / 40%);
+  font-size: 22px;
+  font-weight: 800;
+  transform: translateX(-50%);
+}
+
+.health_camera_video_battery {
+  top: 28px;
+  right: 28px;
+  width: 32px;
+  height: 18px;
+  border: 3px solid #ffffff;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.health_camera_video_battery::after {
+  position: absolute;
+  top: 4px;
+  right: -6px;
+  width: 4px;
+  height: 8px;
+  border-radius: 1px;
+  background: #ffffff;
+  content: '';
+}
+
+.health_camera_video_battery i {
+  position: absolute;
+  inset: 3px 8px 3px 3px;
+  border-radius: 1px;
+  background: #ffffff;
+}
+
+.health_camera_video_focus {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-color: #8c63e7;
+  border-style: solid;
+  border-width: 0;
+}
+
+.health_camera_video_focus_top_left {
+  top: 104px;
+  left: 30%;
+  border-top-width: 5px;
+  border-left-width: 5px;
+  border-top-left-radius: 10px;
+}
+
+.health_camera_video_focus_top_right {
+  top: 104px;
+  right: 30%;
+  border-top-width: 5px;
+  border-right-width: 5px;
+  border-top-right-radius: 10px;
+}
+
+.health_camera_video_focus_bottom_left {
+  bottom: 106px;
+  left: 30%;
+  border-bottom-width: 5px;
+  border-left-width: 5px;
+  border-bottom-left-radius: 10px;
+}
+
+.health_camera_video_focus_bottom_right {
+  right: 30%;
+  bottom: 106px;
+  border-right-width: 5px;
+  border-bottom-width: 5px;
+  border-bottom-right-radius: 10px;
+}
+
+.health_camera_video_crosshair {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 42px;
+  height: 42px;
+  transform: translate(-50%, -50%);
+}
+
+.health_camera_video_crosshair::before,
+.health_camera_video_crosshair::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: #ffffff;
+  content: '';
+  transform: translate(-50%, -50%);
+}
+
+.health_camera_video_crosshair::before {
+  width: 42px;
+  height: 5px;
+  border-radius: 999px;
+}
+
+.health_camera_video_crosshair::after {
+  width: 5px;
+  height: 42px;
+  border-radius: 999px;
+}
+
+.health_camera_video_badge {
+  position: absolute;
+  bottom: 26px;
+  left: 50%;
+  padding: 13px 22px;
+  border-radius: 18px;
+  background: #8c63e7;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1;
+  transform: translateX(-50%);
+}
+
+.health_camera_video_notice {
+  display: grid;
+  grid-template-columns: max-content max-content;
+  align-items: center;
+  justify-content: center;
+  column-gap: 12px;
+  min-height: 32px;
+  width: 100%;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #8c63e7;
+  box-sizing: border-box;
+}
+
+.health_camera_video_notice svg {
+  width: 24px;
+  height: 24px;
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.8;
+}
+
+.health_camera_video_notice strong {
+  display: flex;
+  align-items: center;
+  font-size: clamp(16px, 1.8vw, 20px);
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: -0.03em;
+  color: #8c63e7;
+}
+
+.health_camera_guide_list {
+  display: grid;
+}
+
+.health_camera_guide_item {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr);
+  gap: 16px;
+  align-items: center;
+  padding: 14px 0;
+}
+
+.health_camera_guide_item + .health_camera_guide_item {
+  border-top: 1px solid rgb(140 99 231 / 18%);
+}
+
+.health_camera_guide_card_icon {
+  display: grid;
+  width: 62px;
+  height: 62px;
+  place-items: center;
+  border: 3px solid #8c63e7;
+  border-radius: 50%;
+  color: #8c63e7;
+}
+
+.health_camera_guide_card_icon svg {
+  width: 40px;
+  height: 40px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.health_camera_guide_item h2 {
+  margin: 0 0 6px;
+  color: #17172f;
+  font-size: clamp(19px, 2.5vw, 28px);
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.04em;
+  word-break: keep-all;
+}
+
+.health_camera_guide_item p {
+  margin: 0;
+  color: #4c4c60;
+  font-size: clamp(14px, 1.8vw, 19px);
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: -0.025em;
+  word-break: keep-all;
+}
+
+.health_camera_guide_skip {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: max-content;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #767676;
+  font-size: clamp(15px, 2.6vw, 24px);
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+  white-space: nowrap;
+  word-break: keep-all;
+  cursor: pointer;
+  transition: color 180ms ease, transform 180ms ease;
+}
+
+.health_camera_guide_skip:hover,
+.health_camera_guide_skip:focus-visible {
+  color: #8c63e7;
+  transform: translateY(-1px);
+}
+
+.health_camera_topbar {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 18px 20px 16px;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+.health_camera_tool_group {
+  display: inline-flex;
+  justify-self: end;
+  align-items: center;
+  gap: 12px;
+}
+
+.health_camera_icon_button {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: #111111;
+}
+
+.health_camera_back {
+  justify-self: start;
+}
+
+.health_camera_back .chevron_icon {
+  color: currentColor;
+}
+
+.health_camera_caret {
+  background: #f2f2f4;
+  color: #4c4c4c;
+}
+
+.health_camera_caret span {
+  width: 9px;
+  height: 9px;
+  border-top: 2px solid currentColor;
+  border-left: 2px solid currentColor;
+  transform: translateY(2px) rotate(45deg);
+}
+
+.health_camera_raw {
+  width: auto;
+  padding: 0 10px;
+  border: 1px solid #e9e9ef;
+  background: #ffffff;
+  color: #111111;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+
+.health_camera_exposure {
+  position: relative;
+}
+
+.health_camera_exposure::before,
+.health_camera_exposure::after,
+.health_camera_exposure span,
+.health_camera_exposure span::before,
+.health_camera_exposure span::after {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 3px;
+  height: 9px;
+  border-radius: 999px;
+  background: #111111;
+  content: '';
+  transform-origin: 50% 13px;
+}
+
+.health_camera_exposure::before {
+  transform: translate(-50%, -13px) rotate(0deg);
+}
+
+.health_camera_exposure::after {
+  transform: translate(-50%, -13px) rotate(45deg);
+}
+
+.health_camera_exposure span {
+  transform: translate(-50%, -13px) rotate(90deg);
+}
+
+.health_camera_exposure span::before {
+  transform: translate(-50%, -13px) rotate(135deg);
+}
+
+.health_camera_exposure span::after {
+  transform: translate(-50%, -13px) rotate(180deg);
+}
+
+.health_camera_view {
+  position: relative;
+  width: 100%;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 0;
+  background: #000000;
+}
+
+.health_camera_view::after {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: rgb(0 0 0 / 22%);
+  content: '';
+}
+
+.health_camera_view video,
+.health_camera_placeholder {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.health_camera_view video {
+  transform: scale(var(--camera-zoom, 1));
+  transform-origin: center;
+}
+
+.health_camera_placeholder {
+  filter: saturate(0.92) contrast(0.92);
+}
+
+.health_camera_error {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+  text-shadow: 0 1px 12px rgb(0 0 0 / 50%);
+}
+
+.health_camera_actions {
+  position: relative;
+  z-index: 4;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  align-items: start;
+  justify-content: stretch;
+  gap: 18px;
+  padding: 18px 20px max(24px, env(safe-area-inset-bottom));
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+.health_camera_zoom {
+  position: relative;
+  z-index: 5;
+  display: inline-flex;
+  justify-self: center;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  border-radius: 999px;
+  background: transparent;
+  pointer-events: auto;
+}
+
+.health_camera_zoom button {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #4a4a4a;
+  color: #ffffff;
+  font-family: var(--app-font-family);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  pointer-events: auto;
+  touch-action: manipulation;
+}
+
+.health_camera_zoom button.is_active {
+  background: #c3b24a;
+  font-weight: 800;
+}
+
+.health_camera_modes {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  overflow: hidden;
+}
+
+.health_camera_modes button {
+  min-width: max-content;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #777777;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+.health_camera_modes button.is_active {
+  color: #111111;
+  font-weight: 800;
+}
+
+.health_camera_control_row {
+  display: grid;
+  grid-template-columns: 62px 1fr 62px;
+  align-items: center;
+  justify-items: center;
+}
+
+.health_camera_side_button {
+  position: relative;
+  display: grid;
+  width: 62px;
+  height: 62px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #adadad;
+  color: #ffffff;
+}
+
+.health_camera_side_button:disabled,
+.health_camera_side_button.is_disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.health_camera_album_input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.health_camera_gallery_icon {
+  position: relative;
+  width: 28px;
+  height: 20px;
+}
+
+.health_camera_gallery_icon::before,
+.health_camera_gallery_icon::after {
+  position: absolute;
+  bottom: 2px;
+  border-style: solid;
+  border-color: transparent transparent #ffffff transparent;
+  content: '';
+}
+
+.health_camera_gallery_icon::before {
+  left: 2px;
+  border-width: 0 8px 10px;
+}
+
+.health_camera_gallery_icon::after {
+  right: 1px;
+  border-width: 0 10px 14px;
+}
+
+.health_camera_switch_icon {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border: 2px solid #ffffff;
+  border-right-color: transparent;
+  border-radius: 50%;
+}
+
+.health_camera_switch_icon::before,
+.health_camera_switch_icon::after {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-color: #ffffff;
+  border-style: solid;
+  content: '';
+}
+
+.health_camera_switch_icon::before {
+  top: -2px;
+  right: 0;
+  border-width: 2px 2px 0 0;
+  transform: rotate(28deg);
+}
+
+.health_camera_switch_icon::after {
+  right: 3px;
+  bottom: -1px;
+  border-width: 0 0 2px 2px;
+  transform: rotate(28deg);
+}
+
+.health_camera_shutter {
+  display: grid;
+  width: 80px;
+  height: 80px;
+  place-items: center;
+  padding: 0;
+  border: 4px solid #ffffff;
+  border-radius: 50%;
+  background: #000000;
+  box-shadow: 0 0 0 4px #000000;
+}
+
+.health_camera_shutter_inner {
+  display: block;
+  width: 64px;
+  height: 64px;
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+}
+
+.health_camera_shutter_recording {
+  display: block;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: #ff4d4f;
+}
+
+@media (max-width: 420px) {
+  .health_camera_page {
+    padding: 16px var(--layout-inline-padding, 16px) 28px;
+  }
+
+  .health_camera_page_guide {
+    height: calc(
+      100dvh - var(--layout-header-height, 97px) - var(--layout-footer-height, 90px) -
+        var(--layout-content-padding-y, 48px)
+    );
+    min-height: 0;
+    padding: 0;
+    overflow: auto;
+  }
+
+  .health_camera_guide {
+    height: 100%;
+    min-height: 0;
+    grid-template-rows: auto minmax(0, 1fr);
+    padding: 12px 16px max(10px, env(safe-area-inset-bottom));
+    overflow: hidden;
+  }
+
+  .health_camera_guide_copy {
+    margin-top: 0;
+    padding: 0;
+  }
+
+  .health_camera_guide_copy p {
+    margin-bottom: 6px;
+  }
+
+  .health_camera_guide_copy h1 {
+    font-size: clamp(24px, 7vw, 30px);
+    line-height: 1.1;
+    letter-spacing: -0.06em;
+  }
+
+  .health_camera_guide_copy p,
+  .health_camera_guide_item p {
+    font-size: 12px;
+  }
+
+  .health_camera_guide_copy_top {
+    gap: 10px;
+    margin-bottom: 6px;
+    padding-right: 58px;
+  }
+
+  .health_camera_guide_panel {
+    grid-template-columns: 1fr;
+    gap: 0;
+    min-height: 0;
+    margin-top: 12px;
+    padding: 12px 14px;
+    border-radius: 18px;
+    overflow: hidden;
+  }
+
+  .health_camera_page_guide_photo .health_camera_guide_panel {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin-top: 12px;
+    padding: 0;
+    background: transparent;
+  }
+
+  .health_camera_example {
+    min-height: clamp(122px, 22dvh, 150px);
+    padding: 10px;
+    border-radius: 14px;
+  }
+
+  .health_camera_example span {
+    top: 10px;
+    left: 10px;
+    min-height: 28px;
+    padding: 0 10px;
+    font-size: 12px;
+  }
+
+  .health_camera_example img {
+    min-height: clamp(102px, 19dvh, 130px);
+    border-radius: 12px;
+  }
+
+  .health_camera_page_guide_photo .health_camera_guide_item {
+    min-height: 48px;
+    grid-template-columns: 38px minmax(0, 1fr);
+    gap: 10px;
+    padding: 6px 0;
+  }
+
+  .health_camera_page_guide_photo .health_camera_guide_card_icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .health_camera_page_guide_photo .health_camera_guide_card_icon svg {
+    width: 22px;
+    height: 22px;
+    stroke-width: 2.6;
+  }
+
+  .health_camera_page_guide_photo .health_camera_guide_item h2 {
+    margin-bottom: 2px;
+    font-size: 13px;
+  }
+
+  .health_camera_page_guide_photo .health_camera_guide_item p {
+    font-size: 11px;
+  }
+
+  .health_camera_page_guide_audio .health_camera_guide_panel {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 0;
+    background: transparent;
+  }
+
+  .health_camera_audio_visual {
+    min-height: clamp(122px, 22dvh, 150px);
+    border-radius: 14px;
+  }
+
+  .health_camera_audio_bubble {
+    top: 18px;
+    min-width: min(76%, 240px);
+    padding: 9px 14px;
+    font-size: 14px;
+  }
+
+  .health_camera_audio_bubble::after {
+    bottom: -13px;
+    width: 24px;
+    height: 24px;
+  }
+
+  .health_camera_audio_wave {
+    gap: 4px;
+  }
+
+  .health_camera_audio_wave span {
+    width: 3px;
+    height: var(--wave-h-sm);
+  }
+
+  .health_camera_audio_meter {
+    width: 70px;
+    height: 70px;
+    gap: 4px;
+  }
+
+  .health_camera_audio_meter svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .health_camera_audio_meter strong {
+    font-size: 13px;
+  }
+
+  .health_camera_audio_recording {
+    bottom: 14px;
+    gap: 7px;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .health_camera_audio_recording span {
+    width: 9px;
+    height: 9px;
+  }
+
+  .health_camera_page_guide_audio .health_camera_guide_item {
+    min-height: 48px;
+    grid-template-columns: 38px minmax(0, 1fr);
+    gap: 10px;
+    padding: 6px 0;
+  }
+
+  .health_camera_page_guide_audio .health_camera_guide_card_icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .health_camera_page_guide_audio .health_camera_guide_card_icon svg {
+    width: 22px;
+    height: 22px;
+    stroke-width: 2.6;
+  }
+
+  .health_camera_page_guide_audio .health_camera_guide_item h2 {
+    margin-bottom: 2px;
+    font-size: 13px;
+  }
+
+  .health_camera_page_guide_audio .health_camera_guide_item p {
+    font-size: 11px;
+  }
+
+  .health_camera_page_guide_memo .health_camera_guide_panel {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 0;
+    background: transparent;
+  }
+
+  .health_camera_memo_example {
+    gap: 8px;
+    padding: 12px;
+    border-radius: 14px;
+  }
+
+  .health_camera_memo_example_label {
+    font-size: 15px;
+  }
+
+  .health_camera_memo_example_cards {
+    gap: 8px;
+  }
+
+  .health_camera_memo_example_card {
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 10px;
+    min-height: 62px;
+    padding: 10px;
+    border-radius: 14px;
+  }
+
+  .health_camera_memo_example_icon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .health_camera_memo_example_icon svg {
+    width: 22px;
+    height: 22px;
+    stroke-width: 2.5;
+  }
+
+  .health_camera_memo_example_icon .health_camera_guide_asset_icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .health_camera_memo_example_card h2 {
+    margin-bottom: 2px;
+    font-size: 13px;
+  }
+
+  .health_camera_memo_example_card p {
+    font-size: 11px;
+  }
+
+  .health_camera_page_guide_memo .health_camera_guide_item {
+    min-height: 48px;
+    grid-template-columns: 38px minmax(0, 1fr);
+    gap: 10px;
+    padding: 6px 0;
+  }
+
+  .health_camera_page_guide_memo .health_camera_guide_card_icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .health_camera_page_guide_memo .health_camera_guide_card_icon svg {
+    width: 27px;
+    height: 27px;
+    stroke-width: 2.5;
+  }
+
+  .health_camera_page_guide_memo .health_camera_guide_item h2 {
+    margin-bottom: 2px;
+    font-size: 13px;
+  }
+
+  .health_camera_page_guide_memo .health_camera_guide_item p {
+    font-size: 11px;
+  }
+
+  .health_camera_page_guide_photo .health_camera_guide_panel,
+  .health_camera_page_guide_audio .health_camera_guide_panel,
+  .health_camera_page_guide_video .health_camera_guide_panel,
+  .health_camera_page_guide_memo .health_camera_guide_panel {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 0;
+    background: transparent;
+  }
+
+  .health_camera_page_guide_photo .health_camera_guide_item,
+  .health_camera_page_guide_audio .health_camera_guide_item,
+  .health_camera_page_guide_video .health_camera_guide_item,
+  .health_camera_page_guide_memo .health_camera_guide_item {
+    min-height: 48px;
+    grid-template-columns: 38px minmax(0, 1fr);
+    gap: 10px;
+    padding: 6px 0;
+  }
+
+  .health_camera_page_guide_photo .health_camera_guide_card_icon,
+  .health_camera_page_guide_audio .health_camera_guide_card_icon,
+  .health_camera_page_guide_video .health_camera_guide_card_icon,
+  .health_camera_page_guide_memo .health_camera_guide_card_icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .health_camera_page_guide_photo .health_camera_guide_card_icon svg,
+  .health_camera_page_guide_audio .health_camera_guide_card_icon svg,
+  .health_camera_page_guide_video .health_camera_guide_card_icon svg,
+  .health_camera_page_guide_memo .health_camera_guide_card_icon svg {
+    width: 22px;
+    height: 22px;
+    stroke-width: 2.6;
+  }
+
+  .health_camera_page_guide_photo .health_camera_guide_card_icon .health_camera_guide_asset_icon,
+  .health_camera_page_guide_audio .health_camera_guide_card_icon .health_camera_guide_asset_icon,
+  .health_camera_page_guide_video .health_camera_guide_card_icon .health_camera_guide_asset_icon,
+  .health_camera_page_guide_memo .health_camera_guide_card_icon .health_camera_guide_asset_icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .health_camera_page_guide_photo .health_camera_guide_item h2,
+  .health_camera_page_guide_audio .health_camera_guide_item h2,
+  .health_camera_page_guide_video .health_camera_guide_item h2,
+  .health_camera_page_guide_memo .health_camera_guide_item h2 {
+    margin-bottom: 2px;
+    font-size: 13px;
+  }
+
+  .health_camera_page_guide_photo .health_camera_guide_item p,
+  .health_camera_page_guide_audio .health_camera_guide_item p,
+  .health_camera_page_guide_video .health_camera_guide_item p,
+  .health_camera_page_guide_memo .health_camera_guide_item p {
+    font-size: 11px;
+  }
+
+  .health_camera_video_visual {
+    gap: 8px;
+    padding: 10px;
+    border-radius: 14px;
+  }
+
+  .health_camera_video_preview {
+    min-height: clamp(122px, 22dvh, 150px);
+    border-radius: 14px;
+  }
+
+  .health_camera_video_preview img {
+    min-height: clamp(102px, 19dvh, 130px);
+    border-radius: 12px;
+  }
+
+  .health_camera_video_preview span {
+    top: 10px;
+    left: 10px;
+    min-height: 28px;
+    padding: 0 10px;
+    font-size: 12px;
+  }
+
+  .health_camera_video_rec,
+  .health_camera_video_timer,
+  .health_camera_video_battery {
+    top: 14px;
+  }
+
+  .health_camera_video_rec {
+    left: 14px;
+    gap: 6px;
+    font-size: 15px;
+  }
+
+  .health_camera_video_rec i {
+    width: 9px;
+    height: 9px;
+  }
+
+  .health_camera_video_timer {
+    padding: 6px 14px;
+    font-size: 15px;
+  }
+
+  .health_camera_video_battery {
+    top: 18px;
+    right: 16px;
+    width: 23px;
+    height: 13px;
+    border-width: 2px;
+  }
+
+  .health_camera_video_battery::after {
+    top: 3px;
+    right: -4px;
+    width: 3px;
+    height: 5px;
+  }
+
+  .health_camera_video_battery i {
+    inset: 2px 6px 2px 2px;
+  }
+
+  .health_camera_video_focus {
+    width: 22px;
+    height: 22px;
+  }
+
+  .health_camera_video_focus_top_left,
+  .health_camera_video_focus_top_right {
+    top: 68px;
+    border-top-width: 4px;
+  }
+
+  .health_camera_video_focus_bottom_left,
+  .health_camera_video_focus_bottom_right {
+    bottom: 54px;
+    border-bottom-width: 4px;
+  }
+
+  .health_camera_video_focus_top_left,
+  .health_camera_video_focus_bottom_left {
+    left: 28%;
+    border-left-width: 4px;
+  }
+
+  .health_camera_video_focus_top_right,
+  .health_camera_video_focus_bottom_right {
+    right: 28%;
+    border-right-width: 4px;
+  }
+
+  .health_camera_video_crosshair {
+    width: 24px;
+    height: 24px;
+  }
+
+  .health_camera_video_crosshair::before {
+    width: 24px;
+    height: 3px;
+  }
+
+  .health_camera_video_crosshair::after {
+    width: 3px;
+    height: 24px;
+  }
+
+  .health_camera_video_badge {
+    bottom: 14px;
+    padding: 10px 16px;
+    border-radius: 14px;
+    font-size: 13px;
+  }
+
+  .health_camera_video_notice {
+    min-height: 32px;
+    padding: 0;
+    gap: 8px;
+  }
+
+  .health_camera_video_notice svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .health_camera_video_notice strong {
+    font-size: 12px;
+  }
+
+  .health_camera_guide_item {
+    min-height: 48px;
+    grid-template-columns: 38px minmax(0, 1fr);
+    gap: 10px;
+    padding: 6px 0;
+  }
+
+  .health_camera_guide_card_icon {
+    width: 34px;
+    height: 34px;
+    border-width: 2px;
+  }
+
+  .health_camera_guide_card_icon svg {
+    width: 22px;
+    height: 22px;
+    stroke-width: 2.4;
+  }
+
+  .health_camera_guide_item h2 {
+    margin-bottom: 2px;
+    font-size: 13px;
+  }
+
+  .health_camera_guide_skip {
+    font-size: 12px;
+  }
+
+  .health_camera_view,
+  .health_camera_view video,
+  .health_camera_error {
+    min-height: 0;
+    height: auto;
+  }
+
+  .health_camera_shutter {
+    width: 80px;
+    height: 80px;
+  }
+
+  .health_camera_shutter_recording {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+  }
+
+  .health_camera_page:not(.health_camera_page_guide) {
+    min-height: calc(100dvh - var(--layout-status-bar-height, 0px));
+    grid-template-rows: 108px minmax(0, 1fr) 242px;
+    padding: 0;
+  }
+
+  .health_camera_page:not(.health_camera_page_guide) .health_camera_view,
+  .health_camera_page:not(.health_camera_page_guide) .health_camera_view video,
+  .health_camera_page:not(.health_camera_page_guide) .health_camera_placeholder {
+    height: 100%;
+  }
+
+  .health_camera_topbar {
+    padding: 18px 20px 16px;
+  }
+
+  .health_camera_actions {
+    gap: 18px;
+    padding: 18px 20px max(24px, env(safe-area-inset-bottom));
+  }
+
+  .health_camera_modes {
+    gap: 12px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .health_camera_modes::-webkit-scrollbar {
+    display: none;
+  }
+
+  .health_camera_modes button {
+    font-size: 16px;
+  }
+
+  .health_camera_shutter_inner {
+    width: 64px;
+    height: 64px;
+  }
+}

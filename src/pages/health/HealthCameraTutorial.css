@@ -1,0 +1,377 @@
+.health_cam_tutorial_layer {
+  --health-cam-layout-width: min(100vw, 1440px);
+  --health-cam-layout-gutter: max(0px, calc((100vw - var(--health-cam-layout-width)) / 2));
+  --health-cam-tutorial-tabs-width: min(335px, calc(100vw - 40px));
+  --health-cam-close-button-size: 36px;
+  --health-cam-close-button-offset: 12px;
+  --health-cam-tab-bottom-offset: calc(34px + env(safe-area-inset-bottom));
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: -4px;
+  bottom: 0;
+  z-index: 12;
+  padding: 0;
+  border: 0;
+  background: rgba(14, 14, 14, 0.9);
+  cursor: pointer;
+}
+
+.health_cam_tutorial_backdrop {
+  display: none;
+}
+
+.health_cam_tutorial_focus_box {
+  position: absolute;
+  height: 300px;
+  top: 140px;
+  right: 24px;
+  bottom: clamp(248px, 34svh, 292px);
+  left: 24px;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  overflow: visible;
+}
+
+.health_cam_tutorial_focus_box::before,
+.health_cam_tutorial_focus_box::after,
+.health_cam_tutorial_focus_box span::before,
+.health_cam_tutorial_focus_box span::after {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border: 0 solid rgba(255, 255, 255, 0.78);
+  content: '';
+  z-index: 1;
+}
+
+.health_cam_tutorial_focus_box::before {
+  top: 2px;
+  left: 2px;
+  border-top-width: 6px;
+  border-left-width: 6px;
+  border-top-left-radius: 10px;
+}
+
+.health_cam_tutorial_focus_box::after {
+  top: 2px;
+  right: 2px;
+  border-top-width: 6px;
+  border-right-width: 6px;
+  border-top-right-radius: 10px;
+}
+
+.health_cam_tutorial_focus_box span {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.health_cam_tutorial_focus_box span::before {
+  bottom: 2px;
+  left: 2px;
+  border-bottom-width: 6px;
+  border-left-width: 6px;
+  border-bottom-left-radius: 10px;
+}
+
+.health_cam_tutorial_focus_box span::after {
+  right: 2px;
+  bottom: 2px;
+  border-right-width: 6px;
+  border-bottom-width: 6px;
+  border-bottom-right-radius: 10px;
+}
+
+.health_cam_tabs_wrapper.health_cam_tutorial_tabs_wrapper {
+  position: absolute;
+  right: 0;
+  bottom: var(--health-cam-tab-bottom-offset);
+  left: 0;
+  z-index: 13;
+  pointer-events: none;
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+.health_cam_tutorial_tabs_wrapper.is_hidden {
+  display: none;
+}
+
+.health_cam_tabs.health_cam_tutorial_tabs {
+  position: relative;
+  width: var(--health-cam-tutorial-tabs-width);
+  background: #f1f1f5;
+  padding: 3px;
+}
+
+.health_cam_tabs.health_cam_tutorial_tabs.is_single {
+  width: calc(var(--health-cam-tutorial-tabs-width) * 0.5);
+}
+
+.health_cam_tutorial_tabs.show_camera_only .health_cam_tab:last-child,
+.health_cam_tutorial_tabs.show_record_only .health_cam_tab:first-child {
+  visibility: hidden;
+}
+
+.health_cam_tutorial_tabs .health_cam_tab {
+  position: relative;
+  color: transparent;
+}
+
+.health_cam_tutorial_tabs .health_cam_tab::after {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #767676;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  content: '';
+}
+
+.health_cam_tutorial_tabs .health_cam_tab:first-child::after {
+  content: '카메라';
+}
+
+.health_cam_tutorial_tabs .health_cam_tab:last-child::after {
+  content: '기록';
+}
+
+.health_cam_tutorial_tabs .health_cam_tab.is_active::after {
+  color: #111111;
+  font-weight: 600;
+}
+
+.health_cam_tutorial_callout {
+  position: absolute;
+  display: grid;
+  gap: 8px;
+  color: #d1d1d1;
+  animation: healthCamTutorialFade 240ms ease;
+}
+
+.health_cam_tutorial_mode_hint {
+  position: absolute;
+  color: #dbd2ff;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.025em;
+}
+
+.health_cam_tutorial_text {
+  color: #d1d1d1;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: -0.025em;
+  white-space: nowrap;
+}
+
+.health_cam_tutorial_emphasis {
+  color: #dbd2ff;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.health_cam_tutorial_callout img {
+  display: block;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  position: absolute;
+  max-width: none;
+}
+
+.health_cam_tutorial_callout_video {
+  top: clamp(346px, 44svh, 394px);
+  left: 50%;
+  width: 176px;
+  min-height: 150px;
+  text-align: center;
+  transform: translateX(-50%);
+  animation: healthCamTutorialFadeCentered 240ms ease;
+}
+
+.health_cam_tutorial_callout_video .health_cam_tutorial_text {
+  display: block;
+}
+
+.health_cam_tutorial_callout_video img {
+  width: 35px;
+  height: 127px;
+  aspect-ratio: 35 / 127;
+  top: 76px;
+  left: 30%;
+  margin: 0;
+  transform: translateX(-50%) scaleX(-1);
+}
+
+.health_cam_tutorial_callout_photo {
+  top: clamp(346px, 44svh, 394px);
+  left: 50%;
+  width: 192px;
+  min-height: 158px;
+  text-align: center;
+  transform: translateX(-50%);
+  animation: healthCamTutorialFadeCentered 240ms ease;
+}
+
+.health_cam_tutorial_callout_photo .health_cam_tutorial_text {
+  display: block;
+}
+
+.health_cam_tutorial_callout_photo img {
+  width: 52px;
+  height: 105px;
+  aspect-ratio: 52 / 175;
+  top: 78px;
+  left: 70%;
+  margin: 0;
+  transform: translateX(-50%) scaleX(-1);
+}
+
+.health_cam_tutorial_callout_record {
+  left: calc(50% + (var(--health-cam-tutorial-tabs-width) * 0.28));
+  bottom: calc(var(--health-cam-tab-bottom-offset) + 82px);
+  width: min(174px, calc(100vw - 32px));
+  min-height: 126px;
+  text-align: center;
+  transform: translateX(-50%);
+  animation: healthCamTutorialFadeCentered 240ms ease;
+}
+
+.health_cam_tutorial_callout_record img {
+  width: 20px;
+  height: px;
+  aspect-ratio: 20 / 59;
+  top: calc(100% - 48px);
+  left: 50%;
+  margin: 0;
+  transform: translateX(-50%);
+}
+
+.health_cam_tutorial_callout_close {
+  top: max(84px, calc(env(safe-area-inset-top) + 44px));
+  left: 50%;
+  right: auto;
+  width: min(196px, calc(100vw - 88px));
+  min-height: 56px;
+  text-align: center;
+  transform: translateX(-50%);
+  animation: healthCamTutorialFadeCentered 240ms ease;
+}
+
+.health_cam_tutorial_callout_close .health_cam_tutorial_text {
+  display: block;
+}
+
+.health_cam_tutorial_callout_close img {
+  width: 68px;
+  height: 19px;
+  aspect-ratio: 68 / 19;
+  top: 2px;
+  right: -18px;
+  margin: 0;
+}
+
+.health_cam_tutorial_layer:focus-visible {
+  outline: none;
+}
+
+@media (min-width: 768px) {
+  .health_cam_tutorial_callout_close {
+    top: max(84px, calc(env(safe-area-inset-top) + 44px));
+    right: calc(
+      var(--health-cam-layout-gutter) + var(--health-cam-close-button-offset) + var(--health-cam-close-button-size) + 54px
+    );
+    left: auto;
+    width: 168px;
+    text-align: right;
+    transform: none;
+    animation: healthCamTutorialFade 240ms ease;
+  }
+
+  .health_cam_tutorial_callout_close img {
+    top: 6px;
+    right: -34px;
+  }
+}
+
+@media (max-width: 420px) {
+  .health_cam_tutorial_callout_video {
+    top: clamp(360px, 46svh, 402px);
+    left: 50%;
+    width: 164px;
+  }
+
+  .health_cam_tutorial_callout_video img {
+    top: 74px;
+    left: 30%;
+  }
+
+  .health_cam_tutorial_callout_photo {
+    top: clamp(360px, 46svh, 402px);
+    left: 50%;
+    width: 176px;
+  }
+
+  .health_cam_tutorial_callout_close {
+    width: min(184px, calc(100vw - 72px));
+  }
+
+  .health_cam_tutorial_callout_close img {
+    right: -24px;
+  }
+}
+
+@media (max-width: 360px) {
+  .health_cam_tutorial_callout_video {
+    top: clamp(368px, 47svh, 408px);
+    left: 50%;
+    width: 154px;
+  }
+
+  .health_cam_tutorial_callout_video img {
+    top: 74px;
+    left: 30%;
+  }
+
+  .health_cam_tutorial_callout_photo {
+    top: clamp(368px, 47svh, 408px);
+    left: 50%;
+    width: 164px;
+  }
+
+  .health_cam_tutorial_callout_photo img {
+    top: 82px;
+    left: 70%;
+  }
+}
+
+@keyframes healthCamTutorialFade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes healthCamTutorialFadeCentered {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}

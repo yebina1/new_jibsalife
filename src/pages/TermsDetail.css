@@ -1,0 +1,120 @@
+/* ── Layout background override ───────────────────────── */
+.layout:has(.terms_wrapper),
+.layout:has(.terms_wrapper) .layout_content {
+  background: #ffffff;
+}
+
+/* ── Wrapper ──────────────────────────────────────────── */
+
+.terms_wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+/* ── Body ─────────────────────────────────────────────── */
+
+.terms_body {
+  flex: 1;
+  padding: 24px 16px 10px;
+}
+
+.terms_main_title {
+  margin: 0 0 6px;
+  font-size: 24px;
+  font-weight: 600;
+  color: #111111;
+  letter-spacing: -0.5px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.terms_effective_date {
+  margin: 0 0 32px;
+  font-size: 16px;
+  font-weight: 400;
+  color: #505050;
+  line-height: 1.4;
+  text-align: center;
+}
+
+/* ── Articles ─────────────────────────────────────────── */
+
+.terms_articles {
+  display: flex;
+  flex-direction: column;
+}
+
+.terms_article {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #e5e5ec;
+}
+
+.terms_article + .terms_article {
+  padding-top: 24px;
+}
+
+.terms_article:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.terms_article_title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #111111;
+  letter-spacing: -0.4px;
+  line-height: 1.4;
+}
+
+.terms_article_body {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+  color: #767676;
+  line-height: 1.65;
+  white-space: pre-line;
+}
+
+.terms_article_list {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  list-style: decimal;
+}
+
+.terms_article_list_item {
+  font-size: 14px;
+  font-weight: 400;
+  color: #767676;
+  line-height: 1.65;
+}
+
+/* ── Footer ───────────────────────────────────────────── */
+
+.terms_footer {
+  margin-block: 48px 24px;
+  padding: 0 16px;
+  flex-shrink: 0;
+  background: #ffffff;
+}
+
+.terms_confirm_btn {
+  width: 100%;
+  height: 54px;
+  border: none;
+  border-radius: 12px;
+  background: #6d59f8;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 500;
+  font-family: inherit;
+  letter-spacing: var(--app-letter-spacing, -0.3px);
+  cursor: pointer;
+}

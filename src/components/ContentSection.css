@@ -1,0 +1,70 @@
+.content_section {
+  display: grid;
+  gap: 16px;
+}
+
+.content_section_header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  min-width: 0;
+}
+
+.content_section_copy {
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+}
+
+.content_section_title {
+  margin: 0;
+  color: #111111;
+  font-family: var(--app-font-family);
+  font-size: clamp(18px, 1.2vw, 20px);
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+  word-break: keep-all;
+}
+
+.content_section_subtitle {
+  margin: 0;
+  color: #505050;
+  font-family: var(--app-font-family);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: -0.025em;
+  word-break: keep-all;
+}
+
+.content_section_action {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.content_section_text_action {
+  display: inline-flex;
+  width: auto;
+  height: auto;
+  align-items: center;
+  gap: 2px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #767676;
+  font-family: var(--app-font-family);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.content_section_text_action .chevron_icon {
+  color: currentColor;
+}

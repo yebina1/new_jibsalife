@@ -1,0 +1,14 @@
+.splash_page {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+}
+
+.splash_icon {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+}

@@ -1,0 +1,308 @@
+.health_hospital_search_page {
+  gap: 26px;
+  background: #ffffff;
+}
+
+.health_hospital_search_notification {
+  position: relative;
+}
+
+.health_hospital_search_notification::after {
+  position: absolute;
+  top: 3px;
+  right: 2px;
+  display: none;
+  width: 7px;
+  height: 7px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  background: #ff3b30;
+  content: '';
+}
+
+.health_hospital_search_notification.is_active::after {
+  display: block;
+}
+
+.health_hospital_search_services,
+.health_hospital_search_nearby {
+  display: grid;
+  gap: 18px;
+}
+
+.health_hospital_search_services h2,
+.health_hospital_search_nearby h2 {
+  margin: 0;
+  color: #17171c;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: -0.03em;
+}
+
+.health_hospital_search_service_grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.health_hospital_search_service_card {
+  display: grid;
+  width: 100%;
+  height: auto;
+  justify-items: center;
+  gap: 10px;
+  min-height: 204px;
+  padding: 24px 16px 18px;
+  border: 1px solid #e5e5ee;
+  border-radius: 12px;
+  background: #ffffff;
+  text-align: center;
+  text-decoration: none;
+  color: #17171c;
+}
+
+.health_hospital_search_service_card img {
+  display: block;
+  width: 78px;
+  height: 78px;
+  object-fit: contain;
+}
+
+.health_hospital_search_service_card strong {
+  color: #17171c;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.45;
+  letter-spacing: -0.03em;
+}
+
+.health_hospital_search_service_card p {
+  margin: 0;
+  color: #626273;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.55;
+  letter-spacing: -0.025em;
+  white-space: pre-line;
+}
+
+.health_hospital_search_nearby_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.health_hospital_search_nearby_header a {
+  display: inline-flex;
+  width: auto;
+  height: auto;
+  align-items: center;
+  gap: 2px;
+  padding: 0;
+  color: #767676;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+  text-decoration: none;
+}
+
+.health_hospital_search_nearby_header a .chevron_icon {
+  color: currentColor;
+}
+
+.health_hospital_search_list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  overflow: visible;
+}
+
+.health_hospital_search_list li {
+  overflow: visible;
+}
+
+.health_hospital_search_item {
+  display: grid;
+  position: relative;
+  grid-template-columns: 96px minmax(0, 1fr) 24px;
+  align-items: start;
+  gap: 14px;
+  width: 100%;
+  height: auto;
+  padding: 0;
+  text-align: left;
+  overflow: visible;
+}
+
+.health_hospital_search_item > img {
+  display: block;
+  width: 96px;
+  height: 96px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.health_hospital_search_item_body {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.health_hospital_search_item_top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.health_hospital_search_item_top strong {
+  color: #17171c;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: -0.03em;
+}
+
+.health_hospital_search_rating,
+.health_hospital_search_tags {
+  margin: 0;
+  color: #767676;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: -0.025em;
+}
+
+.health_hospital_search_rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #3a2b2b;
+}
+
+.health_hospital_search_rating i {
+  color: #5d4343;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.health_hospital_search_rating span {
+  margin-left: 8px;
+  color: #626273;
+}
+
+.health_hospital_search_hours {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 32px;
+  align-items: center;
+  padding: 0 12px;
+  border-radius: 8px;
+  background: #f1f1f5;
+  color: #6f6f7f;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+}
+
+.health_hospital_search_hours.is_open {
+  background: #48C453;
+  color: #ffffff;
+}
+
+.health_hospital_search_favorite {
+  display: inline-grid;
+  position: relative;
+  z-index: 2;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #4a3d3d;
+  justify-self: end;
+  isolation: auto;
+  overflow: visible;
+}
+
+.health_hospital_search_favorite.is_active {
+  color: #ff5a5f;
+}
+
+.health_hospital_search_favorite i {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.health_hospital_search_favorite svg {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+
+.health_hospital_search_favorite .heart_effect_area {
+  bottom: 50%;
+  z-index: 20;
+}
+
+@media (max-width: 420px) {
+  .health_hospital_search_page {
+    gap: 24px;
+  }
+
+  .health_hospital_search_services,
+  .health_hospital_search_nearby {
+    gap: 16px;
+  }
+
+  .health_hospital_search_services h2,
+  .health_hospital_search_nearby h2 {
+    font-size: 17px;
+  }
+
+  .health_hospital_search_service_grid {
+    gap: 10px;
+  }
+
+  .health_hospital_search_service_card {
+    min-height: 172px;
+    padding: 20px 12px 16px;
+  }
+
+  .health_hospital_search_service_card img {
+    width: 64px;
+    height: 64px;
+  }
+
+  .health_hospital_search_service_card strong {
+    font-size: 15px;
+  }
+
+  .health_hospital_search_service_card p,
+  .health_hospital_search_rating,
+  .health_hospital_search_tags {
+    font-size: 12px;
+  }
+
+  .health_hospital_search_list {
+    gap: 16px;
+  }
+
+  .health_hospital_search_item {
+    grid-template-columns: 96px minmax(0, 1fr) 24px;
+    gap: 12px;
+  }
+
+  .health_hospital_search_item_top strong {
+    font-size: 15px;
+  }
+
+}

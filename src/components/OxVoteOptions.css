@@ -1,0 +1,32 @@
+.ox_vote_options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.ox_vote_option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  border: 1px solid #CBCBCB;
+  border-radius: 12px;
+  background: #FFFFFF;
+  box-sizing: border-box;
+}
+
+button.ox_vote_option {
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+button.ox_vote_option.selected {
+  border-color: #6D59F8;
+  background: #EFEDFF;
+}
+
+.ox_vote_icon {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+}

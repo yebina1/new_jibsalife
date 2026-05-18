@@ -1,0 +1,76 @@
+/* ── Articles (numbered ol) ───────────────────────────── */
+
+.privacy_articles {
+  list-style: decimal;
+  padding-left: 30px;
+  margin: 0;
+}
+
+.privacy_article {
+  display: list-item;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #e5e5ec;
+  margin-top: 20px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #111111;
+}
+
+.privacy_article::marker {
+  font-size: 20px;
+  font-weight: 600;
+  color: #111111;
+}
+
+.privacy_article:first-child {
+  margin-top: 0;
+}
+
+.privacy_article:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+/* ── Article inner elements ───────────────────────────── */
+
+.privacy_article_title {
+  display: block;
+  font-size: 20px;
+  font-weight: 600;
+  color: #111111;
+  letter-spacing: -0.4px;
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.privacy_article_subtitle {
+  margin: 0 0 6px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #111111;
+  line-height: 1.5;
+}
+
+.privacy_article_list {
+  margin: 0;
+  padding-left: 21px;
+  list-style: decimal;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.privacy_article_list_item {
+  font-size: 14px;
+  font-weight: 400;
+  color: #767676;
+  line-height: 1.45;
+}
+
+.privacy_article_body {
+  margin: 4px 0 0;
+  font-size: 14px;
+  font-weight: 400;
+  color: #767676;
+  line-height: 1.45;
+}

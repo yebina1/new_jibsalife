@@ -1,0 +1,97 @@
+.status_message_bar {
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--layout-footer-height, 0px) + 12px);
+  z-index: 1000;
+  width: calc(100% - 48px);
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.status_message_bar_notification {
+  top: calc(var(--layout-status-bar-height) + 52px);
+  left: calc(50% + (min(100vw, var(--layout-max-width)) / 2) - 16px);
+  bottom: auto;
+  transform: translateX(-100%);
+}
+
+.status_message_bar_sheet {
+  top: auto;
+  bottom: clamp(420px, 52vh, 500px);
+  z-index: 360;
+  width: min(calc(100% - 72px), 540px);
+  transform: translateX(-50%);
+}
+
+.status_message_bar_inner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-sizing: border-box;
+  padding: 16px;
+  border-radius: 6px;
+  background: #BEE3F8;
+  box-shadow: 0 4px 18px rgba(17, 17, 17, 0.12);
+}
+
+.status_message_bar_notification .status_message_bar_inner,
+.status_message_bar_sheet .status_message_bar_inner {
+  gap: 12px;
+}
+
+.status_message_bar_sheet .status_message_bar_inner {
+  border-radius: 24px;
+  background: #F1F1F5;
+  box-shadow: 0 8px 24px rgba(17, 17, 17, 0.14);
+}
+
+.status_message_bar_text {
+  flex: 1;
+  margin: 0;
+  color: #111111;
+  font-family: var(--app-font-family);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+  white-space: pre-line;
+}
+
+.status_message_bar_sheet .status_message_bar_text {
+  white-space: pre-line;
+}
+
+.status_message_bar_badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #fff;
+  color: #6d59f8;
+  font-family: var(--app-font-family);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.025em;
+}
+
+.status_message_bar_close {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #505050;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1;
+}

@@ -1,0 +1,271 @@
+.health_result_actions_page {
+  gap: 28px;
+}
+
+.health_result_actions_notification {
+  position: relative;
+}
+
+.health_result_actions_notification::after {
+  position: absolute;
+  top: 3px;
+  right: 2px;
+  display: none;
+  width: 7px;
+  height: 7px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  background: #ff3b30;
+  content: '';
+}
+
+.health_result_actions_notification.is_active::after {
+  display: block;
+}
+
+.health_result_actions_summary {
+  display: grid;
+  gap: 18px;
+  padding: 22px 18px 20px;
+  border: 1px solid #e7e7f0;
+  border-radius: 18px;
+  background: #ffffff;
+}
+
+.health_result_actions_summary_top {
+  display: grid;
+  grid-template-columns: 66px minmax(0, 1fr) 32px;
+  align-items: center;
+  gap: 16px;
+}
+
+.health_result_actions_summary_top img {
+  display: block;
+  width: 66px;
+  height: 66px;
+  border-radius: 14px;
+  object-fit: cover;
+}
+
+.health_result_actions_summary_copy {
+  display: grid;
+  gap: 4px;
+}
+
+.health_result_actions_summary_copy strong {
+  color: #17171c;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.45;
+  letter-spacing: -0.03em;
+}
+
+.health_result_actions_check {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border: 3px solid #72d057;
+  border-radius: 50%;
+  color: #72d057;
+}
+
+.health_result_actions_check i {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.health_result_actions_summary_line {
+  height: 1px;
+  background: #e6e6ee;
+}
+
+.health_result_actions_summary p {
+  margin: 0;
+  color: #31313a;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: -0.025em;
+}
+
+.health_result_actions_choices {
+  display: grid;
+  gap: 16px;
+}
+
+.health_result_actions_choices h2 {
+  margin: 0;
+  color: #17171c;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: -0.03em;
+}
+
+.health_result_actions_cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.health_result_actions_card {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  min-height: 316px;
+  padding: 20px 14px 16px;
+  border-radius: 16px;
+  text-decoration: none;
+  overflow: hidden;
+}
+
+.health_result_actions_card.is_qna {
+  background: #f8e7d7;
+}
+
+.health_result_actions_card.is_consult {
+  background: #c9dafb;
+}
+
+.health_result_actions_chip_row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.health_result_actions_chip {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+  border-radius: 999px;
+  color: #2d2d35;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.025em;
+  background: rgba(255, 255, 255, 0.48);
+}
+
+.health_result_actions_arrow {
+  display: inline-grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #7e90ff;
+}
+
+.health_result_actions_arrow .chevron_icon {
+  color: currentColor;
+}
+
+.health_result_actions_card strong {
+  display: block;
+  min-height: 52px;
+  color: #17171c;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.45;
+  letter-spacing: -0.03em;
+}
+
+.health_result_actions_card p {
+  margin: 0;
+  min-height: 44px;
+  color: #31313a;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.55;
+  letter-spacing: -0.025em;
+}
+
+.health_result_actions_card img {
+  align-self: end;
+  justify-self: start;
+  width: 94px;
+  height: auto;
+  object-fit: contain;
+}
+
+.health_result_actions_card.is_consult img {
+  width: 94px;
+}
+
+@media (max-width: 420px) {
+  .health_result_actions_page {
+    gap: 24px;
+  }
+
+  .health_result_actions_summary {
+    gap: 16px;
+    padding: 20px 16px 18px;
+    border-radius: 16px;
+  }
+
+  .health_result_actions_summary_top {
+    grid-template-columns: 64px minmax(0, 1fr) 32px;
+    gap: 14px;
+  }
+
+  .health_result_actions_summary_top img {
+    width: 64px;
+    height: 64px;
+  }
+
+  .health_result_actions_summary_copy strong {
+    font-size: 17px;
+  }
+
+  .health_result_actions_summary p {
+    font-size: 12px;
+  }
+
+  .health_result_actions_choices h2 {
+    font-size: 17px;
+  }
+
+  .health_result_actions_cards {
+    gap: 10px;
+  }
+
+  .health_result_actions_card {
+    min-height: 286px;
+    padding: 18px 12px 14px;
+    border-radius: 14px;
+  }
+
+  .health_result_actions_chip {
+    min-height: 32px;
+    padding: 0 12px;
+    font-size: 11px;
+  }
+
+  .health_result_actions_arrow {
+    width: 32px;
+    height: 32px;
+  }
+
+  .health_result_actions_card strong {
+    min-height: 50px;
+    font-size: 17px;
+  }
+
+  .health_result_actions_card p {
+    min-height: 40px;
+    font-size: 12px;
+  }
+
+  .health_result_actions_card img {
+    width: 88px;
+  }
+
+  .health_result_actions_card.is_consult img {
+    width: 88px;
+  }
+}

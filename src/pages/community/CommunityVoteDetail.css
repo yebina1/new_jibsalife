@@ -1,0 +1,140 @@
+.layout:has(.cvd_page) {
+  min-height: 0;
+}
+
+.layout_content:has(.cvd_page) {
+  padding: 0;
+  min-height: 0;
+}
+
+.layout_content > .cvd_page {
+  min-height: 0;
+}
+
+.cvd_page {
+  display: flex;
+  flex-direction: column;
+}
+
+.cvd_page .community_tab_bar,
+.cvd_page .community_subtab_bar {
+  display: none;
+}
+
+/* 2열 그리드 */
+.cvd_grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding: 20px 16px;
+}
+
+/* 후보 카드 */
+.cvd_candidate {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  border: 2px solid #E5E5EC;
+  border-radius: 12px;
+  background: #fff;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.cvd_candidate.selected {
+  border-color: #6D59F8;
+}
+
+.cvd_candidate_img_wrap {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+  flex-shrink: 0;
+}
+
+.cvd_candidate_img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cvd_candidate_footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 10px;
+}
+
+.cvd_candidate_name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111;
+}
+
+.cvd_candidate_check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.cvd_candidate_check svg {
+  width: 16px;
+  height: 16px;
+}
+
+.cvd_vote_submit {
+  width: calc(100% - 32px);
+  margin: 20px 16px;
+}
+
+.cvd_vote_submit_row {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.cvd_vote_submit_row .cvd_vote_submit,
+.cvd_vote_submit_row .white_btn {
+  margin: 0;
+  width: 100%;
+}
+
+.cvd_edit_alert_msg {
+  margin: 0 0 20px;
+  color: #111111;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.cvd_edit_alert_btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  width: 100%;
+}
+
+.cvd_reward_alert {
+  display: grid;
+  gap: 48px;
+  width: 100%;
+}
+
+.cvd_reward_confirm {
+  width: 100%;
+  border-radius: 12px;
+}

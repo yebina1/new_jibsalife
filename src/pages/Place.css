@@ -1,0 +1,187 @@
+.place_page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-height: 0;
+  background: #ffffff;
+}
+
+.layout_content > .place_page {
+  min-height: 0;
+  padding-top: 24px;
+}
+
+.layout:has(.place_page) .header_right .header_icon {
+  stroke-width: 1.5;
+}
+
+.place_hospital_section {
+  display: grid;
+}
+
+.place_section {
+  display: grid;
+  gap: 18px;
+}
+
+.place_section_header {
+  display: grid;
+  gap: 6px;
+}
+
+.place_section_header h2 {
+  margin: 0;
+  color: #17171c;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: -0.03em;
+}
+
+.place_section_header p {
+  margin: 0;
+  color: #626273;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.55;
+  letter-spacing: -0.025em;
+}
+
+.place_hospital_list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  overflow: visible;
+}
+
+.place_hospital_list li {
+  overflow: visible;
+}
+
+.place_hospital_item {
+  display: grid;
+  position: relative;
+  grid-template-columns: 96px minmax(0, 1fr) 24px;
+  align-items: start;
+  gap: 14px;
+  overflow: visible;
+}
+
+.place_hospital_item > img {
+  display: block;
+  width: 96px;
+  height: 96px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.place_hospital_body {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.place_hospital_body strong {
+  color: #17171c;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: -0.03em;
+}
+
+.place_hospital_rating,
+.place_hospital_tags {
+  margin: 0;
+  color: #767676;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.45;
+  letter-spacing: -0.025em;
+}
+
+.place_hospital_rating {
+  color: #3a2b2b;
+}
+
+.place_hospital_rating span {
+  margin-left: 8px;
+  color: #626273;
+}
+
+.place_hospital_hours {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 32px;
+  align-items: center;
+  gap: 4px;
+  padding: 0 12px;
+  border-radius: 8px;
+  background: #f1f1f5;
+  color: #6f6f7f;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+}
+
+.place_hospital_hours.is_open {
+  background: #f1f1f5;
+}
+
+.place_hospital_hours.is_open .place_hospital_hours_label {
+  color: #00c853;
+}
+
+.place_hospital_favorite {
+  display: inline-grid;
+  position: relative;
+  z-index: 2;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #4a3d3d;
+  justify-self: end;
+  isolation: auto;
+  overflow: visible;
+}
+
+.place_hospital_favorite svg {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+
+.place_hospital_favorite .heart_effect_area {
+  bottom: 50%;
+  z-index: 20;
+}
+
+@media (max-width: 420px) {
+  .place_hospital_list {
+    gap: 16px;
+  }
+
+  .place_hospital_item {
+    gap: 12px;
+  }
+
+  .place_section_header h2 {
+    font-size: 17px;
+  }
+
+  .place_section_header p,
+  .place_hospital_rating,
+  .place_hospital_tags {
+    font-size: 12px;
+  }
+
+  .place_hospital_body strong {
+    font-size: 15px;
+  }
+}

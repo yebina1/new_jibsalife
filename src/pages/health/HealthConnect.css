@@ -1,0 +1,35 @@
+.health_connect_page {
+  display: flex;
+  flex-direction: column;
+  gap: 46px;
+  background: #ffffff;
+}
+
+.health_connect_services,
+.health_connect_hospitals {
+  width: min(100%, 430px);
+  margin: 0 auto;
+}
+
+.health_connect_services h2 {
+  margin: 0;
+  color: #111111;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.health_connect_services h2 {
+  margin-bottom: 42px;
+  text-align: center;
+}
+
+.health_connect_hospitals .section_header {
+  margin-bottom: 34px;
+}
+
+.health_connect_notice {
+  margin: 2px auto 0;
+  color: #b36c70;
+  font-size: 10px;
+  text-align: center;
+}

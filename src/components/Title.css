@@ -1,0 +1,51 @@
+.title{
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-title);
+}
+
+.title h1,
+.title h2,
+.title h3,
+.title h4,
+.title h5,
+.title h6{
+  margin: 0;
+  color: var(--font-block);
+  font-weight: var(--font-weight-sb);
+  line-height: var(--app-line-height);
+}
+
+.title h1{
+  font-size: var(--font-title-h1);
+}
+
+.title h2{
+  font-size: var(--font-title-h2);
+}
+
+.title h3{
+  font-size: var(--font-title-h3);
+}
+
+.title h4{
+  font-size: var(--font-title-h4);
+}
+
+.title h5{
+  font-size: var(--font-title-h5);
+}
+
+.title h6{
+  font-size: var(--font-title-h6);
+  line-height: var(--app-line-height);
+}
+
+
+/* sb 12px 145% */
+.title p{
+  margin: 0;
+  color: var(--font-gray);
+  font-size: var(--font-body-sm);
+  line-height: var(--line-height-sm);
+}

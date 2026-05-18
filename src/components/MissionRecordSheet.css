@@ -1,0 +1,326 @@
+.mission_add_rows {
+  display: grid;
+  padding-top: 0;
+}
+
+.mission_add_row {
+  display: flex;
+  width: 100%;
+  min-height: 54px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 0;
+  border-bottom: 1px solid #e5e5ec;
+  box-sizing: border-box;
+}
+
+.mission_add_row_label {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 6px;
+  color: #111111;
+  font-family: Pretendard, 'SUIT', system-ui, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 140%;
+  letter-spacing: -0.4px;
+  white-space: nowrap;
+}
+
+.mission_add_info {
+  display: inline-flex;
+  position: relative;
+  width: 17px;
+  height: 17px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #d9d9de;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.mission_add_info::after {
+  position: absolute;
+  width: 6px;
+  height: 5px;
+  margin: 13px 0 0 -10px;
+  border-radius: 0 0 0 5px;
+  background: #d9d9de;
+  content: '';
+}
+
+.mission_add_info_icon {
+  display: block;
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+}
+
+.mission_add_info_button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.mission_add_row_value {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2px;
+  color: #505050;
+  font-family: Pretendard, 'SUIT', system-ui, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 145%;
+  letter-spacing: -0.35px;
+  text-align: right;
+  white-space: nowrap;
+  word-break: keep-all;
+  cursor: pointer;
+}
+
+.mission_add_category_value {
+  gap: 2px;
+}
+
+.mission_add_category_text {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: 6px;
+}
+
+.mission_add_category_dot {
+  width: 9px;
+  height: 9px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+}
+
+.mission_add_row_value .chevron_icon {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  --chevron-color: #656565;
+}
+
+.mission_add_content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  gap: 10px;
+  padding: 20px 0 12px; 
+}
+
+.mission_add_content.has_amount {
+  gap: 16px;
+}
+
+.mission_add_content h2 {
+  margin: 0;
+  color: #111111;
+  font-family: Pretendard, 'SUIT', system-ui, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 140%;
+  letter-spacing: -0.4px;
+}
+
+.mission_amount_frame {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.mission_amount_control {
+  display: flex;
+  width: 100%;
+  min-height: 56px;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.mission_amount_control button {
+  display: flex;
+  width: 28px;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid #e5e5ec;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #111111;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.mission_amount_control strong {
+  min-width: 48px;
+  color: #111111;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 140%;
+  letter-spacing: -0.4px;
+  text-align: center;
+}
+
+.mission_amount_value {
+  display: inline-flex;
+  min-width: 56px;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: #111111;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 140%;
+  letter-spacing: -0.4px;
+}
+
+.mission_amount_value.is_zero input {
+  color: #999999;
+}
+
+.mission_amount_value input {
+  width: 34px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+  text-align: right;
+  outline: none;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+.mission_amount_value input::-webkit-outer-spin-button,
+.mission_amount_value input::-webkit-inner-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
+.mission_quick_messages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 6px;
+}
+
+.mission_quick_message {
+  display: inline-flex;
+  min-height: 27px;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  border: 1px solid #e5e5ec;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #505050;
+  font-family: Pretendard, 'SUIT', system-ui, sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 145%;
+  letter-spacing: -0.025em;
+}
+
+.mission_quick_message.active {
+  border-color: #e5e5ec;
+  background: #f5f3ff;
+  color: #111111;
+}
+
+.mission_add_title {
+  display: block;
+  width: 100%;
+  min-height: 102px;
+  padding: 20px;
+  border: 0;
+  border-radius: 8px;
+  background: #f2f2f6;
+  box-sizing: border-box;
+  color: #111111;
+  font-family: Pretendard, 'SUIT', system-ui, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 145%;
+  letter-spacing: -0.35px;
+  outline: none;
+  resize: none;
+}
+
+.mission_add_title::placeholder {
+  color: #505050;
+  opacity: 1;
+}
+
+.mission_add_save_wrap {
+  width: 100%;
+  padding: 20px 0 20px;
+}
+
+.mission_add_save_wrap.is_editing,
+.mission_add_save_wrap.is_split {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.mission_add_save_wrap .purple_btn {
+  width: 100%;
+  height: 54px;
+  border-radius: 10px;
+  font-family: Pretendard, 'SUIT', system-ui, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 140%;
+  letter-spacing: -0.025em;
+}
+
+.mission_add_delete_btn {
+  width: 100%;
+  height: 54px;
+  border: 1px solid #6D59F8;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #6D59F8;
+  font-family: Pretendard, 'SUIT', system-ui, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 140%;
+  letter-spacing: -0.025em;
+}
+
+.mission_add_delete_btn:disabled {
+  border-color: #c9ced8;
+  color: #a5adba;
+  cursor: default;
+}
+
+.mission_add_save_wrap .purple_btn:disabled,
+.mission_add_save_wrap .purple_btn.is_disabled {
+  background: #a5adba;
+  color: #ffffff;
+}

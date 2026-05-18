@@ -1,0 +1,1094 @@
+.health_page {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.health_page.health_page :is(h1, h2, h3, h4, h5, h6, p, span, strong, em, a, button, li, label, input, textarea, select),
+.health_page.health_page .progress_circle_inner {
+  font-family: var(--app-font-family);
+  line-height: var(--app-line-height);
+  letter-spacing: var(--app-letter-spacing);
+}
+
+.header_right button[aria-label="about"] {
+  width: fit-content;
+  height: fit-content;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.health_intro {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.health_intro_content{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.health_intro_text {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.health_intro_text .title {
+  gap: 6px;
+}
+
+.health_intro_text .title h3 {
+  line-height: 1.4;
+}
+
+.health_intro_text .title p {
+  font-size: 14px;
+}
+
+.health_intro_image {
+  display: block;
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 1px solid #E5E5EC;
+}
+
+.health_guide {
+  display: flex;
+  width: fit-content;
+  height: fit-content;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.health_guide img {
+  display: block;
+  width: 17px;
+  height: 17px;
+}
+
+.health_guide span{
+  color: var(--point-dark-red);
+  font-size: 14px;
+}
+
+.health_check {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  padding: 0;
+  list-style: none;
+}
+
+.health_check_item button {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  height: 128px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0;
+  border: 0;
+  background: #F1F1F5;
+  cursor: pointer;
+  border-radius: 12px;
+}
+
+.health_check_item i,
+.health_check_item img {
+  font-size: 42px;
+  line-height: 1;
+}
+
+.health_check_item img {
+  display: block;
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+}
+
+.health_check_item span {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.health_intro .white_btn {
+  color: #999999;
+  cursor: default;
+  pointer-events: none;
+}
+
+@media (max-width: 420px) {
+  .health_guide {
+    gap: 8px;
+  }
+
+  .health_guide img {
+    width: 17px;
+    height: 17px;
+  }
+
+  .health_intro {
+    grid-template-columns: minmax(0, 1fr) 96px;
+    gap: 20px;
+  }
+
+  .health_intro_image {
+    width: 60px;
+    height: 60px;
+  }
+
+  .health_check {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px;
+  }
+
+  .health_check_item button {
+    width: 100%;
+    height: 98px;
+    gap: 4px;
+  }
+
+  .health_check_item i,
+  .health_check_item img {
+    font-size: 34px;
+  }
+
+  .health_check_item img {
+    width: 34px;
+    height: 34px;
+  }
+
+  .health_check_item span {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .health_check {
+    gap: 4px;
+  }
+
+  .health_intro {
+    grid-template-columns: minmax(0, 1fr) 82px;
+    gap: 20px;
+  }
+
+  .health_intro_image {
+    width: 56px;
+    height: 56px;
+  }
+
+  .health_check_item button {
+    height: 92px;
+  }
+
+  .health_check_item i,
+  .health_check_item img {
+    font-size: 30px;
+  }
+
+  .health_check_item img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .health_check_item span {
+    font-size: 14px;
+  }
+}
+
+/* ── Health camera UI (피그마 디자인) ───────────────────────────── */
+
+.health_cam_ui {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: -2px;
+  bottom: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  min-height: 100svh;
+  height: 100dvh;
+  gap: 0;
+  padding: 0 0 calc(12px + env(safe-area-inset-bottom));
+  overflow: hidden;
+  background: #ffffff;
+  font-family: 'Pretendard', sans-serif;
+  box-sizing: border-box;
+}
+
+/* 1. 카메라 뷰 영역 */
+
+.health_cam_view {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: #000000;
+}
+
+.health_cam_img,
+.health_cam_video {
+  display: block;
+  width: calc(100% + 2px);
+  min-width: calc(100% + 2px);
+  height: 100%;
+  object-fit: cover;
+  transform: translateX(-1px);
+}
+
+.health_cam_img_fallback {
+  position: absolute;
+  inset: 0;
+  width: calc(100% + 2px);
+  min-width: calc(100% + 2px);
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0;
+  transform: translateX(-1px);
+}
+
+.health_cam_overlay {
+  position: absolute;
+  inset: 0 -1px 0 -1px;
+  background: rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+}
+
+.health_cam_ui.is_tutorial_active {
+  position: relative;
+}
+
+.health_cam_ui.is_tutorial_active .health_cam_overlay {
+  background: transparent;
+}
+
+.health_cam_tabs_wrapper.is_hidden {
+  display: none;
+}
+
+.health_cam_close_btn.is_tutorial_target,
+.health_cam_mode.is_tutorial_target {
+  position: relative;
+  z-index: 14 !important;
+}
+
+.health_cam_close_btn.is_tutorial_target {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.14);
+}
+
+.health_cam_mode.is_tutorial_label {
+  color: #dbd2ff !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+}
+
+/* 2. 컨트롤 영역 */
+
+.health_cam_ctrl {
+  display: grid;
+  gap: 14px;
+  padding: 14px 20px 16px;
+  background: #ffffff;
+}
+
+/* 반려동물 변경하기 */
+
+.health_cam_pet_link {
+  position: relative;
+  display: inline-flex;
+  align-self: center;
+  justify-self: center;
+  align-items: center;
+  gap: 3px;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: #505050;
+  font-size: 14px;
+  font-family: inherit;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.health_cam_pet_default_label {
+  display: inline-flex;
+}
+
+/* 줌 버튼 — 각각 독립된 원형 버튼 */
+
+.health_cam_zoom {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.health_cam_zoom_btn {
+  display: grid;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  place-items: center;
+  border-radius: 100px;
+  background: #505050;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  line-height: 1;
+}
+
+.health_cam_zoom_lg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  width: 32px;
+  height: 32px;
+  font-size: 14px;
+}
+
+.health_cam_zoom_on {
+  color: #ffffff;
+}
+
+.health_cam_zoom_btn.is_disabled {
+  cursor: default;
+  opacity: 0.72;
+  pointer-events: none;
+}
+
+.health_cam_shutter_row .health_cam_side:last-child {
+  cursor: default;
+  opacity: 0.72;
+  pointer-events: none;
+}
+
+/* 모드 탭 */
+
+.health_cam_modes {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+.health_cam_mode {
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: #767676;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: inherit;
+  letter-spacing: -0.025em;
+  cursor: pointer;
+}
+
+.health_cam_mode.is_active {
+  color: #111111;
+  font-weight: 600;
+}
+
+/* 셔터 버튼 열 */
+
+.health_cam_shutter_row {
+  display: grid;
+  grid-template-columns: 56px 1fr 56px;
+  align-items: center;
+  justify-items: center;
+}
+
+/* 사이드 버튼 (갤러리 / 전환) */
+
+.health_cam_side {
+  display: grid;
+  width: 56px;
+  height: 56px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  outline: none;
+  border-radius: 50%;
+  background: #e5e5ec;
+  cursor: pointer;
+}
+
+
+/* 셔터 버튼 */
+
+.health_cam_shutter {
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+
+/* 촬영 완료 버튼 영역 */
+
+.health_cam_result_ctrl {
+  display: flex;
+  gap: 8px;
+  padding: 10px 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.health_cam_retake,
+.health_cam_upload {
+  flex: 1;
+  height: 54px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  outline: none;
+}
+
+.health_cam_retake {
+  border: 1px solid #6D59F8;
+  background: #ffffff;
+  color: #7C6FF7;
+}
+
+.health_cam_upload {
+  border: 0;
+  background: #6D59F8;
+  color: #ffffff;
+}
+
+/* 3. 최하단 탭바 */
+
+.health_cam_tabs_wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background: #ffffff;
+  border-radius: 0;
+  padding: 8px 0;
+  box-sizing: border-box;
+}
+
+.health_cam_tabs {
+  display: flex;
+  gap: 4px;
+  width: min(335px, calc(100vw - 40px));
+  padding: 3px;
+  border-radius: 10px;
+  background: #f1f1f5;
+  box-sizing: border-box;
+}
+
+.health_cam_tab {
+  flex: 1;
+  padding: 14px 10px;
+  border: 0;
+  outline: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #767676;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  line-height: 1.4;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: background 150ms ease, color 150ms ease, box-shadow 150ms ease;
+}
+
+.health_cam_tab.is_active {
+  background: #ffffff;
+  color: #111111;
+  font-weight: 600;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* 4. 반려동물 변경 바텀시트 모달 */
+
+.health_pet_modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: flex-end;
+}
+
+.health_pet_modal_overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(17, 17, 17, 0.3);
+}
+
+.health_pet_modal_sheet {
+  position: relative;
+  width: 100%;
+  background: #ffffff;
+  border-radius: 12px 12px 0 0;
+  padding: 0 20px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.health_pet_modal_handle {
+  width: 41px;
+  height: 4px;
+  border-radius: 100px;
+  background: #C8C8D3;
+  margin: 6px auto 0;
+  flex-shrink: 0;
+}
+
+.health_pet_modal_list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.health_pet_modal_item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 20px 10px;
+  border: 0;
+  outline: none;
+  border-radius: 12px;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+}
+
+.health_pet_modal_item.is_selected {
+  background: #EFEFEF;
+}
+
+.health_pet_modal_avatar {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #E5E5EC;
+  display: grid;
+  place-items: center;
+}
+
+.health_pet_modal_avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.health_pet_modal_info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.health_pet_modal_name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111111;
+  line-height: 1.4;
+  letter-spacing: -0.4px;
+}
+
+.health_pet_modal_detail {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.health_pet_modal_detail_label {
+  font-size: 14px;
+  font-weight: 400;
+  color: #505050;
+  line-height: 1.4;
+}
+
+.health_pet_modal_detail_value {
+  font-size: 14px;
+  font-weight: 500;
+  color: #111111;
+  line-height: 1.4;
+}
+
+.health_pet_modal_dot {
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: #111111;
+  flex-shrink: 0;
+}
+
+.health_pet_modal_close_btn {
+  width: 100%;
+  height: 54px;
+  margin-top: 20px;
+  border: 0;
+  outline: none;
+  border-radius: 12px;
+  background: #6D59F8;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.health_cam_ui .mission_pet_switch_sheet {
+  display: grid;
+  gap: 10px;
+}
+
+.health_cam_ui .mission_pet_switch_list {
+  display: grid;
+  gap: 0;
+}
+
+.health_cam_ui .mission_pet_switch_option {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  min-height: 104px;
+  padding: 20px 10px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: #111111;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.health_cam_ui .mission_pet_switch_option img,
+.health_cam_ui .mission_pet_switch_avatar_fallback {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: 50%;
+  object-fit: cover;
+  overflow: hidden;
+}
+
+.health_cam_ui .mission_pet_switch_avatar_fallback {
+  background: #E5E5EC;
+}
+
+.health_cam_ui .mission_pet_switch_copy {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.health_cam_ui .mission_pet_switch_copy strong {
+  overflow: hidden;
+  color: #111111;
+  font-size: var(--font-title-h5);
+  font-weight: var(--font-weight-sb);
+  line-height: var(--app-line-height);
+  letter-spacing: var(--app-letter-spacing);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.health_cam_ui .mission_pet_switch_meta,
+.health_cam_ui .mission_pet_switch_meta span {
+  overflow: hidden;
+  color: #505050;
+  font-size: var(--font-body-sm);
+  font-weight: var(--font-weight-rg);
+  line-height: var(--line-height-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.health_cam_ui .mission_pet_switch_meta {
+  display: flex;
+  gap: 4px;
+  min-width: 0;
+}
+
+.health_cam_ui .mission_pet_switch_meta .mission_pet_switch_dot {
+  color: var(--font-block);
+}
+
+.health_cam_ui .mission_pet_switch_copy b {
+  color: var(--font-block);
+  font-weight: 700;
+}
+
+.health_cam_ui .mission_pet_switch_option.is_selected {
+  background: #F5F3FF;
+}
+
+.health_cam_ui .mission_pet_switch_option.is_selected .mission_pet_switch_copy strong {
+  color: #6d59f8;
+}
+
+.health_cam_ui .mission_pet_switch_close {
+  width: 100%;
+  height: 54px;
+  margin: 0 0 10px;
+  border: 0;
+  border-radius: 12px;
+  background: #6D59F8;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ── 메모 바텀시트 ──────────────────────────────────────── */
+
+.health_memo_overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+
+.health_memo_sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 101;
+  background: #ffffff;
+  border-radius: 20px 20px 0 0;
+  padding: 0 16px 16px;
+  font-family: Pretendard, 'SUIT', system-ui, sans-serif;
+  max-height: 85dvh;
+  overflow-y: auto;
+}
+
+.health_memo_handle {
+  width: 41px;
+  height: 4px;
+  background: #c8c8d3;
+  border-radius: 100px;
+  margin: 6px auto 20px;
+}
+
+/* rows */
+
+.health_memo_rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.health_memo_row {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 0;
+  border-bottom: 1px solid #e5e5ec;
+  box-sizing: border-box;
+}
+
+.health_memo_row_category {
+  border-top: 1px solid #e5e5ec;
+}
+
+.health_memo_row_label {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 6px;
+  color: #111111;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 140%;
+  letter-spacing: -0.025em;
+  white-space: nowrap;
+}
+
+.health_memo_info {
+  display: inline-flex;
+  position: relative;
+  width: 17px;
+  height: 17px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #d9d9de;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.health_memo_row_value {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #505050;
+  font-size: 14px;
+  font-family: inherit;
+  font-weight: 400;
+  line-height: 145%;
+  letter-spacing: -0.025em;
+  text-align: right;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.health_memo_row_value .chevron_icon {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 auto;
+  --chevron-color: #656565;
+}
+
+.health_memo_category_dot {
+  flex: 0 0 auto;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+/* 내용입력 */
+
+.health_memo_content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 20px;
+  padding-bottom: 12px;
+}
+
+.health_memo_content h2 {
+  margin: 0;
+  color: #111111;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 140%;
+  letter-spacing: -0.025em;
+}
+
+.health_memo_quick_messages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 6px;
+}
+
+.health_memo_quick_message {
+  display: inline-flex;
+  min-height: 27px;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  border: 1px solid #e5e5ec;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #505050;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 145%;
+  letter-spacing: -0.025em;
+  cursor: pointer;
+}
+
+.health_memo_textarea {
+  display: block;
+  width: 100%;
+  min-height: 80px;
+  padding: 16px;
+  border: 0;
+  border-radius: 8px;
+  background: #f2f2f6;
+  box-sizing: border-box;
+  color: #111111;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 145%;
+  letter-spacing: -0.025em;
+  outline: none;
+  resize: none;
+}
+
+.health_memo_textarea::placeholder {
+  color: #111111;
+  opacity: 1;
+}
+
+/* 버튼 */
+
+.health_memo_actions {
+  display: flex;
+  gap: 8px;
+  padding: 20px 0 6px;
+}
+
+.health_memo_save_btn,
+.health_memo_upload_btn {
+  flex: 1;
+  height: 54px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: inherit;
+  letter-spacing: -0.025em;
+  cursor: pointer;
+  outline: none;
+}
+
+.health_memo_save_btn {
+  border: 1px solid #6d59f8;
+  background: #ffffff;
+  color: #6d59f8;
+}
+
+.health_memo_save_btn:disabled {
+  border-color: #c8c8d3;
+  color: #c8c8d3;
+  cursor: default;
+}
+
+.health_memo_upload_btn {
+  border: 0;
+  background: #6d59f8;
+  color: #ffffff;
+}
+
+/* ── 태블릿 반응형 (768px+) ─────────────────────────────── */
+
+@media (min-width: 768px) {
+  /* 카메라 그리드: 뷰 영역이 남은 세로 공간을 모두 채움 */
+  .health_cam_ui {
+    grid-template-rows: auto minmax(0, 1fr) auto auto;
+  }
+
+  .health_cam_view {
+    height: 100%;
+  }
+
+  /* BottomSheet: 전체 너비 하단 시트 */
+  .health_pet_modal_sheet {
+    width: 100%;
+    min-height: 42dvh;
+    border-radius: 20px 20px 0 0;
+    padding: 0 32px 32px;
+  }
+
+  /* 핸들바 */
+  .health_pet_modal_handle {
+    width: 52px;
+    height: 5px;
+    margin: 10px auto 4px;
+  }
+
+  /* 반려동물 아이템 */
+  .health_pet_modal_item {
+    gap: 16px;
+    padding: 24px 16px;
+  }
+
+  /* 선택 배경 제거 (피그마: 모든 아이템 동일 스타일) */
+  .health_pet_modal_item.is_selected {
+    background: transparent;
+  }
+
+  /* 아바타 */
+  .health_pet_modal_avatar {
+    width: 52px;
+    height: 52px;
+  }
+
+  /* 이름 */
+  .health_pet_modal_name {
+    font-size: 18px;
+  }
+
+  /* 상세 정보 (나이/몸무게/성별) */
+  .health_pet_modal_detail {
+    gap: 8px;
+  }
+
+  .health_pet_modal_detail_label,
+  .health_pet_modal_detail_value {
+    font-size: 16px;
+  }
+
+  /* 닫기 버튼 */
+  .health_pet_modal_close_btn {
+    height: 60px;
+    margin-top: 28px;
+    border-radius: 16px;
+    font-size: 18px;
+  }
+
+  /* 카메라 우상단 X 닫기 버튼: size prop이 인라인 스타일로 들어오므로 !important로 override */
+  .health_cam_close_btn {
+    width: 48px !important;
+    height: 48px !important;
+  }
+
+  .health_cam_close_btn .button_icon_asset svg {
+    width: 24px !important;
+    height: 24px !important;
+  }
+}
+
+.health_cam_pet_link > span:not(.health_cam_pet_default_label),
+.health_cam_pet_legacy_label {
+  display: none;
+}
+
+.health_cam_pet_link.has_selected_pet .health_cam_pet_default_label {
+  display: none;
+}
+
+.health_cam_pet_link.has_selected_pet > span:not(.health_cam_pet_default_label),
+.health_cam_pet_link.has_selected_pet .health_cam_pet_legacy_label {
+  display: inline-flex;
+}
+
+.health_cam_pet_legacy_label {
+  display: none;
+}
+
+.health_cam_pet_name {
+  color: #111111;
+  font-weight: 700;
+}

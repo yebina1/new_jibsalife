@@ -1,0 +1,395 @@
+.layout_indicator_only:has(.cv_wrap) {
+  background: #ffffff;
+}
+
+.layout_indicator_only .layout_content:has(.cv_wrap) {
+  background: #ffffff;
+  padding: 0;
+}
+
+.cv_wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── 1위 ── */
+.cv_first_section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px 16px 0;
+}
+
+.cv_first_title_row {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.cv_first_title_row h2 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  color: #111;
+}
+
+.cv_medal_title_icon {
+  width: 67px;
+  height: 68px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.cv_first_img_wrap {
+  width: calc(100% + 32px);
+  border-radius: 0;
+  margin-inline: -16px;
+  overflow: hidden;
+}
+
+.cv_first_img {
+  display: block;
+  width: 100%;
+  height: 312px;
+  flex-shrink: 0;
+  align-self: stretch;
+  aspect-ratio: 163 / 136;
+  object-fit: cover;
+}
+
+.cv_first_stats {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cv_first_stats .cv_stats_row .cv_votes_label{
+  font-size: 18px;
+}
+
+.cv_first_stats .cv_stats_row strong{
+  font-weight: 600;
+}
+
+.cv_first_stats .cv_stats_row .cv_percent_label {
+  color: #505050;
+  font-size: 14px;
+}
+
+/* 공통 stats row */
+.cv_stats_row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+}
+
+.cv_votes_label {
+  font-size: 18px;
+  color: #505050;
+  line-height: var(--line-height-sm);
+}
+
+.cv_first_section .cv_votes_label {
+  font-size: 18px;
+}
+
+.cv_rank_item .cv_votes_label {
+  font-size: 14px;
+}
+
+.cv_votes_label strong {
+  color: #6D59F8;
+  font-weight: 600;
+}
+
+.cv_percent_label {
+  font-size: 14px;
+  color: #505050;
+  line-height: 1.45;
+  flex-shrink: 0;
+}
+
+.cv_rank_item .cv_percent_label {
+  font-size: 12px;
+}
+
+/* 진행 바 */
+.cv_progress_bar {
+  height: 10px;
+  background: #F3F4F6;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.cv_progress_fill {
+  height: 100%;
+  background: #6366F1;
+  border-radius: 99px;
+}
+
+.cv_content_wrap {
+  margin-top: -88px;
+}
+
+/* ── SNS 프로필 카드 ── */
+.cv_profile_card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  background: #F3F2FD;
+  border-radius: 16px 16px 0 0;
+}
+
+.cv_profile_row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cv_profile_right {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.profile_image.cv_profile_avatar {
+  width: 70px;
+  height: 70px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  padding: 3px;
+  background: linear-gradient(135deg, #FBBF00 17%, #DD0657 50%, #FF0038 66%, #FA01A3 83%, #E600CC 99%);
+  
+}
+
+.profile_image.cv_profile_avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #fff;
+}
+
+.cv_profile_info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-block: 8px;
+}
+
+.cv_profile_username_row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+}
+
+.cv_profile_insta_icon {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.cv_profile_username {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111;
+}
+
+.cv_profile_desc {
+  margin: 0;
+  color: #111111;
+}
+
+.cv_follow_btn {
+  flex-shrink: 0;
+  align-self: flex-start;
+  padding: 6px 14px;
+  border-radius: 99px;
+  background: #E5E7EB;
+  color: #111;
+  font-size: 13px;
+  font-weight: 600;
+  height: auto;
+  min-width: 0;
+  width: auto;
+}
+
+.cv_follow_btn.is_disabled {
+  color: #999999 !important;
+  cursor: default;
+  margin-top: 3px;
+}
+
+/* ── 최근 게시물 미리보기 ── */
+.cv_preview_section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cv_preview_label {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6B7280;
+}
+
+.cv_preview_grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.cv_preview_img {
+  display: block;
+  width: 100%;
+  height: 90px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* ── 다른순위 (2위~3위) ── */
+.cv_other_ranks_section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px 16px 24px;
+}
+
+.cv_rank_item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cv_rank_medal {
+  position: absolute;
+  left: -5px;
+  top: -14px;
+  width: 38px;
+  height: 38px;
+  object-fit: contain;
+}
+
+.cv_rank_photo {
+  display: block;
+  width: 88px;
+  height: 88px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.cv_rank_body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.cv_rank_name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111;
+}
+
+/* ── 기타 순위 ── */
+.cv_others_section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px 16px;
+}
+
+.cv_others_section > .title {
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.cv_others_more_btn {
+  color: #505050;
+}
+
+.cv_others_more_btn .button_label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cv_others_more_btn.is_disabled {
+  color: #999999;
+  cursor: default;
+}
+
+.cv_others_grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.cv_others_item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.cv_others_img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.cv_others_label {
+  font-size: 14px;
+  color: #111111;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* ── 하단 ── */
+.cv_bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 20px;
+}
+
+.cv_share_hint {
+  margin: 0;
+  font-size: 16px;
+  color: #505050;
+  text-align: center;
+}
+
+.cv_share_hint strong {
+  color: #111;
+  font-weight: 600;
+}
+
+
+/* ── 리워드 알림 ── */
+.cvd_reward_alert {
+  display: grid;
+  gap: 48px;
+  width: 100%;
+}
+
+.cvd_reward_confirm {
+  width: 100%;
+  border-radius: 12px;
+}

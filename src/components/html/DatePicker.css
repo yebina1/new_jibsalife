@@ -1,0 +1,132 @@
+.date_picker_overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 320;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.date_picker_overlay.dropdown {
+  top: var(--picker-top, 0px);
+  align-items: flex-start;
+}
+
+.date_picker {
+  width: 100%;
+  max-width: 480px;
+  background: #ffffff;
+  border-radius: 20px 20px 0 0;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  overflow: hidden;
+}
+
+.date_picker.inline {
+  max-width: none;
+  border-radius: 0;
+  padding-bottom: 0;
+}
+
+.date_picker.flat {
+  border-radius: 0;
+}
+
+.date_picker_overlay.dropdown .date_picker {
+  border-radius: 0;
+}
+
+.date_picker_columns {
+  position: relative;
+  display: flex;
+  height: 132px;
+  overflow: hidden;
+}
+
+.date_picker_column {
+  flex: 1;
+  overflow-y: scroll;
+  overscroll-behavior: contain;
+  scroll-snap-type: y mandatory;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.date_picker_column::-webkit-scrollbar {
+  display: none;
+}
+
+.date_picker_spacer {
+  height: 44px;
+  flex-shrink: 0;
+}
+
+.date_picker_item {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: #b0b0c3;
+  transition: color 0.15s, font-weight 0.15s;
+  user-select: none;
+  scroll-snap-align: center;
+}
+
+.date_picker_item.active {
+  position: relative;
+  z-index: 1;
+  color: #1a1a2e;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.date_picker_selector {
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  right: 16px;
+  height: 44px;
+  transform: translateY(-50%);
+  border-radius: 10px;
+  background: #C4B5FD;
+  pointer-events: none;
+}
+
+.date_picker_actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 24px 16px 10px;
+}
+
+.date_picker_actions button {
+  flex: 1;
+  min-width: 0;
+  height: 54px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.date_picker_actions button:first-child {
+  border: 1px solid #E5E5EC;
+  background: #ffffff;
+  color: #111111;
+}
+
+.date_picker_actions button:last-child {
+  border: 0;
+  background: #6D59F8;
+  color: #ffffff;
+}
+
+.date_picker_divider {
+  display: none;
+}

@@ -1,0 +1,23 @@
+.health_qna_page {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  background: #f1f1f5;
+  box-sizing: border-box;
+}
+
+.layout:has(.health_qna_page) .status_message_bar {
+  bottom: 116px;
+}
+
+.health_qna_notification {
+  position: relative;
+  color: #111111 !important;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+}
+
+.health_qna_notification .header_icon {
+  color: #111111 !important;
+  stroke: #111111 !important;
+}

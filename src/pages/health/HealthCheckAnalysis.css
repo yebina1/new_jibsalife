@@ -1,0 +1,245 @@
+.hca_page {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+}
+
+/* ── 타이틀바 ── */
+
+.hca_titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  padding: 0 8px 0 4px;
+  flex-shrink: 0;
+  border-bottom: 1px solid rgba(229, 229, 229, 0.8);
+}
+
+.hca_titlebar_start {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.hca_title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111111;
+  line-height: 1;
+  letter-spacing: -0.025em;
+}
+
+.hca_actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ── 메인 (피그마 오토레이아웃 기준) ── */
+
+.hca_main {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  padding: 24px 20px;
+  box-sizing: border-box;
+}
+
+/* ── 1. 타이틀 섹션 ── */
+
+.hca_top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.hca_text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hca_title_text {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #111111;
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+}
+
+.hca_sub_text {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 400;
+  color: #505050;
+  line-height: 1.4;
+}
+
+.hca_progress {
+  position: relative;
+  flex-shrink: 0;
+  width: 70px;
+  height: 70px;
+  display: grid;
+  place-items: center;
+}
+
+.hca_progress svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hca_progress_text {
+  position: relative;
+  z-index: 1;
+  font-size: 15px;
+  font-weight: 600;
+  color: #111111;
+  line-height: 1;
+}
+
+/* ── 2. 카드 그리드 섹션 (피그마: 167×160, gap 10px) ── */
+
+.hca_grid {
+  display: grid;
+  grid-template-columns: 167px 167px;
+  gap: 10px;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hca_card {
+  width: 167px;
+  height: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px 8px;
+  border: 1px solid #e5e5ec;
+  border-radius: 16px;
+  background: #ffffff;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.hca_card_done {
+  background: rgba(17, 17, 17, 0.5);
+}
+
+.hca_card_label {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #111111;
+  line-height: 1.45;
+}
+
+/* ── 3. 경고 문구 섹션 ── */
+
+.hca_notice {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--point-dark-red, #a10803);
+  text-align: center;
+  line-height: 1.4;
+  flex-shrink: 0;
+}
+
+/* ── 태블릿 반응형 (768px+) ── */
+
+@media (min-width: 768px) {
+  /* 타이틀바 */
+  .hca_titlebar {
+    height: 72px;
+    padding: 0 16px;
+  }
+
+  .hca_titlebar_start {
+    gap: 8px;
+  }
+
+  .hca_title {
+    font-size: 22px;
+  }
+
+  /* 메인 컨테이너 — 피그마: padding 24px 16px, 섹션 간 gap 132px */
+  .hca_main {
+    gap: 132px;
+    padding: 24px 16px;
+  }
+
+  /* progress 섹션 */
+  .hca_top {
+    height: 100px;
+  }
+
+  .hca_text {
+    gap: 6px;
+  }
+
+  .hca_title_text {
+    font-size: 22px;
+    font-weight: 700;
+  }
+
+  .hca_sub_text {
+    font-size: 14px;
+  }
+
+  /* progress 원형 차트 — 피그마: 100×100 */
+  .hca_progress {
+    width: 100px;
+    height: 100px;
+  }
+
+  .hca_progress_text {
+    font-size: 22px;
+  }
+
+  /* 카드 그리드 — 피그마: gap 10px */
+  .hca_grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  /* 카드 — 피그마: height 264px, padding 8px, border-radius 12px */
+  .hca_card {
+    width: 100%;
+    height: 264px;
+    gap: 12px;
+    padding: 8px;
+    border-radius: 12px;
+  }
+
+  /* 카드 아이콘 — 피그마: 60×60 */
+  .hca_card img {
+    width: 60px;
+    height: 60px;
+  }
+
+  /* 카드 텍스트 — 피그마: font-size 18px */
+  .hca_card_label {
+    font-size: 18px;
+  }
+
+  /* 경고 문구 — 피그마: font-size 14px */
+  .hca_notice {
+    font-size: 14px;
+  }
+}

@@ -1,0 +1,98 @@
+.confirm_dialog_copy {
+  display: grid;
+  gap: 16px;
+  margin: 0 0 20px;
+  text-align: center;
+}
+
+.confirm_dialog_msg {
+  margin: 0;
+  color: #111111;
+  text-align: center;
+}
+
+.confirm_dialog_desc {
+  margin: 0;
+  color: #767676;
+  word-break: keep-all;
+}
+
+.confirm_dialog_btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  width: 100%;
+}
+
+.confirm_dialog_btns > :only-child {
+  grid-column: 1 / -1;
+}
+
+/* vote-edit variant */
+.alert.confirm_dialog_vote_edit {
+  width: min(100%, 343px);
+  border-radius: 12px;
+  padding: 20px 32px;
+  background: #ffffff;
+}
+
+.confirm_dialog_vote_edit .confirm_dialog_copy {
+  gap: 8px;
+  margin: 0 0 24px;
+}
+
+.confirm_dialog_vote_edit .confirm_dialog_desc {
+  color: #505050;
+  text-align: center;
+}
+
+.confirm_dialog_vote_edit .confirm_dialog_btns {
+  gap: 8px;
+}
+
+/* vote submit variant */
+.alert.confirm_dialog_vote_submit {
+  width: min(100%, 343px);
+  min-height: 206px;
+  padding: 32px 20px 36px;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.16);
+  box-sizing: border-box;
+}
+
+.confirm_dialog_vote_submit .confirm_dialog_copy {
+  gap: 16px;
+  margin: 0 24px;
+  width: 100%;
+  min-height: 70px;
+  align-content: center;
+}
+
+.confirm_dialog_vote_submit .confirm_dialog_desc {
+  color: #505050;
+  text-align: center;
+}
+
+.confirm_dialog_vote_submit .confirm_dialog_btns {
+  gap: 10px;
+}
+
+.confirm_dialog_vote_submit .confirm_dialog_btns .white_btn,
+.confirm_dialog_vote_submit .confirm_dialog_btns .purple_btn {
+  height: 48px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.confirm_dialog_vote_submit .confirm_dialog_btns .white_btn {
+  border-color: #D9D9D9;
+  color: #111111;
+  background: #D9D9D9;
+}
+
+.confirm_dialog_vote_submit .confirm_dialog_btns .purple_btn {
+  background: #FF88C5;
+  border-color: #FF88C5;
+}

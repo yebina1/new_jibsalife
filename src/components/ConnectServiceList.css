@@ -1,0 +1,49 @@
+.connect_service_list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 48px;
+}
+
+.connect_service_button {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #111111;
+  text-align: center;
+  cursor: pointer;
+}
+
+.connect_service_button span {
+  width: 72px;
+  height: 72px;
+  margin-bottom: 14px;
+  background: #a34d50;
+}
+
+.connect_service_button strong {
+  margin-bottom: 8px;
+  font-size: clamp(16px, 1vw, 18px);
+  font-weight: 700;
+}
+
+.connect_service_button p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.35;
+  word-break: keep-all;
+}
+
+@media (max-width: 360px) {
+  .connect_service_list {
+    gap: 28px;
+  }
+
+  .connect_service_button span {
+    width: 58px;
+    height: 58px;
+  }
+}

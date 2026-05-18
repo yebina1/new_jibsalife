@@ -1,0 +1,618 @@
+/* ── HealthReport 페이지 ─────────────────────────────────── */
+
+.hr_page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  background: white;
+}
+
+/* ── 공통 카드 ───────────────────────────────────────────── */
+
+.hr_card {
+  width: 343px;
+  border: 1px solid #e5e5ec;
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+/* ── 공통 뱃지 ───────────────────────────────────────────── */
+
+.hr_badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 6px;
+  border: 1px solid #6d59f8;
+  border-radius: 100px;
+  color: #6d59f8;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── 카드 1: 펫 상태 총평 ────────────────────────────────── */
+
+.hr_card_pet {
+  padding: 20px;
+}
+
+.hr_pet {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hr_pet_avatar {
+  flex-shrink: 0;
+  width: 72px;
+  height: 72px;
+  border-radius: 12px;
+  border: 1px solid #e5e5ec;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: #f1f1f5;
+}
+
+.hr_pet_avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hr_pet_text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hr_pet_name {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #111111;
+  line-height: 1.4;
+  letter-spacing: -0.45px;
+}
+
+.hr_pet_status {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #111111;
+  line-height: 1.4;
+  letter-spacing: -0.45px;
+}
+
+.hr_pet_check_icon {
+  width: 24px;
+  height: 24px;
+}
+
+/* ── 카드 2: 활동량 차트 ─────────────────────────────────── */
+
+.hr_card_chart {
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.hr_chart_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.hr_chart_header_left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hr_chart_title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #000;
+  line-height: 1.4;
+  letter-spacing: -0.4px;
+}
+
+.hr_chart_subtitle {
+  font-size: 14px;
+  font-weight: 400;
+  color: #505050;
+  line-height: 1.4;
+  letter-spacing: -0.35px;
+}
+
+.hr_chart_inner {
+  --hr-plot-top: 10px;
+  --hr-plot-bottom: 27px;
+  --hr-plot-height: calc(100% - var(--hr-plot-top) - var(--hr-plot-bottom));
+  height: 157px;
+  position: relative;
+  margin-top: 16px;
+  overflow: visible;
+}
+
+/* Y축 레이블 */
+
+.hr_y_label {
+  position: absolute;
+  left: 0;
+  width: 36px;
+  text-align: right;
+  font-size: 14px;
+  font-weight: 400;
+  color: #111;
+  line-height: 1;
+  letter-spacing: -0.025em;
+  white-space: nowrap;
+  transform: translateY(-50%);
+}
+
+/* 수평선 */
+
+.hr_h_line {
+  position: absolute;
+  left: 39px;
+  width: calc(100% - 39px);
+  height: 1px;
+}
+
+.hr_h_line_dashed {
+  background: #e5e5ec;
+}
+
+.hr_h_line_solid {
+  background: #b6b6b6;
+}
+
+/* 막대 그룹 */
+
+.hr_bars {
+  position: absolute;
+  left: 39px;
+  top: var(--hr-plot-top);
+  height: var(--hr-plot-height);
+  display: flex;
+  gap: 17px;
+  align-items: flex-end;
+}
+
+.hr_bar_group {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  width: 24px;
+  height: 100%;
+}
+
+.hr_bar {
+  width: 24px;
+  border-radius: 4px 4px 0 0;
+}
+
+.hr_bar_label {
+  position: absolute;
+  top: calc(100% + 7px);
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 14px;
+  font-weight: 400;
+  color: #767676;
+  line-height: 1;
+  letter-spacing: -0.025em;
+  white-space: nowrap;
+}
+
+.hr_bar_label.today {
+  font-weight: 600;
+  color: #111111;
+}
+
+/* ── 카드 3: 식욕 / 배변 상태 ───────────────────────────── */
+
+.hr_card_appetite {
+  padding: 20px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.hr_appetite_col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.hr_appetite_icon_wrap {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+}
+
+.hr_appetite_icon_wrap img {
+  width: 100%;
+  height: 100%;
+}
+
+.hr_appetite_label_row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.hr_appetite_label {
+  font-size: 18px;
+  font-weight: 600;
+  color: #505050;
+  line-height: 1.4;
+  letter-spacing: -0.45px;
+}
+
+.hr_appetite_divider {
+  width: 1px;
+  height: 60px;
+  background: #e5e5ec;
+  flex-shrink: 0;
+}
+
+/* ── 카드 4: 병원 방문 권장 기준 ─────────────────────────── */
+
+.hr_card_criteria {
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.hr_criteria_header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.hr_criteria_shield_wrap {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+}
+
+.hr_criteria_shield_wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.hr_criteria_title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #111111;
+  line-height: 1.4;
+  letter-spacing: -0.4px;
+}
+
+.hr_criteria_grid {
+  display: flex;
+  gap: 32px;
+}
+
+.hr_criteria_col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.hr_criteria_item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hr_criteria_check {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.hr_criteria_text {
+  font-size: 14px;
+  font-weight: 400;
+  color: #111111;
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+}
+
+/* ── 카드 5: 병원찾기 / 수의사상담 ──────────────────────── */
+
+.hr_actions {
+  display: flex;
+  gap: 8px;
+  width: 343px;
+}
+
+.hr_action_card {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 14px 20px 0;
+  border: 0;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+}
+
+.hr_action_hospital {
+  background: #ffebe0;
+}
+
+.hr_action_consult {
+  background: #e5e5ec;
+  cursor: not-allowed;
+}
+
+.hr_action_img {
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.hr_action_img_disabled {
+  filter: grayscale(100%);
+  opacity: 0.45;
+}
+
+.hr_action_text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hr_action_title_row {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.hr_action_title {
+  margin: 0;
+  flex: 0 0 auto;
+  font-size: 14px;
+  font-weight: 600;
+  color: #111111;
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+}
+
+.hr_action_title_disabled {
+  color: #ababab;
+}
+
+.hr_action_arrow {
+  display: inline-grid;
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  place-items: center;
+  color: #111111;
+}
+
+.hr_action_arrow .chevron_icon,
+.hr_action_arrow .chevron_icon_svg {
+  width: 20px;
+  height: 20px;
+}
+
+.hr_action_arrow .chevron_icon_path {
+  stroke-width: 2;
+}
+
+.hr_action_arrow_disabled {
+  color: #ababab;
+}
+
+.hr_action_desc {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 400;
+  color: #505050;
+  line-height: 1.45;
+  letter-spacing: -0.025em;
+  white-space: pre-line;
+}
+
+.hr_action_desc_disabled {
+  color: #ababab;
+}
+
+
+/* ── 태블릿 반응형 (768px+) ────────────────────────────────── */
+
+@media (min-width: 768px) {
+  /* 페이지 컨테이너: 좌우 끝까지 꽉 차게, align stretch */
+  .hr_page {
+    gap: 20px;
+    padding: 0 32px 32px;
+    align-items: stretch;
+  }
+
+  /* 공통 카드: 고정 너비 해제 */
+  .hr_card {
+    width: 100%;
+  }
+
+  /* 카드 1: 펫 상태 */
+  .hr_card_pet {
+    padding: 24px;
+  }
+
+  .hr_badge{
+    font-size: 14px;
+  }
+
+  .hr_pet {
+    gap: 16px;
+  }
+
+  .hr_pet_avatar {
+    width: 88px;
+    height: 88px;
+    border-radius: 14px;
+  }
+
+  .hr_pet_name,
+  .hr_pet_status {
+    font-size: 20px;
+  }
+
+  .hr_pet_check_icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  /* 카드 2: 활동량 차트 */
+  .hr_card_chart {
+    padding: 28px 20px;
+  }
+
+  .hr_chart_inner {
+    --hr-plot-top: 14px;
+    --hr-plot-bottom: 32px;
+    height: clamp(220px, 17vw, 340px);
+    margin-top: 20px;
+  }
+
+  .hr_chart_title {
+    font-size: 18px;
+  }
+
+  .hr_chart_subtitle {
+    font-size: 16px;
+  }
+
+  .hr_y_label {
+    width: 44px;
+    font-size: 16px;
+  }
+
+  /* 레이블 영역(44px) + 여백(12px) = 56px부터 막대/선 시작 */
+  .hr_h_line {
+    left: 56px;
+    width: calc(100% - 56px);
+  }
+
+  .hr_bars {
+    left: 56px;
+    right: 0;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .hr_bar_group,
+  .hr_bar {
+    width: 40px;
+  }
+
+  .hr_bar_label {
+    font-size: 16px;
+  }
+
+  /* 카드 3: 식욕/배변 */
+  .hr_card_appetite {
+    padding: 24px;
+    gap: 20px;
+  }
+
+  .hr_appetite_icon_wrap {
+    width: 52px;
+    height: 52px;
+  }
+
+  .hr_appetite_label {
+    font-size: 20px;
+  }
+
+  .hr_appetite_divider {
+    height: 72px;
+  }
+
+  /* 카드 4: 병원 방문 권장 기준 */
+  .hr_card_criteria {
+    padding: 20px;
+    gap: 20px;
+  }
+
+  .hr_criteria_shield_wrap {
+    width: 36px;
+    height: 36px;
+  }
+
+  .hr_criteria_title {
+    font-size: 18px;
+  }
+
+  .hr_criteria_col {
+    gap: 20px;
+  }
+
+  .hr_criteria_check {
+    width: 20px;
+    height: 20px;
+  }
+
+  .hr_criteria_text {
+    font-size: 16px;
+  }
+
+  /* 카드 5: 병원찾기 / 수의사상담 */
+  .hr_actions {
+    width: 100%;
+    gap: 12px;
+  }
+
+  .hr_action_card {
+    padding: 24px;
+    gap: 16px;
+    border-radius: 14px;
+  }
+
+  .hr_action_img {
+    width: 72px;
+    height: 72px;
+  }
+
+  .hr_action_title {
+    font-size: 16px;
+  }
+
+  .hr_action_desc {
+    font-size: 14px;
+  }
+}
