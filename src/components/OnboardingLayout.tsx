@@ -28,7 +28,13 @@ type OnboardingLayoutProps = {
 }
 
 function OnboardingLayout({
+  step,
+  totalSteps,
   topCenterLabel,
+  topActionLabel,
+  topActionInline = false,
+  reserveTopActionSpace = false,
+  onTopAction,
   title,
   subtitle,
   visual,
@@ -50,13 +56,43 @@ function OnboardingLayout({
 
   const sectionClassName = [
     'onboarding_layout',
+    topActionLabel || reserveTopActionSpace ? 'has_top_action' : '',
     tappable ? 'is_tappable' : '',
   ]
     .filter(Boolean)
     .join(' ')
 
+  const progressLabel =
+    typeof step === 'number' && typeof totalSteps === 'number' ? (
+      <>
+        <span className="title_h4_semibold">{step}</span>
+        <span className="onboarding_layout_progress_divider">/</span>
+        <span className="onboarding_layout_progress_total title_h4_semibold">{totalSteps}</span>
+      </>
+    ) : topCenterLabel ? (
+      <span className="title_h4_semibold">{topCenterLabel}</span>
+    ) : null
+
   return (
     <section className={sectionClassName}>
+      {topActionLabel && !topActionInline ? (
+        <div className="onboarding_layout_topbar">
+          <button
+            type="button"
+            className="onboarding_layout_top_action caption_medium"
+            onClick={onTopAction}
+          >
+            {topActionLabel}
+          </button>
+        </div>
+      ) : reserveTopActionSpace ? (
+        <div className="onboarding_layout_topbar">
+          <span className="onboarding_layout_top_action onboarding_layout_top_action_placeholder caption_medium">
+            .
+          </span>
+        </div>
+      ) : null}
+
       <div
         className="onboarding_layout_content"
         style={contentGap ? { ['--onboarding-content-gap' as string]: `${contentGap}px` } : undefined}
@@ -75,10 +111,25 @@ function OnboardingLayout({
         }
       >
         <div className="onboarding_layout_header">
-          {topCenterLabel ? (
-            <p className="onboarding_layout_progress onboarding_layout_progress_label">
-              <span className="title_h4_semibold">{topCenterLabel}</span>
-            </p>
+          {progressLabel ? (
+            <div
+              className={`onboarding_layout_progress_row${topActionLabel && topActionInline ? ' has_inline_action' : ''}`}
+            >
+              <p className="onboarding_layout_progress onboarding_layout_progress_label">
+                {progressLabel}
+              </p>
+              {topActionLabel && topActionInline ? (
+                <div className="onboarding_layout_top_action_inline_slot">
+                  <button
+                    type="button"
+                    className="onboarding_layout_top_action caption_medium"
+                    onClick={onTopAction}
+                  >
+                    {topActionLabel}
+                  </button>
+                </div>
+              ) : null}
+            </div>
           ) : null}
 
           <Title as="h2" className="onboarding_layout_copy" title={title}>

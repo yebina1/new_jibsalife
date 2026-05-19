@@ -6,9 +6,7 @@ import { checkChallengeDayDone, CHALLENGE_STATUS_CHANGED_EVENT, isDemoChallengeA
 import { useNavigate } from 'react-router'
 import { addUserNotification } from '../../utils/userNotifications'
 import { AUTH_CURRENT_USER_STORAGE_KEY } from '../../utils/authAccounts'
-import PageHeader from '../../components/PageHeader'
-import HeaderIcon from '../../components/HeaderIcon'
-import Button from '../../components/html/Button'
+import CommunityPageHeader from '../../components/CommunityPageHeader'
 import Title from '../../components/Title'
 import ContentSection from '../../components/ContentSection'
 import WeeklyChallengeCard from '../../components/WeeklyChallengeCard'
@@ -281,22 +279,7 @@ function CommunityChallenge() {
 
   return (
     <>
-      <PageHeader
-        title="집사인생"
-        rightContent={
-          <>
-            <Button type="button" aria-label="검색" className="community_header_search" onClick={() => navigate('/community/search')}>
-              <HeaderIcon type="search" />
-            </Button>
-            <Button type="button" aria-label="calendar" onClick={() => navigate('/mission')}>
-              <HeaderIcon type="calendar" />
-            </Button>
-            <Button type="button" aria-label="notification" onClick={() => navigate('/notification')}>
-              <HeaderIcon type="notification" />
-            </Button>
-          </>
-        }
-      />
+      <CommunityPageHeader />
 
       <main className="page cc_page">
         <section className="cc_progress_section">

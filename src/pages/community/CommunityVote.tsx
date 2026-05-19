@@ -4,8 +4,7 @@ import { type CSSProperties, useEffect, useMemo, useRef, useState } from 'react'
 import { useSwipeNav } from '../../hooks/useSwipeNav'
 import { useNavigate, useSearchParams } from 'react-router'
 import { ChevronRight, MoreVertical } from 'lucide-react'
-import PageHeader from '../../components/PageHeader'
-import HeaderIcon from '../../components/HeaderIcon'
+import CommunityPageHeader from '../../components/CommunityPageHeader'
 import Title from '../../components/Title'
 import Button from '../../components/html/Button'
 import Alert from '../../components/Alert'
@@ -257,22 +256,7 @@ function CommunityVote() {
 
   return (
     <>
-      <PageHeader
-        title="집사인생"
-        rightContent={
-          <>
-            <Button type="button" aria-label="검색" className="community_header_search" onClick={() => navigate('/community/search')}>
-              <HeaderIcon type="search" />
-            </Button>
-            <Button type="button" aria-label="calendar" onClick={() => navigate('/mission')}>
-              <HeaderIcon type="calendar" />
-            </Button>
-            <Button type="button" aria-label="notification" onClick={() => navigate('/notification')}>
-              <HeaderIcon type="notification" />
-            </Button>
-          </>
-        }
-      />
+      <CommunityPageHeader />
 
       <main className="page cv2_page">
         {sub === 'all' && (

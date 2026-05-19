@@ -1,4 +1,3 @@
-import type { HealthResultSummaryItem } from '../components/HealthResultSummary'
 import type { HealthResultDetailItem } from '../components/HealthResultDetailBox'
 import { readMissionActivityRecords } from './missionActivityRecords'
 import { readMissionHistoryRecordsWithDefaults } from './missionHistoryRecords'
@@ -28,6 +27,13 @@ export type HealthResultSummaryData = {
   consultation: string
   hospitalGuide: string
   report: string
+}
+
+export type HealthResultSummaryItem = {
+  icon: 'warning' | 'search' | 'chat' | 'hospital' | 'report'
+  label: string
+  value: string
+  to?: string
 }
 
 export type HealthEvaluationResult = {

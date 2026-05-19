@@ -4,9 +4,7 @@ import { useSwipeNav } from '../../hooks/useSwipeNav'
 import Title from '../../components/Title'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate, useSearchParams } from 'react-router'
-import PageHeader from '../../components/PageHeader'
-import HeaderIcon from '../../components/HeaderIcon'
-import Button from '../../components/html/Button'
+import CommunityPageHeader from '../../components/CommunityPageHeader'
 import FloatingWriteButton from '../../components/FloatingWriteButton'
 import LikeButton from '../../components/LikeButton'
 import PetStoryFeedItem from '../../components/PetStoryFeedItem'
@@ -481,22 +479,7 @@ function CommunityPetStory() {
 
   return (
     <>
-      <PageHeader
-        title="집사인생"
-        rightContent={
-          <>
-            <Button type="button" aria-label="검색" className="community_header_search" onClick={() => navigate('/community/search')}>
-              <HeaderIcon type="search" />
-            </Button>
-            <Button type="button" aria-label="캘린더" onClick={() => navigate('/mission')}>
-              <HeaderIcon type="calendar" />
-            </Button>
-            <Button type="button" aria-label="알림" onClick={() => navigate('/notification')}>
-              <HeaderIcon type="notification" />
-            </Button>
-          </>
-        }
-      />
+      <CommunityPageHeader />
 
       <main className={isDaily ? 'page cpsd_page' : 'page community_page community_page_petstory'}>
         {isOverview ? (

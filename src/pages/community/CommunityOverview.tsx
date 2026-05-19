@@ -5,9 +5,7 @@ import { useNavigate } from 'react-router'
 import { useSwipeNav } from '../../hooks/useSwipeNav'
 import { checkChallengeDayDone, readCurrentDay, saveCurrentDay, claimChallengeDay, isChallengeDayClaimed, CHALLENGE_STATUS_CHANGED_EVENT } from '../../utils/challengeStatus'
 import { challengeDays } from './CommunityChallenge'
-import PageHeader from '../../components/PageHeader'
-import HeaderIcon from '../../components/HeaderIcon'
-import Button from '../../components/html/Button'
+import CommunityPageHeader from '../../components/CommunityPageHeader'
 import Title from '../../components/Title'
 import WeeklyChallengeCard from '../../components/WeeklyChallengeCard'
 import VoteMissionBanner from '../../components/VoteMissionBanner'
@@ -44,22 +42,7 @@ function CommunityOverview() {
 
   return (
     <>
-      <PageHeader
-        title="집사인생"
-        rightContent={
-          <>
-            <Button type="button" aria-label="검색" className="community_header_search" onClick={() => navigate('/community/search')}>
-              <HeaderIcon type="search" />
-            </Button>
-            <Button type="button" aria-label="calendar" onClick={() => navigate('/mission')}>
-              <HeaderIcon type="calendar" />
-            </Button>
-            <Button type="button" aria-label="notification" onClick={() => navigate('/notification')}>
-              <HeaderIcon type="notification" />
-            </Button>
-          </>
-        }
-      />
+      <CommunityPageHeader />
       <main className="page co_page">
         <VoteMissionBanner
           timeText="7시간 남음"
