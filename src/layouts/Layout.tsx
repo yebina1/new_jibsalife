@@ -52,6 +52,41 @@ const voteSortOptions = [
   { label: '임박순', value: 'deadline' },
 ] as const
 
+const placeTabs = [
+  { label: '전체', to: '/place?category=all' },
+  { label: '케어', to: '/place?category=care' },
+  { label: '동반외출', to: '/place?category=outing' },
+  { label: '여행', to: '/place?category=travel' },
+  { label: '쇼핑', to: '/place?category=shopping' },
+] as const
+
+const placeSubTabsByCategory: Record<string, { label: string; value: string }[]> = {
+  all: [{ label: '전체', value: 'all' }],
+  care: [
+    { label: '병원', value: 'hospital' },
+    { label: '미용실', value: 'grooming' },
+    { label: '훈련소', value: 'training' },
+    { label: '호텔/돌봄', value: 'hotel-care' },
+  ],
+  outing: [
+    { label: '카페', value: 'cafe' },
+    { label: '동반 식당', value: 'restaurant' },
+    { label: '산책 코스', value: 'walk-course' },
+  ],
+  travel: [{ label: '펜션숙소', value: 'pension' }],
+  shopping: [
+    { label: '용품샵', value: 'supplies' },
+    { label: '사료전문점', value: 'food' },
+    { label: '의류샵', value: 'clothing' },
+  ],
+}
+
+const placeSortOptions = [
+  { label: '인기순', value: 'popular' },
+  { label: '최신순', value: 'latest' },
+  { label: '거리순', value: 'distance' },
+] as const
+
 function getSubParam(to: string) {
   return new URLSearchParams(to.split('?')[1]).get('sub')
 }
@@ -66,6 +101,7 @@ function Layout({
   const [actionRowSlot, setActionRowSlot] = useState<HTMLElement | null>(null)
   const [headerSlot, setHeaderSlot] = useState<HTMLElement | null>(null)
   const [isCommunitySortOpen, setIsCommunitySortOpen] = useState(false)
+  const [isPlaceSortOpen, setIsPlaceSortOpen] = useState(false)
   const navigate = useNavigate()
   const [isFloatingAiHiddenByScroll, setIsFloatingAiHiddenByScroll] = useState(false)
   const headerRef = useRef<HTMLElement>(null)
@@ -75,6 +111,9 @@ function Layout({
   const searchParams = new URLSearchParams(search)
   const communitySubParam = searchParams.get('sub')
   const communitySortParam = searchParams.get('sort') ?? 'latest'
+  const placeCategoryParam = searchParams.get('category') ?? 'all'
+  const placeSubParam = searchParams.get('sub') ?? 'all'
+  const placeSortParam = searchParams.get('sort') ?? 'popular'
   const isCameraPage = pathname === '/health/camera/capture' || pathname === '/health/cam'
   const isSplashPage = pathname === '/splash'
   const isNoLayoutPage = isCameraPage || isSplashPage
@@ -91,21 +130,27 @@ function Layout({
   const isRewardPage = pathname.startsWith('/community/challenge/reward')
   const isSearchPage = pathname === '/community/search'
   const isHomePage = pathname === '/home'
+  const isPlacePath = pathname === '/place'
   const showCommunityChrome =
     isCommunityPath && !isPetStoryDetailPage && !isPetStoryWritePage && !isKnowledgeDetailPage && !isVoteDetailPage && !isVoteResultPage && !isVoteWritePage && !isRewardPage && !isSearchPage
+  const showPlaceChrome = isPlacePath
   const communitySubTabs = !isPetStoryDetailPage && !isPetStoryWritePage && !isKnowledgeDetailPage && pathname.startsWith('/community/petstory')
     ? petStorySubTabs
     : !isPetStoryDetailPage && !isKnowledgeDetailPage && pathname.startsWith('/community/vote') && pathname !== '/community/vote/detail' && !isVoteResultPage
       ? voteSubTabs
       : null
+  const placeSubTabs = placeSubTabsByCategory[placeCategoryParam] ?? placeSubTabsByCategory.all
   const showCommunitySort =
     !isPetStoryDetailPage &&
     !isKnowledgeDetailPage &&
     !pathname.startsWith('/community/vote') &&
     pathname.startsWith('/community/petstory')
+  const showPlaceSort = showPlaceChrome
   const activeCommunitySortOptions = pathname.startsWith('/community/vote') ? voteSortOptions : communitySortOptions
   const activeCommunitySort =
     activeCommunitySortOptions.find((option) => option.value === communitySortParam) ?? activeCommunitySortOptions[0]
+  const activePlaceSort =
+    placeSortOptions.find((option) => option.value === placeSortParam) ?? placeSortOptions[0]
   const contentClassName =
     hasContentPadding ? 'layout_content' : 'layout_content layout_content_no_padding'
   const hideFloatingAiButtonPaths = [
@@ -169,6 +214,30 @@ function Layout({
     return `${pathname}?${nextParams.toString()}`
   }
 
+  const buildPlaceTabTo = (categoryValue: string) => {
+    const nextParams = new URLSearchParams(search)
+    nextParams.set('category', categoryValue)
+    nextParams.set('sub', 'all')
+    if (!nextParams.get('sort')) nextParams.set('sort', 'popular')
+    return `/place?${nextParams.toString()}`
+  }
+
+  const buildPlaceSubTabTo = (subValue: string) => {
+    const nextParams = new URLSearchParams(search)
+    nextParams.set('category', placeCategoryParam)
+    nextParams.set('sub', subValue)
+    if (!nextParams.get('sort')) nextParams.set('sort', 'popular')
+    return `/place?${nextParams.toString()}`
+  }
+
+  const buildPlaceSortTo = (sortValue: string) => {
+    const nextParams = new URLSearchParams(search)
+    nextParams.set('category', placeCategoryParam)
+    nextParams.set('sub', placeSubParam)
+    nextParams.set('sort', sortValue)
+    return `/place?${nextParams.toString()}`
+  }
+
   const isMinimal = !showHeader && !showNav && !showFooter
   const isIndicatorOnlyLayout = (!showNav && showFooter) || isPetStoryDetailPage || isKnowledgeDetailPage || isVoteResultPage || isPetStoryWritePage || isVoteWritePage
   const layoutClassName = isCameraPage
@@ -179,6 +248,8 @@ function Layout({
       ? `layout layout_minimal ${isLoginPage ? 'layout_login' : ''} ${isSignupPage ? 'layout_signup' : ''} ${
           isOnboardingPage && !hasContentPadding ? 'layout_minimal_no_header_space' : ''
         }`
+      : showPlaceChrome
+        ? 'layout layout_community layout_community_with_subtabs'
       : showCommunityChrome
         ? `layout layout_community ${communitySubTabs ? 'layout_community_with_subtabs' : ''}`
         : `layout ${!showFooter ? 'layout_no_footer' : ''} ${
@@ -188,6 +259,10 @@ function Layout({
   useEffect(() => {
     setIsCommunitySortOpen(false)
   }, [pathname])
+
+  useEffect(() => {
+    setIsPlaceSortOpen(false)
+  }, [pathname, search])
 
   useLayoutEffect(() => {
     const headerEl = headerRef.current
@@ -207,7 +282,7 @@ function Layout({
     updateHeaderHeight()
     observer.observe(headerEl)
     return () => observer.disconnect()
-  }, [header, showHeader, showCommunityChrome, communitySubTabs])
+  }, [header, showHeader, showCommunityChrome, showPlaceChrome, communitySubTabs, placeSubTabs])
 
   useEffect(() => {
     if (pathname !== '/mypage/posts' || typeof window === 'undefined') {
@@ -341,6 +416,96 @@ function Layout({
                     </div>
                   </div>
                 ) : null}
+              </>
+            ) : showPlaceChrome ? (
+              <>
+                <nav className="layout_community_tabs layout_place_tabs" aria-label="장소 카테고리">
+                  {placeTabs.map((tab) => {
+                    const categoryValue = new URLSearchParams(tab.to.split('?')[1]).get('category') ?? 'all'
+
+                    return (
+                      <NavLink
+                        key={tab.to}
+                        to={buildPlaceTabTo(categoryValue)}
+                        className={() =>
+                          `layout_community_tab ${placeCategoryParam === categoryValue ? 'active' : ''}`
+                        }
+                        end
+                      >
+                        {tab.label}
+                      </NavLink>
+                    )
+                  })}
+                </nav>
+                <div className="layout_community_controls">
+                  {showPlaceSort ? (
+                    <div className={`layout_community_sort_dropdown ${isPlaceSortOpen ? 'open' : ''}`}>
+                      <Button
+                        type="button"
+                        className="s_white_radius_btn"
+                        icon={<span className="layout_community_sort_icon" />}
+                        iconPosition="right"
+                        onClick={() => setIsPlaceSortOpen((prev) => !prev)}
+                      >
+                        {activePlaceSort.label}
+                      </Button>
+                      {isPlaceSortOpen ? (
+                        <div className="layout_community_sort_menu">
+                          {placeSortOptions.map((option) => (
+                            <NavLink
+                              key={option.value}
+                              to={buildPlaceSortTo(option.value)}
+                              className={`layout_community_sort_option ${
+                                option.value === activePlaceSort.value ? 'active' : ''
+                              }`}
+                              style={{
+                                color: option.value === activePlaceSort.value ? '#6D59F8' : '#111111',
+                                WebkitTextFillColor:
+                                  option.value === activePlaceSort.value ? '#6D59F8' : '#111111',
+                                fontWeight: option.value === activePlaceSort.value ? 600 : 400,
+                              }}
+                              onClick={() => setIsPlaceSortOpen(false)}
+                            >
+                              <span
+                                style={{
+                                  color: option.value === activePlaceSort.value ? '#6D59F8' : '#111111',
+                                  WebkitTextFillColor:
+                                    option.value === activePlaceSort.value ? '#6D59F8' : '#111111',
+                                  fontWeight: option.value === activePlaceSort.value ? 600 : 400,
+                                }}
+                              >
+                                {option.label}
+                              </span>
+                            </NavLink>
+                          ))}
+                        </div>
+                      ) : null}
+                    </div>
+                  ) : null}
+
+                  <div className="layout_community_subtab_scroll">
+                    {placeSubTabs.map((tab) => {
+                      const isActive =
+                        placeCategoryParam === 'all'
+                          ? tab.value === 'all'
+                          : placeSubParam === tab.value
+
+                      return (
+                        <Button
+                          key={tab.value}
+                          type="button"
+                          className={`s_white_radius_btn${isActive ? ' layout_community_subtab_active' : ''}`}
+                          onClick={() => {
+                            navigate(buildPlaceSubTabTo(tab.value))
+                            setIsPlaceSortOpen(false)
+                          }}
+                        >
+                          {tab.label}
+                        </Button>
+                      )
+                    })}
+                  </div>
+                </div>
               </>
             ) : null}
           </header>

@@ -31,6 +31,9 @@ import {
 } from '../../utils/missionHistoryRecords'
 import { showStateBarMessage } from '../../utils/stateBarMessage'
 import { addUserNotification } from '../../utils/userNotifications'
+import { getUserScopedStorageKey } from '../../utils/userScopedStorage'
+
+const HEALTH_CAMERA_TUTORIAL_SEEN_KEY = 'jibsalife.health.camera-tutorial.seen'
 
 const today = new Date()
 
@@ -266,7 +269,13 @@ function Health() {
   const [cameraMode, setCameraMode] = useState<'photo' | 'video'>('photo')
   const [activeTab, setActiveTab] = useState<'camera' | 'memo'>('camera')
   const [capturedImage, setCapturedImage] = useState<string | null>(null)
-  const [cameraTutorialStepIndex, setCameraTutorialStepIndex] = useState<number | null>(0)
+  const [cameraTutorialStepIndex, setCameraTutorialStepIndex] = useState<number | null>(() => {
+    if (typeof window === 'undefined') return 0
+
+    return window.localStorage.getItem(getUserScopedStorageKey(HEALTH_CAMERA_TUTORIAL_SEEN_KEY)) === 'true'
+      ? null
+      : 0
+  })
   const [showPetModal, setShowPetModal] = useState(false)
   const [showCalendarPetSwitch, setShowCalendarPetSwitch] = useState(false)
   const [pets, setPets] = useState<PetProfileSummary[]>(readPetProfiles)
@@ -851,6 +860,13 @@ function Health() {
   }, [cameraTutorialStepIndex, isCameraTutorialVisible])
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
+    if (cameraTutorialStepIndex !== cameraTutorialStepOrder.length - 1) return
+
+    window.localStorage.setItem(getUserScopedStorageKey(HEALTH_CAMERA_TUTORIAL_SEEN_KEY), 'true')
+  }, [cameraTutorialStepIndex])
+
+  useEffect(() => {
     if (
       capturedImage ||
       capturedVideo ||
@@ -863,6 +879,14 @@ function Health() {
       setCameraTutorialStepIndex(null)
     }
   }, [activeTab, capturedImage, capturedVideo, showCalendarMemoSheet, showCalendarPetSwitch, showMemoSheet, showPetModal])
+
+  const closeCameraTutorial = () => {
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem(getUserScopedStorageKey(HEALTH_CAMERA_TUTORIAL_SEEN_KEY), 'true')
+    }
+
+    setCameraTutorialStepIndex(null)
+  }
 
   const advanceCameraTutorial = () => {
     setCameraTutorialStepIndex((currentStep) => {
@@ -891,7 +915,7 @@ function Health() {
           iconColor="#fff"
           size={36}
           className={`health_cam_close_btn${activeCameraTutorialStep === 'close' ? ' is_tutorial_target' : ''}`}
-          onClick={isCameraTutorialVisible ? () => setCameraTutorialStepIndex(null) : undefined}
+          onClick={isCameraTutorialVisible ? closeCameraTutorial : undefined}
           icon={
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <line x1="18" y1="6" x2="6" y2="18" />

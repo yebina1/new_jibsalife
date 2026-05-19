@@ -22,6 +22,7 @@ import HealthCameraCapture from './pages/health/HealthCameraCapture'
 import HealthCheckAnalysis from './pages/health/HealthCheckAnalysis'
 import HealthCheckLoading from './pages/health/HealthCheckLoading'
 import HealthHospitalRecommend from './pages/health/HealthHospitalRecommend'
+import HealthHospitalDetail from './pages/health/HealthHospitalDetail'
 import HealthCheckResult from './pages/health/HealthCheckResult'
 import HealthCheckSummary from './pages/health/HealthCheckSummary'
 import HealthConnect from './pages/health/HealthConnect'
@@ -147,6 +148,7 @@ function App() {
           <Route path="/health/connect" element={<HealthConnect />} />
           <Route path="/health/hospitals" element={<HealthHospitalSearch />} />
           <Route path="/health/hospitals/list" element={<HealthHospitalList />} />
+          <Route path="/health/hospitals/:hospitalId" element={<HealthHospitalDetail />} />
           <Route path="/community" element={<CommunityOverview />} />
           <Route path="/community/overview" element={<CommunityOverview />} />
           <Route path="/community/petstory" element={<CommunityPetStory />} />

@@ -20,6 +20,7 @@ function HealthHospitalList() {
     distance: item.distanceKm,
   }))
   const hospitalCardItems: HospitalCardItem[] = sortedHospitalItems.map((item) => ({
+    id: item.id,
     name: item.name,
     image: item.image,
     rating: item.rating,
@@ -65,6 +66,7 @@ function HealthHospitalList() {
             items={hospitalCardItems}
             likedNames={favoriteNames}
             onToggleLike={handleFavoriteToggle}
+            onSelect={(hospitalId) => navigate(`/health/hospitals/${hospitalId}`)}
           />
         </ContentSection>
       </main>

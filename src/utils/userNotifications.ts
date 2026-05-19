@@ -1,4 +1,5 @@
 import { isDemoAccount } from './authAccounts'
+import { demoCommunityCreatedPosts } from './communityCreatedPosts'
 import { readCurrentUserId } from './userScopedStorage'
 
 const STORAGE_KEY = 'jibsalife.notifications.user'
@@ -10,36 +11,37 @@ export type UserNotificationItem = {
   content: string
   createdAt: string
   path: string
+  state?: unknown
 }
 
 const demoNotificationItems: UserNotificationItem[] = [
   {
     id: 1,
-    title: '오늘의 챌린지 참여하고 포인트 받자!',
-    content: '챌린지 참여 시 포인트를 받을 수 있어요.',
+    title: '챌린지',
+    content: '오늘 참여한 챌린지 보상을 아직 받지 않았어요.',
     createdAt: '2026-05-18T00:08:00+09:00',
     path: '/community/challenge',
   },
   {
     id: 2,
     title: '커뮤니티',
-    content: '게시글에 댓글이 달렸어요.',
+    content: '내가 쓴 게시글에 댓글이 달렸어요.',
     createdAt: '2026-05-17T15:08:00+09:00',
-    path: '/community/petstory',
+    path: `/community/petstory/detail/${demoCommunityCreatedPosts[0]?.id ?? 900001}`,
   },
   {
     id: 3,
     title: '커뮤니티',
-    content: '게시글에 댓글이 달렸어요.',
+    content: '내가 남긴 댓글에 답글이 달렸어요.',
     createdAt: '2026-05-17T18:08:00+09:00',
-    path: '/community/petstory',
+    path: `/community/petstory/detail/${demoCommunityCreatedPosts[1]?.id ?? 900002}`,
   },
   {
     id: 4,
-    title: '커뮤니티',
-    content: '게시글에 댓글이 달렸어요.',
+    title: '캘린더',
+    content: '내가 남긴 건강 기록을 캘린더에서 다시 확인해 보세요.',
     createdAt: '2026-05-15T23:08:00+09:00',
-    path: '/community/petstory',
+    path: '/mission',
   },
 ]
 
@@ -110,13 +112,13 @@ export function seedSignupNotificationsForUser(userId: string) {
     {
       id: now.getTime(),
       title: '가입을 환영해요!',
-      content: '가입 축하 포인트 1,000P가 지급됐어요.',
+      content: '가입 축하 사인업 1,000P가 지급되었어요.',
       createdAt: now.toISOString(),
       path: '/home',
     },
     {
       id: justBeforeNow.getTime(),
-      title: '반려동물 정보를 입력해주세요!',
+      title: '반려동물 정보를 입력해 주세요',
       content: '프로필을 완성하면 더 정확한 이상 신호 감지와 건강 리포트를 받을 수 있어요.',
       createdAt: justBeforeNow.toISOString(),
       path: '/onboarding?setup=profile',

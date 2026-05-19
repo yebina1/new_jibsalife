@@ -1,6 +1,7 @@
 export type AuthAccount = {
   id: string
   password: string
+  profileName?: string
   petType?: 'dog' | 'cat' | null
   petName?: string
   profileSetupDone?: boolean
@@ -66,7 +67,7 @@ export function saveAuthAccount(account: Omit<AuthAccount, 'id' | 'createdAt'> &
   const nextAccount: AuthAccount = {
     ...account,
     id: normalizedId,
-    profileSetupDone: false,
+    profileSetupDone: account.profileSetupDone ?? false,
     createdAt: new Date().toISOString(),
   }
   const nextAccounts = [

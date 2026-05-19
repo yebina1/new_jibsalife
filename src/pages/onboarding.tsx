@@ -17,6 +17,7 @@ import { markCurrentUserProfileSetupDone } from '../utils/authAccounts'
 import { writeMyProfile } from '../utils/myProfile'
 import { writePetProfile } from '../utils/petProfile'
 import { defaultPetProfiles, writePetProfiles, writeSelectedPetProfileId } from '../utils/petProfiles'
+import { writeSignupProfileDraft } from '../utils/signupProfileDraft'
 import { voteDetails } from './community/CommunityVoteData'
 import knowledge1 from '../img/petstory/Knowledge/knowledge1.png'
 import knowledge2 from '../img/petstory/Knowledge/knowledge2.png'
@@ -254,9 +255,11 @@ function DecoratedOnboardingImage({
 function Onboarding() {
   const navigate = useNavigate()
   const { search } = useLocation()
-  const isProfileSetup = new URLSearchParams(search).get('setup') === 'profile'
+  const onboardingParams = new URLSearchParams(search)
+  const isProfileSetup = onboardingParams.get('setup') === 'profile'
+  const isSignupFlow = onboardingParams.get('flow') === 'signup'
   const pageRef = useRef<HTMLElement>(null)
-  const [step, setStep] = useState<OnboardingStep>(() => (isProfileSetup ? 'profile' : 'welcome'))
+  const [step, setStep] = useState<OnboardingStep>(() => ((isProfileSetup || isSignupFlow) ? 'profile' : 'welcome'))
   const [guardianType, setGuardianType] = useState<GuardianType | null>(null)
   const [profileName, setProfileName] = useState<string>(getRandomNicknameSuggestion)
   const [petName, setPetName] = useState('')
@@ -315,6 +318,16 @@ function Onboarding() {
 
   const handlePetNameNext = () => {
     if (trimmedPetName.length < 1) return
+
+    if (isSignupFlow && !isProfileSetup) {
+      writeSignupProfileDraft({
+        guardianType: selectedType,
+        guardianName: trimmedProfileName,
+        petName: trimmedPetName,
+      })
+      navigate('/signup')
+      return
+    }
 
     writePetProfile({ name: trimmedPetName })
     writePetProfiles([

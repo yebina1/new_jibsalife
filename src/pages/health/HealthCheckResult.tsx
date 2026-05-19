@@ -1,5 +1,5 @@
 ﻿import { useEffect, useMemo } from 'react'
-import { useLocation, useNavigate } from 'react-router'
+import { useNavigate } from 'react-router'
 import './Health.css'
 import './HealthCheckResult.css'
 import PageHeader from '../../components/PageHeader'
@@ -64,9 +64,6 @@ function countRecordedDays(records: MissionHistoryRecord[]) {
 
 function HealthCheckResult() {
   const navigate = useNavigate()
-  const location = useLocation()
-  const resultState = (location.state as { returnTo?: string } | null) ?? null
-  const backTarget = resultState?.returnTo ?? '/health/cam'
 
   const activityData = useMemo(() => {
     const today = new Date()
@@ -136,7 +133,7 @@ function HealthCheckResult() {
     <>
       <PageHeader
         title="AI 건강 리포트"
-        leftContent={<BackButton to={backTarget} replace />}
+        leftContent={<BackButton to="/home" replace />}
         rightContent={
           <>
             <Button type="button" aria-label="calendar" onClick={() => navigate('/mission')}>

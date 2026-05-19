@@ -155,6 +155,10 @@
   background: #ffffff;
 }
 
+.layout_place_tabs {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
 .layout_community_tab {
   position: relative;
   display: flex;
@@ -565,5 +569,11 @@ button.layout_nav_link {
 
   .layout_nav_label {
     font-size: 11px;
+  }
+}
+
+@media (max-width: 767px) {
+  .layout {
+    --layout-status-bar-base-height: 0px;
   }
 }

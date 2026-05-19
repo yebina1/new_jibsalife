@@ -1,4 +1,5 @@
-﻿import { useState } from 'react'
+import { useState } from 'react'
+import { Link, useNavigate } from 'react-router'
 import './Health.css'
 import './HealthHospitalSearch.css'
 import PageHeader from '../../components/PageHeader'
@@ -8,7 +9,6 @@ import ContentSection from '../../components/ContentSection'
 import BackButton from '../../components/html/BackButton'
 import Button from '../../components/html/Button'
 import LikeButton from '../../components/LikeButton'
-import { Link } from 'react-router'
 import calendarIcon from '../../svg/calendar.svg'
 import hospital3d from '../../img/hospital_3d.png'
 import message3d from '../../img/message_3d.png'
@@ -37,6 +37,7 @@ const serviceCards: ServiceCard[] = [
 ]
 
 function HealthHospitalSearch() {
+  const navigate = useNavigate()
   const [favoriteNames, setFavoriteNames] = useState<string[]>([])
   const sortedHospitalItems = sortHospitalsByStatusAndDistance(hospitalSearchItems, (item) => ({
     open: item.open,
@@ -92,15 +93,18 @@ function HealthHospitalSearch() {
             </Link>
           }
         >
-
           <ul className="health_hospital_search_list">
             {sortedHospitalItems.map((item) => {
               const operatingState = getOperatingState(item.open, item.close)
               const isFavorite = favoriteNames.includes(item.name)
 
               return (
-                <li key={item.name}>
-                  <div className="health_hospital_search_item">
+                <li key={item.id}>
+                  <button
+                    type="button"
+                    className="health_hospital_search_item"
+                    onClick={() => navigate(`/health/hospitals/${item.id}`)}
+                  >
                     <img src={item.image} alt={`${item.name} 이미지`} aria-hidden="true" />
                     <div className="health_hospital_search_item_body">
                       <div className="health_hospital_search_item_top">
@@ -127,9 +131,12 @@ function HealthHospitalSearch() {
                       liked={isFavorite}
                       className="health_hospital_search_favorite"
                       aria-label={isFavorite ? `${item.name} 찜 해제` : `${item.name} 찜`}
-                      onClick={() => handleFavoriteToggle(item.name)}
+                      onClick={(event) => {
+                        event.stopPropagation()
+                        handleFavoriteToggle(item.name)
+                      }}
                     />
-                  </div>
+                  </button>
                 </li>
               )
             })}

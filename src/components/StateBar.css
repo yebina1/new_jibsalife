@@ -71,3 +71,9 @@
   pointer-events: none;
   max-width: calc(100% - 32px);
 }
+
+@media (max-width: 767px) {
+  .state_bar {
+    display: none;
+  }
+}

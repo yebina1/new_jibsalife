@@ -7,7 +7,7 @@ import tutorialArrowClose from '../../svg/health/arrow4.svg'
 export type CameraTutorialStepId = 'video' | 'photo' | 'record' | 'close'
 
 export const cameraTutorialStepOrder: CameraTutorialStepId[] = ['video', 'photo', 'record', 'close']
-export const cameraTutorialStepDurations = [2200, 2200, 2400, 2200]
+export const cameraTutorialStepDurations = [1400, 1400, 1600, 1400]
 
 type Props = {
   step: CameraTutorialStepId

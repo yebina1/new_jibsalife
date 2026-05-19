@@ -162,6 +162,17 @@
   z-index: 20;
 }
 
+.place_empty_state {
+  display: grid;
+  min-height: 240px;
+  place-items: center;
+  color: #626273;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: -0.025em;
+}
+
 @media (max-width: 420px) {
   .place_hospital_list {
     gap: 16px;

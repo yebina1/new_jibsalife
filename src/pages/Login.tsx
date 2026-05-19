@@ -9,6 +9,7 @@ import xIcon from '../img/x-icon.png'
 import eyeOnIcon from '../svg/eye.svg'
 import eyeOffIcon from '../svg/eye_off.svg'
 import { findAuthAccount, markLoggedIn, shouldShowProfileSetupForAccount } from '../utils/authAccounts'
+import { hydrateCurrentUserProfileFromAccount } from '../utils/signupProfileDraft'
 import './Login.css'
 
 function Login() {
@@ -29,6 +30,7 @@ function Login() {
     if (account) {
       setError('')
       markLoggedIn(account)
+      hydrateCurrentUserProfileFromAccount(account)
       navigate(shouldShowProfileSetupForAccount(account) ? '/onboarding?setup=profile' : '/home')
     } else {
       setError('아이디 또는 비밀번호가 잘못 입력되었습니다.')
@@ -136,7 +138,7 @@ function Login() {
           <span>|</span>
           <Link to="#">비밀번호 찾기</Link>
           <span>|</span>
-          <Link to="/signup">회원가입</Link>
+          <Link to="/onboarding?flow=signup">회원가입</Link>
         </div>
         <p className="login_promo">
           <span>지금 가입하면, </span>

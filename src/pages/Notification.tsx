@@ -20,6 +20,7 @@ type NotificationItem = {
   content: string
   time: string
   path: string
+  state?: unknown
 }
 
 function toNotificationItem(item: UserNotificationItem): NotificationItem {
@@ -29,6 +30,7 @@ function toNotificationItem(item: UserNotificationItem): NotificationItem {
     content: item.content,
     time: formatRelativeTime(item.createdAt),
     path: item.path,
+    state: item.state,
   }
 }
 
@@ -52,7 +54,7 @@ function Notification() {
       saveNotificationReadIds(next)
       return next
     })
-    navigate(item.path)
+    navigate(item.path, item.state !== undefined ? { state: item.state } : undefined)
   }
 
   return (

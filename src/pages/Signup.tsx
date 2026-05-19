@@ -15,6 +15,7 @@ import grayCheckIcon from '../img/gray-check.png'
 import blueCheckIcon from '../img/blue-check.png'
 import { hasAuthAccount, saveAuthAccount } from '../utils/authAccounts'
 import { markSignupWelcomeRewardPending } from '../utils/profilePoints'
+import { clearSignupProfileDraft, readSignupProfileDraft } from '../utils/signupProfileDraft'
 import { seedSignupNotificationsForUser } from '../utils/userNotifications'
 import './Signup.css'
 
@@ -160,12 +161,19 @@ function Signup() {
       return
     }
 
+    const signupProfileDraft = readSignupProfileDraft()
+
     saveAuthAccount({
       id: email,
       password,
+      profileName: signupProfileDraft?.guardianName,
+      petType: signupProfileDraft?.guardianType,
+      petName: signupProfileDraft?.petName,
+      profileSetupDone: Boolean(signupProfileDraft),
     })
     markSignupWelcomeRewardPending(email)
     seedSignupNotificationsForUser(email)
+    clearSignupProfileDraft()
     sessionStorage.removeItem('signup_terms')
     sessionStorage.removeItem('signup_form')
     setIsSignupCompleteOpen(true)
