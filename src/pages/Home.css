@@ -82,12 +82,15 @@
   color: #606060;
 }
 
+.summary_slider_viewport {
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+
 .summary_slider {
   width: min(100%, 406px);
   margin-inline: auto;
-  padding: 6px 10px 20px;
-  overflow-x: hidden;
-  overflow-y: visible;
+  padding: 6px 0 20px;
   touch-action: pan-y;
   user-select: none;
   cursor: grab;
@@ -277,7 +280,7 @@
   letter-spacing: -0.025em;
 }
 
-.home_ranking_banner_copy span {
+.home_ranking_banner_copy > span {
   color: #505050;
   font-size: 12px;
   font-weight: 400;
@@ -1243,12 +1246,15 @@
 }
 
 @media (min-width: 1200px) {
+  .summary_slider_viewport {
+    overflow: visible;
+  }
+
   .summary_slider {
     width: 100%;
     max-width: 100%;
     margin-inline: 0;
     padding-inline: 0;
-    overflow: visible;
     cursor: default;
     touch-action: auto;
     user-select: auto;
@@ -1350,7 +1356,7 @@
     white-space: nowrap;
   }
 
-  .home_ranking_banner_copy span {
+  .home_ranking_banner_copy > span {
     white-space: nowrap;
   }
 

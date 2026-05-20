@@ -885,11 +885,10 @@ function Home() {
           title="오늘의 요약"
           subtitle={todaySummaryDate}
         >
+          <div className="summary_slider_viewport" aria-label="오늘의 요약 슬라이드" data-no-swipe-nav>
           <div
             ref={emblaRef}
             className="summary_slider"
-            aria-label="오늘의 요약 슬라이드"
-            data-no-swipe-nav
           >
             <div className="summary_slider_track">
               {summarySlides.map((slide) =>
@@ -923,6 +922,7 @@ function Home() {
                 />
               ))}
             </div>
+          </div>
           </div>
         </ContentSection>
 

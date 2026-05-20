@@ -106,22 +106,6 @@
   stroke: #111111;
 }
 
-.header_right .header_notification_button::after {
-  position: absolute;
-  top: 3px;
-  right: 2px;
-  display: none;
-  width: 7px;
-  height: 7px;
-  border: 2px solid #ffffff;
-  border-radius: 50%;
-  background: #E81B1B;
-  content: '';
-}
-
-.header_right .header_notification_button.is_active::after {
-  display: block;
-}
 
 .header_left button {
   display: flex;
@@ -186,4 +170,55 @@
   height: 28px;
   font-size: 28px;
   line-height: 28px;
+}
+
+/* ── 알림 벨 아이콘 ── */
+
+.header_notification_icon_wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+}
+
+.header_notification_icon_wrap.is_unread .header_icon {
+  animation: bell_ring 2.8s ease-in-out infinite;
+  transform-origin: 50% 16%;
+}
+
+.header_notification_badge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 3px;
+  border: 2px solid #ffffff;
+  border-radius: 999px;
+  background: #E74C2A;
+  color: #ffffff;
+  font-size: 11.5px;
+  font-weight: 800;
+  line-height: 1;
+  box-sizing: border-box;
+  pointer-events: none;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+@keyframes bell_ring {
+  0%   { transform: rotate(0deg); }
+  4%   { transform: rotate(20deg); }
+  10%  { transform: rotate(-18deg); }
+  16%  { transform: rotate(14deg); }
+  22%  { transform: rotate(-11deg); }
+  28%  { transform: rotate(7deg); }
+  33%  { transform: rotate(-4deg); }
+  38%  { transform: rotate(0deg); }
+  100% { transform: rotate(0deg); }
 }

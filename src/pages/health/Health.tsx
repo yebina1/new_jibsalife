@@ -13,6 +13,7 @@ import HealthCameraTutorial, {
 import ChevronIcon from '../../components/ChevronIcon'
 import BackButton from '../../components/html/BackButton'
 import MissionRecordSheet from '../../components/MissionRecordSheet'
+import HomeIndicator from '../../components/HomeIndicator'
 import StateBar from '../../components/StateBar'
 import StatusMessageBar from '../../components/StatusMessageBar'
 import {
@@ -1049,18 +1050,7 @@ function Health() {
         />
       ) : null}
 
-      <div style={{ backgroundColor: 'white', height: '34px', position: 'relative', width: '100%' }} aria-hidden="true">
-        <div style={{
-          position: 'absolute',
-          bottom: '8px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          backgroundColor: 'black',
-          height: '5px',
-          width: '134px',
-          borderRadius: '100px',
-        }} />
-      </div>
+      <HomeIndicator />
 
       {/* 반려동물 변경 모달 */}
       {showCalendarPetSwitch && (

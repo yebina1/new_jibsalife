@@ -65,7 +65,7 @@ function Notification() {
   return (
     <div className="notification_page">
       <div className="notification_header">
-        <BackButton aria-label="뒤로가기" />
+        <BackButton aria-label="뒤로가기" to="/home" />
         <h1 className="notification_title">알림</h1>
       </div>
 

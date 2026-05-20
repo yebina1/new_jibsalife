@@ -1,11 +1,56 @@
-import notificationActiveIcon from '../svg/notification.svg'
-import { shouldShowNotificationDot } from '../utils/notificationState'
+import { useEffect, useState } from 'react'
+import {
+  NOTIFICATION_READ_CHANGE_EVENT,
+  readUnreadNotificationCount,
+} from '../utils/notificationState'
+import { USER_NOTIFICATIONS_CHANGE_EVENT } from '../utils/userNotifications'
 
 type HeaderIconType = 'calendar' | 'notification' | 'search' | 'settings'
 
 type HeaderIconProps = {
   type: HeaderIconType
   size?: number
+}
+
+function NotificationBellIcon({ size }: { size?: number }) {
+  const [unreadCount, setUnreadCount] = useState(() => readUnreadNotificationCount())
+
+  useEffect(() => {
+    const update = () => setUnreadCount(readUnreadNotificationCount())
+    window.addEventListener(NOTIFICATION_READ_CHANGE_EVENT, update)
+    window.addEventListener(USER_NOTIFICATIONS_CHANGE_EVENT, update)
+    return () => {
+      window.removeEventListener(NOTIFICATION_READ_CHANGE_EVENT, update)
+      window.removeEventListener(USER_NOTIFICATIONS_CHANGE_EVENT, update)
+    }
+  }, [])
+
+  const hasUnread = unreadCount > 0
+  const badgeLabel = unreadCount > 99 ? '99+' : String(unreadCount)
+  const sizeStyle = size ? { width: size, height: size } : undefined
+
+  return (
+    <span className={`header_notification_icon_wrap${hasUnread ? ' is_unread' : ''}`}>
+      <svg
+        className="header_icon"
+        viewBox="0 0 28 28"
+        fill="none"
+        aria-hidden="true"
+        style={sizeStyle}
+      >
+        <path d="M18.65 20c0 2.57-2.08 4.65-4.65 4.65S9.35 22.57 9.35 20" />
+        <path d="M14 4.55c2.1 0 4.1.9 5.55 2.45 1.3 1.4 2 4.05 2.43 6.75.34 2.12.58 4.25.72 5.5.06.58-.4 1.05-1 1.05H6.3c-.6 0-1.06-.47-1-1.05.14-1.25.38-3.38.72-5.5C6.45 11.05 7.15 8.4 8.45 7A7.55 7.55 0 0 1 14 4.55Z" />
+      </svg>
+      {hasUnread && (
+        <span
+          className="header_notification_badge"
+          aria-label={`읽지 않은 알림 ${unreadCount}개`}
+        >
+          {badgeLabel}
+        </span>
+      )}
+    </span>
+  )
 }
 
 function HeaderIcon({ type, size }: HeaderIconProps) {
@@ -40,23 +85,7 @@ function HeaderIcon({ type, size }: HeaderIconProps) {
     )
   }
 
-  if (shouldShowNotificationDot()) {
-    return (
-      <img
-        src={notificationActiveIcon}
-        className="header_icon"
-        aria-hidden="true"
-        style={sizeStyle ?? { width: 28, height: 28 }}
-      />
-    )
-  }
-
-  return (
-    <svg className="header_icon" viewBox="0 0 28 28" fill="none" aria-hidden="true" style={sizeStyle}>
-      <path d="M18.65 20c0 2.57-2.08 4.65-4.65 4.65S9.35 22.57 9.35 20" />
-      <path d="M14 4.55c2.1 0 4.1.9 5.55 2.45 1.3 1.4 2 4.05 2.43 6.75.34 2.12.58 4.25.72 5.5.06.58-.4 1.05-1 1.05H6.3c-.6 0-1.06-.47-1-1.05.14-1.25.38-3.38.72-5.5C6.45 11.05 7.15 8.4 8.45 7A7.55 7.55 0 0 1 14 4.55Z" />
-    </svg>
-  )
+  return <NotificationBellIcon size={size} />
 }
 
 export default HeaderIcon

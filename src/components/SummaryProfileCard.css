@@ -1,7 +1,7 @@
 .summary_profile_card {
-  flex: 0 0 100%;
+  flex: 0 0 calc(100% - 40px);
   position: relative;
-  width: 100%;
+  width: calc(100% - 40px);
   min-height: 212px;
   padding: 20px;
   box-sizing: border-box;
