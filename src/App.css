@@ -110,6 +110,10 @@
   background: #f1f1f5;
 }
 
+.layout_indicator_only:has(.chat_room_dock) {
+  --layout-footer-height: 102px;
+}
+
 .layout_indicator_only .layout_content {
   background: #f1f1f5;
 }

@@ -3,12 +3,10 @@
 .chat_room {
   --chat-bot-bubble-width: 271.42px;
   --chat-bot-bubble-padding: 16px 18px;
-  --chat-room-dock-offset: var(--layout-footer-height, 0px);
-  --chat-room-dock-height: calc(68px + env(safe-area-inset-bottom) + 6px);
   display: flex;
   flex-direction: column;
-  height: calc(100dvh - var(--layout-header-height) - var(--layout-footer-height) - var(--layout-content-padding-y));
-  min-height: calc(100dvh - var(--layout-header-height) - var(--layout-footer-height) - var(--layout-content-padding-y));
+  height: calc(100dvh - var(--layout-header-height) - var(--layout-footer-height));
+  min-height: calc(100dvh - var(--layout-header-height) - var(--layout-footer-height));
   background: #f1f1f5;
   overflow: hidden;
   box-sizing: border-box;
@@ -20,8 +18,8 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  justify-content: flex-end;
   gap: 18px;
-  padding: 8px 0 calc(var(--chat-room-dock-offset) + var(--chat-room-dock-height) + 22px);
   scrollbar-width: none;
 }
 
@@ -337,15 +335,9 @@
 }
 
 .chat_room_dock {
-  position: fixed;
-  bottom: var(--layout-footer-height, 0px);
-  left: 50%;
-  width: min(100%, var(--layout-max-width));
-  transform: translateX(-50%);
-  z-index: 8;
   display: flex;
   flex-direction: column;
-  padding: 0 0 calc(env(safe-area-inset-bottom));
+  width: 100%;
   box-sizing: border-box;
   background: transparent;
 }
