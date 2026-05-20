@@ -1,6 +1,6 @@
 import './CommunityPetStoryDetails.css'
 import { createPortal } from 'react-dom'
-import { useEffect, useRef, useState } from 'react'
+import { type TouchEvent, useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router'
 import PageHeader from '../../components/PageHeader'
 import HeaderIcon from '../../components/HeaderIcon'
@@ -24,8 +24,10 @@ import { MY_PROFILE_IMAGE, MY_PROFILE_NAME, readMyProfileName } from '../../util
 import { readCommunityCreatedPosts, writeCommunityCreatedPosts } from '../../utils/communityCreatedPosts'
 import { useActionRowSlot } from '../../contexts/ActionRowContext'
 import { petStoryDetailComments } from './CommunityPetStoryDetailData'
+import { dailyPosts } from './CommunityPetStory'
 const likedPostsStorageKey = 'jibsalife.community.likedPostIds'
 const likedCommentIdsStorageKey = 'jibsalife.community.likedCommentIds'
+const DETAIL_SWIPE_THRESHOLD = 72
 
 function readViewCount(postId: number, initialViews = 0): number {
   try {
@@ -327,9 +329,11 @@ function CommunityPetStoryDetails() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const viewIncrementedForRef = useRef<number | null>(null)
   const lastScrollTopRef = useRef(0)
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null)
   const currentProfileName = readMyProfileName()
   const content = post.content?.trim() || fallbackPost.content || '함께 나누고 싶은 반려 생활 이야기를 남겼어요.'
   const isLiked = likedPostIds.includes(post.id)
+  const activeDailyIndex = dailyPosts.findIndex((dailyPost) => dailyPost.id === post.id)
   const likeCount = (post.likes ?? 0) + (isLiked ? 1 : 0)
   const topLevelCommentCount = visibleComments.filter((comment) => !comment.parentId).length
   const editCommentText = editCommentId !== null ? editCommentInitialText : undefined
@@ -497,6 +501,45 @@ function CommunityPetStoryDetails() {
     setActiveGalleryIndex(index)
   }
 
+  const navigateDailyByOffset = (offset: -1 | 1) => {
+    if (activeDailyIndex < 0) return
+
+    const nextIndex = activeDailyIndex + offset
+    if (nextIndex < 0 || nextIndex >= dailyPosts.length) return
+
+    const nextPost = dailyPosts[nextIndex]
+    navigate(`/community/petstory/detail/${nextPost.id}`, {
+      replace: true,
+      state: {
+        ...detailState,
+        post: nextPost,
+      },
+    })
+  }
+
+  const handleDetailTouchStart = (event: TouchEvent<HTMLElement>) => {
+    const touch = event.touches[0]
+    if (!touch) return
+    touchStartRef.current = { x: touch.clientX, y: touch.clientY }
+  }
+
+  const handleDetailTouchEnd = (event: TouchEvent<HTMLElement>) => {
+    const touch = event.changedTouches[0]
+    const start = touchStartRef.current
+    touchStartRef.current = null
+
+    if (!touch || !start) return
+
+    const diffX = touch.clientX - start.x
+    const diffY = touch.clientY - start.y
+
+    if (Math.abs(diffX) < DETAIL_SWIPE_THRESHOLD || Math.abs(diffX) <= Math.abs(diffY) * 1.2) {
+      return
+    }
+
+    navigateDailyByOffset(diffX < 0 ? 1 : -1)
+  }
+
   return (
     <>
       <PageHeader
@@ -519,7 +562,12 @@ function CommunityPetStoryDetails() {
         }
       />
 
-      <main className="page cpsdetail_page" ref={pageRef}>
+      <main
+        className="page cpsdetail_page"
+        ref={pageRef}
+        onTouchStart={handleDetailTouchStart}
+        onTouchEnd={handleDetailTouchEnd}
+      >
         <article className="cpsdetail_post">
           <header className="cpsdetail_author_row">
             <AvatarIcon />

@@ -193,10 +193,18 @@
   min-width: 52px;
   min-height: 34px;
   padding: 4px 8px;
+  border-color: rgb(255 255 255 / 52%);
+  background: linear-gradient(135deg, rgb(255 255 255 / 0.82), rgb(246 242 255 / 0.58));
+  box-shadow:
+    0 8px 18px rgb(109 89 248 / 0.08),
+    inset 0 1px 0 rgb(255 255 255 / 0.84);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
 }
 
 .mission_today_chip.is_active {
-  background: transparent;
+  border-color: rgb(109 89 248 / 0.18);
+  background: linear-gradient(135deg, rgb(235 229 255 / 0.96), rgb(220 210 255 / 0.84));
 }
 
 .mission_today_chip .button_label {
@@ -222,6 +230,7 @@
   line-height: 28px;
   letter-spacing: 0;
   cursor: pointer;
+  text-shadow: 0 1px 0 rgb(255 255 255 / 0.58);
 }
 
 .mission_month_title i {
@@ -238,9 +247,15 @@
   height: auto;
   padding: 17px;
   box-sizing: border-box;
-  border: 1px solid #e1e1ea;
+  border: 1px solid rgb(255 255 255 / 0.52);
   border-radius: 12px;
-  background: #ffffff;
+  background:
+    linear-gradient(145deg, rgb(237 233 254 / 0.78) 0%, rgb(245 241 255 / 0.66) 42%, rgb(255 255 255 / 0.72) 100%);
+  box-shadow:
+    0 16px 34px rgb(109 89 248 / 0.08),
+    inset 0 1px 0 rgb(255 255 255 / 0.88);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
 }
 
 .mission_weekdays,
@@ -416,10 +431,10 @@
     var(--mission-fixed-calendar-height) +
     var(--mission-fixed-title-height)
   );
-  bottom: var(--layout-footer-height);
   left: 50%;
   z-index: 89;
   width: min(100%, var(--layout-max-width));
+  max-height: calc(100dvh - var(--layout-header-height) - var(--mission-fixed-calendar-height) - var(--mission-fixed-title-height) - var(--layout-footer-height));
   padding: 0 var(--layout-inline-padding) 24px;
   box-sizing: border-box;
   overflow-y: auto;

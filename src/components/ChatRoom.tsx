@@ -342,7 +342,6 @@ function ChatRoom({
           {messages.map((chatMessage) => (
             <motion.div
               key={chatMessage.id}
-              layout
               className={`chat_message chat_message_${chatMessage.sender}`}
               initial={{ opacity: 0, y: 32 }}
               animate={{ opacity: 1, y: 0 }}
@@ -367,29 +366,6 @@ function ChatRoom({
               </div>
             </motion.div>
           ))}
-
-          {isComposingMessage && !isAwaitingResponse ? (
-            <motion.div
-              key="chat-user-preview"
-              layout
-              className="chat_message chat_message_user chat_message_user_preview"
-              aria-hidden="true"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={messageTransition}
-            >
-              <div className="chat_message_content">
-                <div className="chat_message_bubble chat_message_bubble_user_typing">
-                  <div className="chat_typing_indicator chat_typing_indicator_user" aria-hidden="true">
-                    <span className="chat_typing_dot" />
-                    <span className="chat_typing_dot" />
-                    <span className="chat_typing_dot" />
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          ) : null}
 
           {isAwaitingResponse ? (
             <motion.div
@@ -426,6 +402,7 @@ function ChatRoom({
             </motion.div>
           ) : null}
 
+
           {bottomPromptMessage && showBottomPrompt ? (
             <motion.div
               key="chat-bottom-prompt"
@@ -450,7 +427,30 @@ function ChatRoom({
               </div>
             </motion.div>
           ) : null}
+
         </AnimatePresence>
+
+        {isComposingMessage && !isAwaitingResponse ? (
+          <motion.div
+            key="chat-user-preview"
+            className="chat_message chat_message_user chat_message_user_preview"
+            aria-hidden="true"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            transition={messageTransition}
+          >
+            <div className="chat_message_content">
+              <div className="chat_message_bubble chat_message_bubble_user_typing">
+                <div className="chat_typing_indicator chat_typing_indicator_user" aria-hidden="true">
+                  <span className="chat_typing_dot" />
+                  <span className="chat_typing_dot" />
+                  <span className="chat_typing_dot" />
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        ) : null}
 
         <div ref={bottomRef} />
       </div>
@@ -463,6 +463,18 @@ function ChatRoom({
             handleSubmit()
           }}
         >
+          {showToolButton ? (
+            <button
+              type="button"
+              className={`chat_room_tool_button${isToolMenuOpen ? ' is_active' : ''}`}
+              aria-label="추가 기능"
+              aria-expanded={isToolMenuOpen}
+              onClick={handleToolMenuToggle}
+            >
+              <i className="material-icons" aria-hidden="true">add</i>
+            </button>
+          ) : null}
+
           {showToolButton ? (
             <div className={`chat_room_tool_menu${isToolMenuOpen ? ' is_open' : ''}`} aria-hidden={!isToolMenuOpen}>
               <button type="button" className="chat_room_tool_menu_button" aria-label="카메라">
@@ -507,17 +519,6 @@ function ChatRoom({
             </div>
           ) : null}
 
-          {showToolButton ? (
-            <button
-              type="button"
-              className={`chat_room_tool_button${isToolMenuOpen ? ' is_active' : ''}`}
-              aria-label="추가 기능"
-              aria-expanded={isToolMenuOpen}
-              onClick={handleToolMenuToggle}
-            >
-              <i className="material-icons" aria-hidden="true">add</i>
-            </button>
-          ) : null}
 
           <div className="chat_room_input_shell">
           <input
@@ -535,16 +536,7 @@ function ChatRoom({
               aria-label={submitLabel}
               disabled={!isComposingMessage || isAwaitingResponse}
             >
-              <svg viewBox="0 0 28 28" fill="none" aria-hidden="true">
-                <path d="M14 19V9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                <path
-                  d="m9.5 13.5 4.5-4.5 4.5 4.5"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+              <i className="material-icons" aria-hidden="true">north</i>
             </button>
           </div>
         </form>

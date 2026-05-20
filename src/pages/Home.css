@@ -85,8 +85,9 @@
 .summary_slider {
   width: min(100%, 406px);
   margin-inline: auto;
-  padding: 6px 0 0;
-  overflow: hidden;
+  padding: 6px 10px 20px;
+  overflow-x: hidden;
+  overflow-y: visible;
   touch-action: pan-y;
   user-select: none;
   cursor: grab;
@@ -96,11 +97,6 @@
   display: flex;
   align-items: stretch;
   gap: 8px;
-  transition: transform 280ms ease;
-}
-
-.summary_slider_track.dragging {
-  transition: none;
 }
 
 .summary_slider:active {
@@ -264,14 +260,21 @@
 .home_ranking_banner_copy {
   display: grid;
   gap: 2px;
+  font-family: 'Pretendard', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.025em;
 }
 
 .home_ranking_banner_copy p {
   margin: 0;
   color: #111111;
+  font-family: var(--app-font-family);
   font-size: 16px;
   font-weight: 500;
   line-height: 1.4;
+  letter-spacing: -0.025em;
 }
 
 .home_ranking_banner_copy span {
@@ -279,6 +282,14 @@
   font-size: 12px;
   font-weight: 400;
   line-height: 1.4;
+}
+
+.text_type_cursor {
+  display: inline-block;
+  color: inherit;
+  font-weight: 300;
+  margin-left: 1px;
+  transition: opacity 0.1s;
 }
 
 .home_ranking_banner_icon {
@@ -367,10 +378,89 @@
   background: transparent;
   color: #ffffff;
   cursor: pointer;
+  overflow: visible;
+  isolation: isolate;
 }
 
 .best_pose_vote_card_like.is_active {
   background: #FF88C5;
+}
+
+.best_pose_vote_card_target_effect {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.best_pose_vote_target_cursor {
+  position: absolute;
+  width: 88px;
+  height: 88px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: best-pose-target-cursor-fade 0.86s cubic-bezier(0.22, 0.88, 0.32, 1) forwards;
+}
+
+.best_pose_vote_target_cursor_ring,
+.best_pose_vote_target_cursor_cross {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.best_pose_vote_target_cursor_ring {
+  border-radius: 50%;
+}
+
+.best_pose_vote_target_cursor_ring_outer {
+  width: 88px;
+  height: 88px;
+  border: 1.5px solid rgb(255 255 255 / 0.92);
+  box-shadow:
+    0 0 0 1px rgb(255 136 197 / 0.34),
+    0 0 18px rgb(255 136 197 / 0.34);
+  animation: best-pose-target-cursor-spin 3.4s linear infinite,
+    best-pose-target-cursor-pulse 0.86s cubic-bezier(0.22, 0.88, 0.32, 1) forwards;
+}
+
+.best_pose_vote_target_cursor_ring_outer::before,
+.best_pose_vote_target_cursor_ring_outer::after {
+  position: absolute;
+  inset: -4px;
+  border: 1px solid rgb(255 255 255 / 0.88);
+  border-radius: 50%;
+  clip-path: polygon(44% 0, 56% 0, 56% 18%, 44% 18%);
+  content: '';
+}
+
+.best_pose_vote_target_cursor_ring_outer::after {
+  transform: rotate(90deg);
+}
+
+.best_pose_vote_target_cursor_ring_inner {
+  width: 40px;
+  height: 40px;
+  border: 1.5px solid rgb(255 255 255 / 0.95);
+  background:
+    radial-gradient(circle, rgb(255 255 255 / 0.5) 0 20%, transparent 24% 100%);
+  box-shadow: 0 0 14px rgb(255 255 255 / 0.28);
+  animation: best-pose-target-cursor-inner 0.86s cubic-bezier(0.18, 0.9, 0.28, 1) forwards;
+}
+
+.best_pose_vote_target_cursor_cross_h,
+.best_pose_vote_target_cursor_cross_v {
+  width: 16px;
+  height: 1.5px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.96);
+  box-shadow: 0 0 8px rgb(255 255 255 / 0.24);
+}
+
+.best_pose_vote_target_cursor_cross_v {
+  width: 1.5px;
+  height: 16px;
 }
 
 .best_pose_vote_card_heart {
@@ -416,6 +506,61 @@
   background: transparent !important;
   cursor: pointer;
   white-space: nowrap;
+}
+
+@keyframes best-pose-target-cursor-fade {
+  0% {
+    opacity: 0;
+  }
+
+  12% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes best-pose-target-cursor-pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.28);
+  }
+
+  55% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(1.14);
+  }
+}
+
+@keyframes best-pose-target-cursor-inner {
+  0% {
+    transform: translate(-50%, -50%) scale(0.42);
+    opacity: 0.2;
+  }
+
+  40% {
+    transform: translate(-50%, -50%) scale(1.06);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(0.92);
+    opacity: 0;
+  }
+}
+
+@keyframes best-pose-target-cursor-spin {
+  from {
+    rotate: 0deg;
+  }
+
+  to {
+    rotate: 360deg;
+  }
 }
 
 .home_vote_btn::after {

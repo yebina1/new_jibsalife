@@ -54,7 +54,12 @@ function Notification() {
       saveNotificationReadIds(next)
       return next
     })
-    navigate(item.path, item.state !== undefined ? { state: item.state } : undefined)
+    const nextState =
+      item.state !== undefined
+        ? { ...(typeof item.state === 'object' && item.state !== null ? item.state : {}), returnTo: '/notification' }
+        : { returnTo: '/notification' }
+
+    navigate(item.path, { state: nextState })
   }
 
   return (

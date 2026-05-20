@@ -1,4 +1,4 @@
-.onboarding_page {
+﻿.onboarding_page {
   --onboarding-action-height: 54px;
   --onboarding-action-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
   --onboarding-start-image-top: 358px;
@@ -13,7 +13,7 @@
 
 .onboarding_page .onboarding_layout {
   padding-bottom: var(--onboarding-action-reserved-space);
-  scroll-padding-bottom: var(--onboarding-action-reserved-space);ㄴ
+  scroll-padding-bottom: var(--onboarding-action-reserved-space);
 }
 
 .onboarding_page .onboarding_layout_action {
@@ -38,7 +38,7 @@
   display: block;
   width: 100%;
   object-fit: contain;
-  image-rendering: auto;`
+  image-rendering: auto;
 }
 
 .onboarding_decorated_image {
@@ -540,7 +540,7 @@
     transform: translateX(-50%);
   }
 
-  /* ── Step 1 (환영 화면) 834px 피그마 기준 ── */
+  /* ?? Step 1 (?섏쁺 ?붾㈃) 834px ?쇨렇留?湲곗? ?? */
   .onboarding_page .onboarding_layout:has(.onboarding_action_start) {
     padding: 120px 24px;
   }
@@ -595,7 +595,7 @@
     z-index: auto;
     transform: none;
   }
-  /* ────────────────────────────────────────── */
+  /* ?????????????????????????????????????????? */
 
   .onboarding_visual_image_pet {
     width: 143px;
@@ -624,7 +624,7 @@
     height: 240px;
   }
 
-  /* ── Step 2 (집사 선택 화면) 834px 피그마 기준 ── */
+  /* ?? Step 2 (吏묒궗 ?좏깮 ?붾㈃) 834px ?쇨렇留?湲곗? ?? */
   .onboarding_page .onboarding_layout:has(.onboarding_guardian_grid) {
     padding: 110px 24px;
   }
@@ -714,9 +714,9 @@
     z-index: auto;
     transform: none;
   }
-  /* ────────────────────────────────────────── */
+  /* ?????????????????????????????????????????? */
 
-  /* ── Step 3 (닉네임 입력) 834px 피그마 기준 ── */
+  /* ?? Step 3 (?됰꽕???낅젰) 834px ?쇨렇留?湲곗? ?? */
   .onboarding_page .onboarding_layout:has(.onboarding_name_form) {
     padding: 120px 24px;
   }
@@ -800,9 +800,9 @@
     z-index: auto;
     transform: none;
   }
-  /* ────────────────────────────────────────── */
+  /* ?????????????????????????????????????????? */
 
-  /* ── Steps 4-6 (기능 소개 슬라이드) 834px 피그마 기준 ── */
+  /* ?? Steps 4-6 (湲곕뒫 ?뚭컻 ?щ씪?대뱶) 834px ?쇨렇留?湲곗? ?? */
   .onboarding_page .onboarding_layout:has(.onboarding_layout_indicators) {
     padding: 120px 24px;
   }
@@ -851,7 +851,7 @@
     height: auto;
   }
 
-  /* Steps 5 & 6 have landscape images — override portrait box when dot 2 or 3 is active */
+  /* Steps 5 & 6 have landscape images ??override portrait box when dot 2 or 3 is active */
   .onboarding_page .onboarding_layout:has(.onboarding_layout_indicators span:nth-child(n+2).is_active) .onboarding_visual_image_feature {
     width: 100%;
     max-width: 520px;
@@ -888,9 +888,9 @@
     transform: none;
     margin-top: auto;
   }
-  /* ────────────────────────────────────────── */
+  /* ?????????????????????????????????????????? */
 
-  /* ── 완료 페이지 834px 피그마 기준 ── */
+  /* ?? ?꾨즺 ?섏씠吏 834px ?쇨렇留?湲곗? ?? */
   .onboarding_page .onboarding_layout.has_top_action {
     padding: 120px 24px;
   }
@@ -965,7 +965,7 @@
     transform: none;
     margin-top: auto;
   }
-  /* ────────────────────────────────────────── */
+  /* ?????????????????????????????????????????? */
 }
 
 @media (min-width: 768px) {

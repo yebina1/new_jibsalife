@@ -44,3 +44,10 @@ export function shouldShowNotificationDot() {
   const readIds = readNotificationReadIds()
   return readUserNotifications().some((notification) => !readIds.has(notification.id))
 }
+
+export function readUnreadNotificationCount() {
+  if (typeof window === 'undefined') return 0
+
+  const readIds = readNotificationReadIds()
+  return readUserNotifications().filter((notification) => !readIds.has(notification.id)).length
+}

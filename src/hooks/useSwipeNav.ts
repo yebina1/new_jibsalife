@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router'
 function isInsideHorizontalScroll(target: EventTarget | null): boolean {
   let node = target instanceof Element ? target : null
   while (node && node !== document.body) {
+    if (node.hasAttribute('data-no-swipe-nav')) return true
     if (node.scrollWidth > node.clientWidth) {
       const overflow = window.getComputedStyle(node).overflowX
       if (overflow === 'auto' || overflow === 'scroll') return true

@@ -196,7 +196,7 @@ export function SummaryProfileAddCard({
   return (
     <button type="button" className={classNames} aria-label={label} onClick={onClick}>
       <span className="summary_profile_card_add_button" aria-hidden="true">
-        <i />
+        <i className="material-icons">add</i>
       </span>
     </button>
   )

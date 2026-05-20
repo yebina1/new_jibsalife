@@ -1,5 +1,5 @@
 import './Home.css'
-import { useEffect, useRef, useState, type ChangeEvent } from 'react'
+import { useEffect, useRef, useState, type ChangeEvent, type MouseEvent } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 import ChevronIcon from '../components/ChevronIcon'
 import PageHeader from '../components/PageHeader'
@@ -11,6 +11,9 @@ import Button from '../components/html/Button'
 import Alert from '../components/Alert'
 import ConfirmDialog from '../components/ConfirmDialog'
 import ConfettiEffect from '../components/effect/ConfettiEffect'
+import { TextType } from '../components/effect/TextType'
+import useEmblaCarousel from 'embla-carousel-react'
+import { useSwipeNav } from '../hooks/useSwipeNav'
 import PointAlertContent from '../components/PointAlertContent'
 import RewardHero from '../components/RewardHero'
 import RewardPointCard from '../components/RewardPointCard'
@@ -37,6 +40,7 @@ import { isChallengeDayClaimed, markChallengeVoteCompleted, readCurrentDay } fro
 import { consumeSignupWelcomeReward, readProfilePoints } from '../utils/profilePoints'
 import { showStateBarMessage } from '../utils/stateBarMessage'
 import LazyImage from '../components/LazyImage'
+import { dailyPosts, knowledgeFeedItems } from './community/CommunityPetStory'
 import knowledge1 from '../img/petstory/Knowledge/knowledge1.png'
 import knowledge3 from '../img/petstory/Knowledge/knowledge3.png'
 import knowledge4 from '../img/petstory/Knowledge/knowledge4.png'
@@ -74,6 +78,7 @@ const emptyPetIdForm: PetIdCardForm = {
 const bestPoseVoteItems = voteDetails.find((voteDetail) => voteDetail.id === 'best-pose')?.candidates ?? []
 const BEST_POSE_VOTE_ID = 'best-pose'
 const VOTE_REWARD_AMOUNT = 60
+const TARGET_CURSOR_EFFECT_DURATION_MS = 860
 
 
 const contentItems = [
@@ -128,6 +133,37 @@ const homeDeferredImageSources = [
   ...bestPoseVoteItems.slice(3).map((item) => item.image),
   ...contentItems.slice(2).map((item) => item.image),
 ] as const
+
+function getHomePetStoryNavigationState(path: string) {
+  if (path.includes('/knowledge/')) {
+    const currentItem = knowledgeFeedItems.find((item) => item.path === path)
+
+    return currentItem
+      ? {
+          item: {
+            id: currentItem.id,
+            title: currentItem.title,
+            image: currentItem.image,
+            viewsText: currentItem.viewsText,
+            likes: currentItem.likes,
+            comments: currentItem.comments,
+            createdAt: currentItem.createdAt,
+          },
+          storyCategory: 'knowledge' as const,
+        }
+      : { storyCategory: 'knowledge' as const }
+  }
+
+  const detailId = Number(path.split('/').pop())
+  const currentPost = dailyPosts.find((post) => post.id === detailId)
+
+  return currentPost
+    ? {
+        post: currentPost,
+        storyCategory: 'daily' as const,
+      }
+    : { storyCategory: 'daily' as const }
+}
 
 const preloadedHomeImages = new Set<string>()
 
@@ -322,13 +358,19 @@ function VoteHeartIcon({ active }: { active: boolean }) {
   )
 }
 
+type VoteTargetCursorEffect = {
+  id: number
+  itemId: number
+  x: number
+  y: number
+}
+
 function Home() {
   const navigate = useNavigate()
   const location = useLocation()
   const [profileSlides, setProfileSlides] = useState<ProfileSummarySlide[]>(readPetProfiles)
   const [summarySlideIndex, setSummarySlideIndex] = useState(getInitialSummarySlideIndex)
-  const [dragOffset, setDragOffset] = useState(0)
-  const [isDragging, setIsDragging] = useState(false)
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, align: 'start' })
   const [selectedCardId, setSelectedCardId] = useState<number | null>(
     () => getInitialVoteState().votedCardId,
   )
@@ -341,6 +383,7 @@ function Home() {
   const [rankingIndex, setRankingIndex] = useState(0)
   const [isRankingAutoPlayEnabled, setIsRankingAutoPlayEnabled] = useState(true)
   const [isVoteRewardOpen, setIsVoteRewardOpen] = useState(false)
+  const [voteTargetCursorEffects, setVoteTargetCursorEffects] = useState<VoteTargetCursorEffect[]>([])
   const [isSignupWelcomeOpen, setIsSignupWelcomeOpen] = useState(false)
   const [currentPoints, setCurrentPoints] = useState(readProfilePoints)
   const [confirmAction, setConfirmAction] = useState<'profile-edit' | 'profile-delete' | 'vote-edit' | null>(null)
@@ -349,7 +392,6 @@ function Home() {
   const [petIdPhoto, setPetIdPhoto] = useState<string | null>(null)
   const [petIdForm, setPetIdForm] = useState<PetIdCardForm>(emptyPetIdForm)
   const [calendarRecords, setCalendarRecords] = useState<MissionHistoryRecord[]>(readCalendarRecords)
-  const dragStateRef = useRef({ startX: 0 })
   const rankingPointerRef = useRef({ startX: 0, startY: 0, isActive: false })
   const rankingResumeTimeoutRef = useRef<number | null>(null)
   const summarySlides = [
@@ -520,41 +562,14 @@ function Home() {
     })
   }, [location.pathname, location.state, navigate])
 
-  const handleDragStart = (clientX: number) => {
-    dragStateRef.current.startX = clientX
-    setIsDragging(true)
-    setDragOffset(0)
-  }
+  useSwipeNav('/place', '/community/overview')
 
-  const handleDragMove = (clientX: number) => {
-    if (!isDragging) return
-    const nextOffset = clientX - dragStateRef.current.startX
-
-    if (
-      (summarySlideIndex === 0 && nextOffset > 0) ||
-      (summarySlideIndex === summarySlides.length - 1 && nextOffset < 0)
-    ) {
-      setDragOffset(0)
-      return
-    }
-
-    setDragOffset(nextOffset)
-  }
-
-  const handleDragEnd = () => {
-    if (!isDragging) return
-
-    const threshold = 56
-
-    if (dragOffset <= -threshold && summarySlideIndex < summarySlides.length - 1) {
-      setSummarySlideIndex((current) => current + 1)
-    } else if (dragOffset >= threshold && summarySlideIndex > 0) {
-      setSummarySlideIndex((current) => current - 1)
-    }
-
-    setIsDragging(false)
-    setDragOffset(0)
-  }
+  useEffect(() => {
+    if (!emblaApi) return
+    const onSelect = () => setSummarySlideIndex(emblaApi.selectedScrollSnap())
+    emblaApi.on('select', onSelect)
+    return () => { emblaApi.off('select', onSelect) }
+  }, [emblaApi])
 
   const scheduleRankingAutoPlayResume = () => {
     if (rankingResumeTimeoutRef.current !== null) {
@@ -738,6 +753,26 @@ function Home() {
     setSelectedCardId((prev) => (prev === id ? null : id))
   }
 
+  const spawnVoteTargetCursorEffect = (itemId: number, x: number, y: number) => {
+    const effectId = Date.now() + Math.floor(Math.random() * 1000)
+    setVoteTargetCursorEffects((prev) => [...prev, { id: effectId, itemId, x, y }])
+    window.setTimeout(() => {
+      setVoteTargetCursorEffects((prev) => prev.filter((effect) => effect.id !== effectId))
+    }, TARGET_CURSOR_EFFECT_DURATION_MS)
+  }
+
+  const handleBestPoseVoteSelect = (id: number, event: MouseEvent<HTMLButtonElement>) => {
+    if (votedCardId !== null && hasModified) return
+
+    if (selectedCardId !== id) {
+      const mediaElement = event.currentTarget.closest('.best_pose_vote_card_media')
+      const rect = mediaElement?.getBoundingClientRect() ?? event.currentTarget.getBoundingClientRect()
+      spawnVoteTargetCursorEffect(id, rect.width / 2, rect.height / 2)
+    }
+
+    selectBestPoseVote(id)
+  }
+
   const openBestPoseVoteReward = () => {
     if (selectedCardId === null) return
     if (votedCardId !== null) {
@@ -851,32 +886,12 @@ function Home() {
           subtitle={todaySummaryDate}
         >
           <div
+            ref={emblaRef}
             className="summary_slider"
             aria-label="오늘의 요약 슬라이드"
-            onPointerDown={(event) => {
-              handleDragStart(event.clientX)
-              event.currentTarget.setPointerCapture(event.pointerId)
-            }}
-            onPointerMove={(event) => handleDragMove(event.clientX)}
-            onPointerUp={(event) => {
-              if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-                event.currentTarget.releasePointerCapture(event.pointerId)
-              }
-              handleDragEnd()
-            }}
-            onPointerCancel={(event) => {
-              if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-                event.currentTarget.releasePointerCapture(event.pointerId)
-              }
-              handleDragEnd()
-            }}
+            data-no-swipe-nav
           >
-            <div
-              className={`summary_slider_track ${isDragging ? 'dragging' : ''}`}
-              style={{
-                transform: `translateX(calc(-${summarySlideIndex * 100}% - ${summarySlideIndex * 8}px + ${dragOffset}px))`,
-              }}
-            >
+            <div className="summary_slider_track">
               {summarySlides.map((slide) =>
                 slide.type === 'add' ? (
                   <SummaryProfileAddCard key={slide.id} onClick={openPetIdModal} />
@@ -904,7 +919,7 @@ function Home() {
                   className={index === summarySlideIndex ? 'active' : ''}
                   aria-label={`${index + 1}번 요약 보기`}
                   aria-pressed={index === summarySlideIndex}
-                  onClick={() => setSummarySlideIndex(index)}
+                  onClick={() => emblaApi?.scrollTo(index)}
                 />
               ))}
             </div>
@@ -951,7 +966,7 @@ function Home() {
               decoding="async"
             />
             <div className="home_ranking_banner_copy">
-              <p>이번주엔 루루가 제일 인기 많았대!</p>
+              <p><TextType text="이번주엔 루루가 제일 인기 많았대!" typingSpeed={90} pauseDuration={2200} /></p>
               <span>(다들 너무 귀여워서 고르기 힘들어요…)</span>
             </div>
           </div>
@@ -986,12 +1001,31 @@ function Home() {
                       rootStyle={{ height: '100%' }}
                       priority={index < 3}
                     />
+                    <span className="best_pose_vote_card_target_effect" aria-hidden="true">
+                      {voteTargetCursorEffects
+                        .filter((effect) => effect.itemId === item.id)
+                        .map((effect) => (
+                          <span
+                            key={effect.id}
+                            className="best_pose_vote_target_cursor"
+                            style={{
+                              left: `${effect.x}px`,
+                              top: `${effect.y}px`,
+                            }}
+                          >
+                            <span className="best_pose_vote_target_cursor_ring best_pose_vote_target_cursor_ring_outer" />
+                            <span className="best_pose_vote_target_cursor_ring best_pose_vote_target_cursor_ring_inner" />
+                            <span className="best_pose_vote_target_cursor_cross best_pose_vote_target_cursor_cross_h" />
+                            <span className="best_pose_vote_target_cursor_cross best_pose_vote_target_cursor_cross_v" />
+                          </span>
+                        ))}
+                    </span>
                     <button
                       type="button"
                       className={`best_pose_vote_card_like${isLiked ? ' is_active' : ''}`}
                       aria-label={`${displayName} 선택`}
                       aria-pressed={isLiked}
-                      onClick={() => selectBestPoseVote(item.id)}
+                      onClick={(event) => handleBestPoseVoteSelect(item.id, event)}
                     >
                       <VoteHeartIcon active={isLiked} />
                     </button>
@@ -1039,6 +1073,7 @@ function Home() {
                 onClick={() =>
                   navigate(item.path, {
                     state: {
+                      ...getHomePetStoryNavigationState(item.path),
                       previousPage: 'home',
                       restoreScrollY: window.scrollY,
                     },

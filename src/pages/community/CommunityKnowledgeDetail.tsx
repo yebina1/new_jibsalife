@@ -1,6 +1,6 @@
 import './CommunityKnowledgeDetail.css'
 import { createPortal } from 'react-dom'
-import { type ReactNode, useEffect, useRef, useState } from 'react'
+import { type ReactNode, type TouchEvent, useEffect, useRef, useState } from 'react'
 import { markKnowledgeLiked } from '../../utils/challengeStatus'
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router'
 import PageHeader from '../../components/PageHeader'
@@ -34,6 +34,7 @@ import commentIcon from '../../svg/nav_communicate.svg'
 import { useActionRowSlot } from '../../contexts/ActionRowContext'
 import { MY_PROFILE_NAME } from '../../utils/myProfile'
 import { petStoryDetailComments } from './CommunityPetStoryDetailData'
+import { knowledgeFeedItems } from './CommunityPetStory'
 
 type KnowledgeDetailState = {
   item?: {
@@ -45,6 +46,9 @@ type KnowledgeDetailState = {
     comments?: number
     createdAt?: string
   }
+  previousPage?: string
+  returnTo?: string
+  restoreScrollY?: number
 }
 
 type KnowledgeComment = (typeof petStoryDetailComments)[number] & {
@@ -60,6 +64,7 @@ type DetailItem = {
 }
 
 const defaultKnowledgeId = 'walkproblems'
+const DETAIL_SWIPE_THRESHOLD = 72
 
 const knowledgeDetailFallbackItems: Record<string, NonNullable<KnowledgeDetailState['item']>> = {
   walkproblems: {
@@ -459,8 +464,11 @@ function CommunityKnowledgeDetail() {
     readKnowledgeComments(knowledgeCommentsStorageKey),
   )
   const lastScrollTopRef = useRef(0)
-  const stateItem = (location.state as KnowledgeDetailState | null)?.item
+  const detailState = (location.state as KnowledgeDetailState | null) ?? null
+  const touchStartRef = useRef<{ x: number; y: number } | null>(null)
+  const stateItem = detailState?.item
   const item = stateItem ?? knowledgeDetailFallbackItems[knowledgeId] ?? knowledgeDetailFallbackItems[defaultKnowledgeId]
+  const activeKnowledgeIndex = knowledgeFeedItems.findIndex((feedItem) => feedItem.path.endsWith(`/${knowledgeId}`))
   const knowledgeLikeKey = String(item?.id ?? knowledgeId)
   const [likedKnowledgeKeys, setLikedKnowledgeKeys] = useState<string[]>([])
   const detailTitle = item?.title ?? '강아지 산책 안 하면 생기는 문제점'
@@ -485,6 +493,53 @@ function CommunityKnowledgeDetail() {
   const commentCount = visibleComments.length
   const isKnowledgeLiked = likedKnowledgeKeys.includes(knowledgeLikeKey)
   const knowledgeLikeCount = (item?.likes ?? 128) + (isKnowledgeLiked ? 1 : 0)
+
+  const navigateKnowledgeByOffset = (offset: -1 | 1) => {
+    if (activeKnowledgeIndex < 0) return
+
+    const nextIndex = activeKnowledgeIndex + offset
+    if (nextIndex < 0 || nextIndex >= knowledgeFeedItems.length) return
+
+    const nextItem = knowledgeFeedItems[nextIndex]
+    navigate(nextItem.path, {
+      replace: true,
+      state: {
+        ...detailState,
+        item: {
+          id: nextItem.id,
+          title: nextItem.title,
+          image: nextItem.image,
+          viewsText: nextItem.viewsText,
+          likes: nextItem.likes,
+          comments: nextItem.comments,
+          createdAt: nextItem.createdAt,
+        },
+      },
+    })
+  }
+
+  const handleDetailTouchStart = (event: TouchEvent<HTMLElement>) => {
+    const touch = event.touches[0]
+    if (!touch) return
+    touchStartRef.current = { x: touch.clientX, y: touch.clientY }
+  }
+
+  const handleDetailTouchEnd = (event: TouchEvent<HTMLElement>) => {
+    const touch = event.changedTouches[0]
+    const start = touchStartRef.current
+    touchStartRef.current = null
+
+    if (!touch || !start) return
+
+    const diffX = touch.clientX - start.x
+    const diffY = touch.clientY - start.y
+
+    if (Math.abs(diffX) < DETAIL_SWIPE_THRESHOLD || Math.abs(diffX) <= Math.abs(diffY) * 1.2) {
+      return
+    }
+
+    navigateKnowledgeByOffset(diffX < 0 ? 1 : -1)
+  }
 
   const toggleKnowledgeLike = () => {
     if (!isKnowledgeLiked) {
@@ -588,6 +643,8 @@ function CommunityKnowledgeDetail() {
         className={`page community_knowledge_detail_page ${
           isCommentFormVisible ? 'is_comment_form_visible' : 'is_comment_form_hidden'
         }`}
+        onTouchStart={handleDetailTouchStart}
+        onTouchEnd={handleDetailTouchEnd}
       >
         <PageHeader
           title=""

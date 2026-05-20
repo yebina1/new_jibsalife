@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react'
-import './Nav.css'
+import { motion } from 'framer-motion'
 import { NavLink, useLocation, useNavigate } from 'react-router'
+import './Nav.css'
 import navCommunicateOffIcon from '../svg/nav_communicate off.svg'
 import navHealthOffIcon from '../svg/nav_health off.svg'
 import navHomeActiveIcon from '../svg/nav_home active.svg'
@@ -29,6 +30,14 @@ const navIconMap = {
   },
 } as const
 
+function isNavItemActive(pathname: string, item: (typeof navItems)[number]) {
+  return (
+    pathname === item.path ||
+    (item.icon === 'community' && pathname.startsWith('/community')) ||
+    (item.icon === 'health' && pathname.startsWith('/health'))
+  )
+}
+
 function NavIcon({ type, active }: { type: (typeof navItems)[number]['icon']; active: boolean }) {
   const className = active ? 'layout_nav_icon active' : 'layout_nav_icon'
 
@@ -53,7 +62,11 @@ function NavIcon({ type, active }: { type: (typeof navItems)[number]['icon']; ac
 
   if (active && type === 'mypage') {
     return (
-      <svg viewBox="0 0 28 28" className={`${className} layout_nav_icon_mypage_active`} aria-hidden="true">
+      <svg
+        viewBox="0 0 28 28"
+        className={`${className} layout_nav_icon_mypage_active`}
+        aria-hidden="true"
+      >
         <circle className="layout_nav_icon_mypage_active_bg" cx="14" cy="14" r="11" strokeWidth="1.5" />
         <circle className="layout_nav_icon_mypage_active_face" cx="14" cy="11.5" r="3.5" strokeWidth="1.5" />
         <path
@@ -135,26 +148,30 @@ function Nav() {
               })
             }}
             className={({ isActive }) =>
-              isActive ||
-              (item.icon === 'community' && pathname.startsWith('/community')) ||
-              (item.icon === 'health' && pathname.startsWith('/health'))
-                ? 'layout_nav_link active'
-                : 'layout_nav_link'
+              isActive || isNavItemActive(pathname, item) ? 'layout_nav_link active' : 'layout_nav_link'
             }
           >
-            {({ isActive }) => (
-              <>
-                <NavIcon
-                  type={item.icon}
-                  active={
-                    isActive ||
-                    (item.icon === 'community' && pathname.startsWith('/community')) ||
-                    (item.icon === 'health' && pathname.startsWith('/health'))
-                  }
-                />
-                <span className="layout_nav_label">{item.label}</span>
-              </>
-            )}
+            {({ isActive }) => {
+              const isCurrent = isActive || isNavItemActive(pathname, item)
+
+              return (
+                <motion.span
+                  className="layout_nav_link_inner"
+                  transition={{ type: 'spring', stiffness: 460, damping: 34, mass: 0.9 }}
+                >
+                  {isCurrent ? (
+                    <motion.span
+                      layoutId="layout-nav-active-bubble"
+                      className="layout_nav_link_bubble"
+                      transition={{ type: 'spring', stiffness: 460, damping: 34, mass: 0.9 }}
+                      aria-hidden="true"
+                    />
+                  ) : null}
+                  <NavIcon type={item.icon} active={isCurrent} />
+                  <span className="layout_nav_label">{item.label}</span>
+                </motion.span>
+              )
+            }}
           </NavLink>
         ))}
       </div>

@@ -300,8 +300,8 @@
 
 .health_cam_ctrl {
   display: grid;
-  gap: 14px;
-  padding: 14px 20px 16px;
+  gap: 8px;
+  padding: 8px 20px 10px;
   background: #ffffff;
 }
 
@@ -437,11 +437,41 @@
 .health_cam_shutter {
   display: grid;
   place-items: center;
+  width: 92px;
+  height: 92px;
   padding: 0;
   border: 0;
   outline: none;
   background: transparent;
   cursor: pointer;
+}
+
+.health_cam_shutter > div {
+  position: relative;
+  display: grid !important;
+  width: 92px !important;
+  height: 92px !important;
+  place-items: center;
+  padding: 0 !important;
+  border: 1px solid rgb(109 89 248 / 18%) !important;
+  border-radius: 50% !important;
+  background:
+    radial-gradient(circle at 50% 34%, rgb(255 255 255 / 0.96), rgb(255 255 255 / 0.84) 36%, rgb(237 233 254 / 0.94) 100%) !important;
+  box-shadow:
+    0 10px 24px rgb(109 89 248 / 10%),
+    inset 0 1px 0 rgb(255 255 255 / 0.88);
+}
+
+.health_cam_shutter > div > div {
+  position: relative;
+  width: 62px !important;
+  height: 62px !important;
+  border-radius: 50% !important;
+  background:
+    radial-gradient(circle at 50% 30%, rgb(237 233 254 / 1), rgb(220 211 255 / 0.92) 66%, rgb(198 184 255 / 0.88) 100%) !important;
+  box-shadow:
+    inset 0 10px 20px rgb(255 255 255 / 0.28),
+    0 6px 18px rgb(109 89 248 / 0.14);
 }
 
 
