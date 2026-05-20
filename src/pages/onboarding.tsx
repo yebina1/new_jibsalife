@@ -29,6 +29,8 @@ import weeklyRankFirstImage from '../img/home_lanking/lank1.png'
 import weeklyRankSecondImage from '../img/home_lanking/lank2.png'
 import weeklyRankThirdImage from '../img/home_lanking/lank3.png'
 import lankGoldIcon from '../svg/home/lank_gold.svg'
+import heartMessageImage from '../svg/heart_message.svg'
+import cameraMessageImage from '../svg/camera_message.svg'
 import onboardingDecoration1 from '../svg/onboarding/paw1.svg'
 import onboardingDecoration2 from '../svg/onboarding/paw2.svg'
 import onboardingDecoration3 from '../svg/onboarding/paw3.svg'
@@ -240,6 +242,28 @@ function DecoratedOnboardingImage({
           decoding="async"
         />
       ))}
+      {variant === 'welcome' && (
+        <>
+          <img
+            className="onboarding_welcome_float onboarding_welcome_float_heart"
+            src={heartMessageImage}
+            alt=""
+            aria-hidden="true"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+          />
+          <img
+            className="onboarding_welcome_float onboarding_welcome_float_camera"
+            src={cameraMessageImage}
+            alt=""
+            aria-hidden="true"
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+          />
+        </>
+      )}
       <img
         className={`onboarding_visual_image ${imageClassName}`}
         src={src}
@@ -529,7 +553,7 @@ function Onboarding() {
   }
 
   return (
-    <main key={step} ref={pageRef} className="onboarding_page">
+    <main ref={pageRef} className="onboarding_page">
       {false ? (
         <button type="button" className="onboarding_skip_button caption_medium" onClick={goToLogin}>
           건너뛰기

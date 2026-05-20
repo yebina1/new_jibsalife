@@ -12,26 +12,29 @@
 }
 
 .onboarding_page .onboarding_layout {
-  padding-bottom: var(--onboarding-action-reserved-space);
-  scroll-padding-bottom: var(--onboarding-action-reserved-space);
+  padding-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
 }
 
 .onboarding_page .onboarding_layout_action {
-  position: fixed;
-  right: max(26px, calc((100vw - var(--layout-max-width, 1440px)) / 2 + 26px));
-  bottom: var(--onboarding-action-bottom);
-  left: max(26px, calc((100vw - var(--layout-max-width, 1440px)) / 2 + 26px));
-  z-index: 120;
-  width: auto;
+  width: 100%;
   height: var(--onboarding-action-height);
 }
 
-.onboarding_page .onboarding_layout_indicators {
-  margin-bottom: calc(var(--onboarding-action-height) + var(--onboarding-action-bottom) - 8px);
+@keyframes onboarding_char_in {
+  from {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
-.onboarding_page .onboarding_name_form {
-  margin-bottom: calc(var(--onboarding-action-height) + var(--onboarding-action-bottom) - 4px);
+.onboarding_anim_block {
+  display: inline-block;
+  white-space: pre-line;
+  animation: onboarding_char_in 0.3s ease-out both;
 }
 
 .onboarding_visual_image {
@@ -62,6 +65,34 @@
   height: var(--onboarding-paw-size, 18px);
   object-fit: contain;
   pointer-events: none;
+}
+
+@keyframes onboarding_float_a {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+
+@keyframes onboarding_float_b {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+.onboarding_welcome_float {
+  position: absolute;
+  z-index: 2;
+}
+
+.onboarding_welcome_float_heart {
+  top: 31px;
+  left: 14px;
+  animation: onboarding_float_a 2.8s ease-in-out infinite;
+}
+
+.onboarding_welcome_float_camera {
+  top: 31px;
+  right: 2px;
+  animation: onboarding_float_b 3.2s ease-in-out infinite;
+  animation-delay: -1.6s;
 }
 
 .onboarding_decorated_image_welcome .onboarding_decoration_1 {
@@ -476,10 +507,7 @@
 
 @media (min-width: 768px) {
   .onboarding_page .onboarding_layout_action {
-    left: 50%;
-    right: auto;
-    width: min(520px, calc(100vw - 64px));
-    transform: translateX(-50%);
+    max-width: 520px;
   }
 
   .onboarding_page .onboarding_layout:has(.onboarding_intro_visual) {
@@ -529,16 +557,6 @@
     height: 217px;
   }
 
-  .onboarding_page .onboarding_layout:has(.onboarding_intro_visual) .onboarding_layout_action {
-    position: fixed;
-    right: max(26px, calc((100vw - var(--layout-max-width, 1440px)) / 2 + 26px));
-    bottom: var(--onboarding-action-bottom);
-    left: 50%;
-    z-index: 120;
-    width: min(520px, calc(100vw - 64px));
-    height: var(--onboarding-action-height);
-    transform: translateX(-50%);
-  }
 
   /* ?? Step 1 (?섏쁺 ?붾㈃) 834px ?쇨렇留?湲곗? ?? */
   .onboarding_page .onboarding_layout:has(.onboarding_action_start) {
@@ -585,6 +603,7 @@
     height: 351px;
   }
 
+<<<<<<< HEAD
   .onboarding_page .onboarding_layout:has(.onboarding_action_start) .onboarding_layout_action {
     position: static;
     width: 100%;
@@ -596,6 +615,9 @@
     transform: none;
   }
   /* ?????????????????????????????????????????? */
+=======
+  /* ────────────────────────────────────────── */
+>>>>>>> 9b6d93f (온보딩 수정)
 
   .onboarding_visual_image_pet {
     width: 143px;
@@ -704,6 +726,7 @@
     font-size: 14px;
   }
 
+<<<<<<< HEAD
   .onboarding_page .onboarding_layout:has(.onboarding_guardian_grid) .onboarding_layout_action {
     position: static;
     width: 100%;
@@ -715,6 +738,9 @@
     transform: none;
   }
   /* ?????????????????????????????????????????? */
+=======
+  /* ────────────────────────────────────────── */
+>>>>>>> 9b6d93f (온보딩 수정)
 
   /* ?? Step 3 (?됰꽕???낅젰) 834px ?쇨렇留?湲곗? ?? */
   .onboarding_page .onboarding_layout:has(.onboarding_name_form) {
@@ -790,6 +816,7 @@
     padding-top: 12px;
   }
 
+<<<<<<< HEAD
   .onboarding_page .onboarding_layout:has(.onboarding_name_form) .onboarding_layout_action {
     position: static;
     width: 100%;
@@ -801,6 +828,9 @@
     transform: none;
   }
   /* ?????????????????????????????????????????? */
+=======
+  /* ────────────────────────────────────────── */
+>>>>>>> 9b6d93f (온보딩 수정)
 
   /* ?? Steps 4-6 (湲곕뒫 ?뚭컻 ?щ씪?대뱶) 834px ?쇨렇留?湲곗? ?? */
   .onboarding_page .onboarding_layout:has(.onboarding_layout_indicators) {
@@ -877,6 +907,7 @@
     margin-bottom: 0;
   }
 
+<<<<<<< HEAD
   .onboarding_page .onboarding_layout:has(.onboarding_layout_indicators) .onboarding_layout_action {
     position: static;
     width: 100%;
@@ -889,6 +920,9 @@
     margin-top: auto;
   }
   /* ?????????????????????????????????????????? */
+=======
+  /* ────────────────────────────────────────── */
+>>>>>>> 9b6d93f (온보딩 수정)
 
   /* ?? ?꾨즺 ?섏씠吏 834px ?쇨렇留?湲곗? ?? */
   .onboarding_page .onboarding_layout.has_top_action {
@@ -954,6 +988,7 @@
     object-fit: contain;
   }
 
+<<<<<<< HEAD
   .onboarding_page .onboarding_layout.has_top_action .onboarding_layout_action {
     position: static;
     width: 100%;
@@ -966,6 +1001,9 @@
     margin-top: auto;
   }
   /* ?????????????????????????????????????????? */
+=======
+  /* ────────────────────────────────────────── */
+>>>>>>> 9b6d93f (온보딩 수정)
 }
 
 @media (min-width: 768px) {
@@ -1013,16 +1051,4 @@
     width: min(520px, calc(100vw - 64px));
   }
 
-  .onboarding_page .onboarding_layout:has(.onboarding_guardian_grid) .onboarding_layout_action,
-  .onboarding_page .onboarding_layout:has(.onboarding_name_form) .onboarding_layout_action {
-    position: fixed;
-    right: max(26px, calc((100vw - var(--layout-max-width, 1440px)) / 2 + 26px));
-    bottom: var(--onboarding-action-bottom);
-    left: 50%;
-    z-index: 120;
-    width: min(520px, calc(100vw - 64px));
-    height: var(--onboarding-action-height);
-    transform: translateX(-50%);
-    margin-top: 0;
-  }
 }
