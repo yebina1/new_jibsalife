@@ -27,6 +27,10 @@ type OnboardingLayoutProps = {
   onContentClick?: () => void
 }
 
+function SplitText({ children }: { children: string }) {
+  return <span className="onboarding_anim_block">{children}</span>
+}
+
 function OnboardingLayout({
   step,
   totalSteps,
@@ -72,6 +76,16 @@ function OnboardingLayout({
     ) : topCenterLabel ? (
       <span className="title_h4_semibold">{topCenterLabel}</span>
     ) : null
+
+  const titleString = typeof title === 'string' ? title : null
+
+  const titleContent = titleString
+    ? <SplitText key={titleString}>{titleString}</SplitText>
+    : title
+
+  const subtitleContent = typeof subtitle === 'string'
+    ? <SplitText key={subtitle}>{subtitle}</SplitText>
+    : subtitle
 
   return (
     <section className={sectionClassName}>
@@ -132,8 +146,8 @@ function OnboardingLayout({
             </div>
           ) : null}
 
-          <Title as="h2" className="onboarding_layout_copy" title={title}>
-            {subtitle ? <div className="onboarding_layout_subtitle subTitle_regular">{subtitle}</div> : null}
+          <Title as="h2" className="onboarding_layout_copy" title={titleContent}>
+            {subtitle ? <div className="onboarding_layout_subtitle subTitle_regular">{subtitleContent}</div> : null}
           </Title>
         </div>
 
@@ -154,18 +168,18 @@ function OnboardingLayout({
               ))}
             </div>
           ) : null}
-          {actionLabel ? (
-            <Button
-              type="button"
-              className={actionClassNames}
-              disabled={actionDisabled}
-              onClick={onAction}
-            >
-              {actionLabel}
-            </Button>
-          ) : null}
         </div>
       </div>
+      {actionLabel ? (
+        <Button
+          type="button"
+          className={actionClassNames}
+          disabled={actionDisabled}
+          onClick={onAction}
+        >
+          {actionLabel}
+        </Button>
+      ) : null}
     </section>
   )
 }

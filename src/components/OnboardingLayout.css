@@ -40,7 +40,8 @@
 
 .onboarding_layout_content {
   display: grid;
-  flex: 0 0 auto;
+  flex: 1;
+  min-height: 0;
   justify-items: center;
   align-content: start;
   row-gap: var(--onboarding-content-gap);
@@ -167,7 +168,7 @@
   }
 
   .onboarding_layout_content {
-    flex: 0 1 auto;
+    flex: 1;
     min-height: 0;
     width: 100%;
     max-width: 520px;

@@ -1,7 +1,9 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import './ChatRoom.css'
 import { createLocalChatbotAnswer } from '../utils/localChatbotAnswers'
+import { useActionRowSlot } from '../contexts/ActionRowContext'
 
 export type ChatAction = {
   label: string
@@ -124,13 +126,23 @@ function ChatRoom({
   const [isAwaitingResponse, setIsAwaitingResponse] = useState(false)
   const [isToolMenuOpen, setIsToolMenuOpen] = useState(false)
   const [localFeedbackSelections, setLocalFeedbackSelections] = useState<Record<number, FeedbackType>>({})
-  const bottomRef = useRef<HTMLDivElement>(null)
+  const messagesRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const footerSlot = useActionRowSlot()
   const resolvedFeedbackSelections = feedbackSelections ?? localFeedbackSelections
   const isComposingMessage = message.trim().length > 0
 
+  useLayoutEffect(() => {
+    const layoutEl = document.querySelector<HTMLElement>('.layout')
+    if (!layoutEl) return
+    layoutEl.style.setProperty('--layout-footer-height', '102px')
+    return () => { layoutEl.style.removeProperty('--layout-footer-height') }
+  }, [])
+
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' })
+    const el = messagesRef.current
+    if (!el) return
+    el.scrollTo({ top: el.scrollHeight, behavior: 'smooth' })
   }, [messages, isAwaitingResponse, isComposingMessage, showBottomPrompt])
 
   useEffect(() => {
@@ -335,192 +347,72 @@ function ChatRoom({
     </>
   )
 
-  return (
-    <section className="chat_room" aria-label={ariaLabel}>
-      <div className="chat_room_messages">
-        <AnimatePresence initial={false}>
-          {messages.map((chatMessage) => (
-            <motion.div
-              key={chatMessage.id}
-              className={`chat_message chat_message_${chatMessage.sender}`}
-              initial={{ opacity: 0, y: 32 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={messageTransition}
-            >
-              {chatMessage.sender === 'bot' ? (
-                <div className="chat_message_avatar" aria-hidden="true">
-                  {botAvatarSrc ? (
-                    <img src={botAvatarSrc} alt={`${botName} 프로필 이미지`} />
-                  ) : (
-                    <span>AI</span>
-                  )}
-                </div>
-              ) : null}
-
-              <div className="chat_message_content">
-                {chatMessage.sender === 'bot' ? (
-                  <span className="chat_message_name">{botName}</span>
-                ) : null}
-                {renderMessageBody(chatMessage)}
-              </div>
-            </motion.div>
-          ))}
-
-          {isAwaitingResponse ? (
-            <motion.div
-              key="chat-bot-typing"
-              layout
-              className="chat_message chat_message_bot"
-              initial={{ opacity: 0, y: 32 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={messageTransition}
-            >
-              <div className="chat_message_avatar chat_message_avatar_typing" aria-hidden="true">
-                {botAvatarSrc ? (
-                  <img src={botAvatarSrc} alt={`${botName} 프로필 이미지`} />
-                ) : (
-                  <span>AI</span>
-                )}
-              </div>
-
-              <div className="chat_message_content chat_message_content_typing">
-                <span className="chat_message_name">{botName}</span>
-                <div
-                  className="chat_message_bubble chat_message_bubble_typing"
-                  aria-live="polite"
-                  aria-label="AI 답변 입력 중"
-                >
-                  <div className="chat_typing_indicator" aria-hidden="true">
-                    <span className="chat_typing_dot" />
-                    <span className="chat_typing_dot" />
-                    <span className="chat_typing_dot" />
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          ) : null}
-
-
-          {bottomPromptMessage && showBottomPrompt ? (
-            <motion.div
-              key="chat-bottom-prompt"
-              layout
-              className="chat_message chat_message_bot"
-              initial={{ opacity: 0, y: 32 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={messageTransition}
-            >
-              <div className="chat_message_avatar" aria-hidden="true">
-                {botAvatarSrc ? (
-                  <img src={botAvatarSrc} alt={`${botName} 프로필 이미지`} />
-                ) : (
-                  <span>AI</span>
-                )}
-              </div>
-
-              <div className="chat_message_content">
-                <span className="chat_message_name">{botName}</span>
-                {renderMessageBody(bottomPromptMessage)}
-              </div>
-            </motion.div>
-          ) : null}
-
-        </AnimatePresence>
-
-        {isComposingMessage && !isAwaitingResponse ? (
-          <motion.div
-            key="chat-user-preview"
-            className="chat_message chat_message_user chat_message_user_preview"
-            aria-hidden="true"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            transition={messageTransition}
+  const dock = (
+    <div className="chat_room_dock">
+      <form
+        className={`chat_room_form${isAwaitingResponse ? ' is_waiting' : ''}`}
+        onSubmit={(event) => {
+          event.preventDefault()
+          handleSubmit()
+        }}
+      >
+        {showToolButton ? (
+          <button
+            type="button"
+            className={`chat_room_tool_button${isToolMenuOpen ? ' is_active' : ''}`}
+            aria-label="추가 기능"
+            aria-expanded={isToolMenuOpen}
+            onClick={handleToolMenuToggle}
           >
-            <div className="chat_message_content">
-              <div className="chat_message_bubble chat_message_bubble_user_typing">
-                <div className="chat_typing_indicator chat_typing_indicator_user" aria-hidden="true">
-                  <span className="chat_typing_dot" />
-                  <span className="chat_typing_dot" />
-                  <span className="chat_typing_dot" />
-                </div>
-              </div>
-            </div>
-          </motion.div>
+            <i className="material-icons" aria-hidden="true">add</i>
+          </button>
         ) : null}
 
-        <div ref={bottomRef} />
-      </div>
-
-      <div className="chat_room_dock">
-        <form
-          className={`chat_room_form${isAwaitingResponse ? ' is_waiting' : ''}`}
-          onSubmit={(event) => {
-            event.preventDefault()
-            handleSubmit()
-          }}
-        >
-          {showToolButton ? (
+        {showToolButton ? (
+          <div className={`chat_room_tool_menu${isToolMenuOpen ? ' is_open' : ''}`} aria-hidden={!isToolMenuOpen}>
+            <button type="button" className="chat_room_tool_menu_button" aria-label="카메라">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M8 7.5 9.2 6h5.6L16 7.5H18A2 2 0 0 1 20 9.5v7A2 2 0 0 1 18 18.5H6A2 2 0 0 1 4 16.5v-7A2 2 0 0 1 6 7.5h2Z"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <circle cx="12" cy="13" r="3" stroke="currentColor" strokeWidth="1.6" />
+              </svg>
+            </button>
+            <button type="button" className="chat_room_tool_menu_button" aria-label="사진">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="4" y="6" width="16" height="12" rx="2" stroke="currentColor" strokeWidth="1.6" />
+                <path
+                  d="m7.5 15 3-3 2.5 2.5 2-2 1.5 2.5"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <circle cx="9" cy="10" r="1" fill="currentColor" />
+              </svg>
+            </button>
             <button
               type="button"
-              className={`chat_room_tool_button${isToolMenuOpen ? ' is_active' : ''}`}
-              aria-label="추가 기능"
-              aria-expanded={isToolMenuOpen}
-              onClick={handleToolMenuToggle}
+              className="chat_room_tool_menu_button chat_room_tool_menu_button_text"
+              aria-label="GIF"
             >
-              <i className="material-icons" aria-hidden="true">add</i>
+              GIF
             </button>
-          ) : null}
+            <button type="button" className="chat_room_tool_menu_button" aria-label="더보기">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="6.5" cy="12" r="1.5" fill="currentColor" />
+                <circle cx="12" cy="12" r="1.5" fill="currentColor" />
+                <circle cx="17.5" cy="12" r="1.5" fill="currentColor" />
+              </svg>
+            </button>
+          </div>
+        ) : null}
 
-          {showToolButton ? (
-            <div className={`chat_room_tool_menu${isToolMenuOpen ? ' is_open' : ''}`} aria-hidden={!isToolMenuOpen}>
-              <button type="button" className="chat_room_tool_menu_button" aria-label="카메라">
-                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <path
-                    d="M8 7.5 9.2 6h5.6L16 7.5H18A2 2 0 0 1 20 9.5v7A2 2 0 0 1 18 18.5H6A2 2 0 0 1 4 16.5v-7A2 2 0 0 1 6 7.5h2Z"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <circle cx="12" cy="13" r="3" stroke="currentColor" strokeWidth="1.6" />
-                </svg>
-              </button>
-              <button type="button" className="chat_room_tool_menu_button" aria-label="사진">
-                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <rect x="4" y="6" width="16" height="12" rx="2" stroke="currentColor" strokeWidth="1.6" />
-                  <path
-                    d="m7.5 15 3-3 2.5 2.5 2-2 1.5 2.5"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <circle cx="9" cy="10" r="1" fill="currentColor" />
-                </svg>
-              </button>
-              <button
-                type="button"
-                className="chat_room_tool_menu_button chat_room_tool_menu_button_text"
-                aria-label="GIF"
-              >
-                GIF
-              </button>
-              <button type="button" className="chat_room_tool_menu_button" aria-label="더보기">
-                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <circle cx="6.5" cy="12" r="1.5" fill="currentColor" />
-                  <circle cx="12" cy="12" r="1.5" fill="currentColor" />
-                  <circle cx="17.5" cy="12" r="1.5" fill="currentColor" />
-                </svg>
-              </button>
-            </div>
-          ) : null}
-
-
-          <div className="chat_room_input_shell">
+        <div className="chat_room_input_shell">
           <input
             ref={inputRef}
             className="chat_room_input"
@@ -530,18 +422,138 @@ function ChatRoom({
             onChange={(event) => setMessage(event.target.value)}
             onFocus={() => setIsToolMenuOpen(false)}
           />
-            <button
-              type="submit"
-              className="chat_room_submit_button"
-              aria-label={submitLabel}
-              disabled={!isComposingMessage || isAwaitingResponse}
+          <button
+            type="submit"
+            className="chat_room_submit_button"
+            aria-label={submitLabel}
+            disabled={!isComposingMessage || isAwaitingResponse}
+          >
+            <i className="material-icons" aria-hidden="true">north</i>
+          </button>
+        </div>
+      </form>
+    </div>
+  )
+
+  return (
+    <>
+      <section className="chat_room" aria-label={ariaLabel}>
+        <div className="chat_room_messages" ref={messagesRef}>
+          <AnimatePresence initial={false}>
+            {messages.map((chatMessage) => (
+              <motion.div
+                key={chatMessage.id}
+                className={`chat_message chat_message_${chatMessage.sender}`}
+                initial={{ opacity: 0, y: 32 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={messageTransition}
+              >
+                {chatMessage.sender === 'bot' ? (
+                  <div className="chat_message_avatar" aria-hidden="true">
+                    {botAvatarSrc ? (
+                      <img src={botAvatarSrc} alt={`${botName} 프로필 이미지`} />
+                    ) : (
+                      <span>AI</span>
+                    )}
+                  </div>
+                ) : null}
+
+                <div className="chat_message_content">
+                  {chatMessage.sender === 'bot' ? (
+                    <span className="chat_message_name">{botName}</span>
+                  ) : null}
+                  {renderMessageBody(chatMessage)}
+                </div>
+              </motion.div>
+            ))}
+
+            {isAwaitingResponse ? (
+              <motion.div
+                key="chat-bot-typing"
+                layout
+                className="chat_message chat_message_bot"
+                initial={{ opacity: 0, y: 32 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={messageTransition}
+              >
+                <div className="chat_message_avatar chat_message_avatar_typing" aria-hidden="true">
+                  {botAvatarSrc ? (
+                    <img src={botAvatarSrc} alt={`${botName} 프로필 이미지`} />
+                  ) : (
+                    <span>AI</span>
+                  )}
+                </div>
+
+                <div className="chat_message_content chat_message_content_typing">
+                  <span className="chat_message_name">{botName}</span>
+                  <div
+                    className="chat_message_bubble chat_message_bubble_typing"
+                    aria-live="polite"
+                    aria-label="AI 답변 입력 중"
+                  >
+                    <div className="chat_typing_indicator" aria-hidden="true">
+                      <span className="chat_typing_dot" />
+                      <span className="chat_typing_dot" />
+                      <span className="chat_typing_dot" />
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ) : null}
+
+            {bottomPromptMessage && showBottomPrompt ? (
+              <motion.div
+                key="chat-bottom-prompt"
+                layout
+                className="chat_message chat_message_bot"
+                initial={{ opacity: 0, y: 32 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={messageTransition}
+              >
+                <div className="chat_message_avatar" aria-hidden="true">
+                  {botAvatarSrc ? (
+                    <img src={botAvatarSrc} alt={`${botName} 프로필 이미지`} />
+                  ) : (
+                    <span>AI</span>
+                  )}
+                </div>
+
+                <div className="chat_message_content">
+                  <span className="chat_message_name">{botName}</span>
+                  {renderMessageBody(bottomPromptMessage)}
+                </div>
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
+
+          {isComposingMessage && !isAwaitingResponse ? (
+            <motion.div
+              key="chat-user-preview"
+              className="chat_message chat_message_user chat_message_user_preview"
+              aria-hidden="true"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={messageTransition}
             >
-              <i className="material-icons" aria-hidden="true">north</i>
-            </button>
-          </div>
-        </form>
-      </div>
-    </section>
+              <div className="chat_message_content">
+                <div className="chat_message_bubble chat_message_bubble_user_typing">
+                  <div className="chat_typing_indicator chat_typing_indicator_user" aria-hidden="true">
+                    <span className="chat_typing_dot" />
+                    <span className="chat_typing_dot" />
+                    <span className="chat_typing_dot" />
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          ) : null}
+        </div>
+      </section>
+      {footerSlot ? createPortal(dock, footerSlot) : dock}
+    </>
   )
 }
 
