@@ -267,6 +267,11 @@
   color: #999999;
 }
 
+.mypage_logout_btn .mypage_menu_left {
+  color: #505050;
+  font-weight: 600;
+}
+
 @media (max-width: 420px) {
   .mypage_page {
     gap: 48px;

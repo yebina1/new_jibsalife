@@ -141,6 +141,15 @@ export function shouldShowProfileSetupForCurrentUser() {
   return shouldShowProfileSetupForAccount(getCurrentAuthAccount())
 }
 
+export function markLoggedOut() {
+  if (typeof window === 'undefined') {
+    return
+  }
+
+  window.localStorage.removeItem(AUTH_LOGGED_IN_STORAGE_KEY)
+  window.localStorage.removeItem(AUTH_CURRENT_USER_STORAGE_KEY)
+}
+
 export function markCurrentUserProfileSetupDone() {
   if (typeof window === 'undefined') {
     return

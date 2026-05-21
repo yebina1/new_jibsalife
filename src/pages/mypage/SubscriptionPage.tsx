@@ -1,9 +1,16 @@
-﻿import { useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import './SubscriptionPage.css'
 import subscriptionPetImage from '../../img/illust_login_pet.jpg'
+import managePetImage from '../../img/megaphone_dog.png'
 import Title from '../../components/Title'
 import Button from '../../components/html/Button'
+import { isCurrentDemoUser } from '../../utils/userScopedStorage'
+
+const manageBenefitItems = [
+  { key: 'ai', icon: '🤖', label: 'AI 심화 분석', amount: '10,000원' },
+  { key: 'consulting', icon: '👤', label: '전문가 상담 연결', amount: '2,500원' },
+]
 
 const benefits = [
   { key: 'ai', node: <><strong>AI 심화 분석</strong>으로 건강 변화를 더 정확하게 확인</> },
@@ -16,7 +23,103 @@ const benefits = [
 
 function SubscriptionPage() {
   const navigate = useNavigate()
+  const isDemoUser = isCurrentDemoUser()
   const [selectedPlan, setSelectedPlan] = useState<'yearly' | 'monthly'>('yearly')
+
+  const [showBenefits, setShowBenefits] = useState(false)
+
+  if (isDemoUser) {
+    return (
+      <main className="page subscription_page sub_manage_page">
+        <button
+          type="button"
+          className="sub_manage_close"
+          aria-label="닫기"
+          onClick={() => navigate('/mypage')}
+        >
+          ×
+        </button>
+
+        <div className="sub_manage_top">
+          <span className="sub_manage_badge">집사클럽 ✦</span>
+          <h2 className="sub_manage_title">집사 인생이 더 편해져요 ✦</h2>
+          <p className="sub_manage_subtitle">AI 분석부터 전문가 상담까지, 모든 혜택을 누려보세요</p>
+        </div>
+
+        <div className="sub_manage_hero_card">
+          <div className="sub_manage_hero_body">
+            <img src={managePetImage} alt="" aria-hidden="true" className="sub_manage_hero_img" />
+            <div className="sub_manage_hero_text">
+              <p className="sub_manage_hero_label">지금까지 받은 혜택</p>
+              <strong className="sub_manage_hero_amount">12,500P</strong>
+            </div>
+          </div>
+          <ul className="sub_manage_benefit_list">
+            {manageBenefitItems.map(({ key, icon, label, amount }) => (
+              <li key={key}>
+                <span className="sub_manage_benefit_icon">{icon}</span>
+                <span className="sub_manage_benefit_name">{label}</span>
+                <span className="sub_manage_benefit_amount">{amount}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <button type="button" className="sub_manage_more_btn" onClick={() => setShowBenefits(v => !v)}>
+          전용 혜택 더 보기 <span>{showBenefits ? '∧' : '∨'}</span>
+        </button>
+
+        {showBenefits && (
+          <ul className="subscription_benefits sub_manage_benefits_list">
+            {benefits.map(({ key, node }) => (
+              <li key={key}>
+                <i className="bx bx-check-circle" aria-hidden="true" />
+                <p>{node}</p>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <section className="sub_manage_card">
+          <div className="sub_manage_card_header">
+            <span className="sub_manage_card_title">집사클럽</span>
+            <em className="sub_manage_card_badge">이용 중</em>
+          </div>
+          <div className="sub_manage_card_row">
+            <span className="sub_manage_row_left"><i className="bx bx-calendar" />구독 플랜</span>
+            <span className="sub_manage_plan_tag">월간</span>
+          </div>
+          <div className="sub_manage_card_row">
+            <span className="sub_manage_row_left"><i className="bx bx-time-five" />구독 기간</span>
+            <span>2026년 5월 1일 ~ 6월 1일</span>
+          </div>
+          <div className="sub_manage_card_row">
+            <span className="sub_manage_row_left"><i className="bx bx-credit-card" />다음 결제일</span>
+            <span>2026년 6월 1일</span>
+          </div>
+          <div className="sub_manage_card_row">
+            <span className="sub_manage_row_left"><i className="bx bx-purchase-tag" />결제금액</span>
+            <span className="sub_manage_price_wrap">
+              <span className="sub_manage_price_badge">혜택가</span>
+              <del>₩58,800</del>
+              <strong>49,800원</strong>
+            </span>
+          </div>
+          <div className="sub_manage_card_row">
+            <span className="sub_manage_row_left"><i className="bx bx-receipt" />결제내역</span>
+            <span className="sub_manage_card_link">보기 ›</span>
+          </div>
+        </section>
+
+        <section className="sub_manage_upgrade">
+          <button type="button" className="sub_manage_upgrade_btn">
+            연간으로 구독하기
+          </button>
+          <p className="sub_manage_upgrade_desc">연간 구독시 포인트 <strong>2배!</strong></p>
+        </section>
+      </main>
+    )
+  }
 
   return (
     <main className="page subscription_page">

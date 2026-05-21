@@ -15,6 +15,7 @@ import {
   readMyProfileName,
 } from '../../utils/myProfile'
 import { isCurrentDemoUser } from '../../utils/userScopedStorage'
+import { markLoggedOut } from '../../utils/authAccounts'
 import {
   COMMUNITY_CREATED_POSTS_CHANGE_EVENT,
   readCommunityCreatedPosts,
@@ -300,6 +301,11 @@ function MyPage() {
     return stat
   })
 
+  const handleLogout = () => {
+    markLoggedOut()
+    navigate('/login', { replace: true })
+  }
+
   const handleLocationSetting = () => {
     if (!navigator.geolocation) {
       setLocationMessage('이 브라우저에서는 위치 기능을 지원하지 않아요.')
@@ -453,6 +459,12 @@ function MyPage() {
                 </button>
               </li>
             ))}
+            <li>
+              <button type="button" className="mypage_menu_button mypage_logout_btn" onClick={handleLogout}>
+                <span className="mypage_menu_left">로그아웃</span>
+                <ChevronIcon direction="right" size="md" />
+              </button>
+            </li>
           </ul>
         </ContentSection>
       </main>

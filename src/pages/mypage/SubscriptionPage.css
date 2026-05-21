@@ -268,3 +268,494 @@
     padding-inline: 12px;
   }
 }
+
+/* 구독 관리 페이지 (구독자 전용) */
+.sub_manage_hero strong {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.sub_manage_active_badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 14px;
+  border-radius: 999px;
+  background: #ede9ff;
+  color: #6c55f6;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.sub_manage_point_card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-top: 20px;
+  padding: 18px 20px;
+  border-radius: 12px;
+  background: #f3f0ff;
+  border: 1px solid #ddd5ff;
+}
+
+.sub_manage_point_icon {
+  font-size: 28px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.sub_manage_point_card strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #4b35d4;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.sub_manage_point_card p {
+  margin: 0;
+  color: #6c55f6;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
+  word-break: keep-all;
+}
+
+.sub_manage_info_card {
+  margin-top: 16px;
+  padding: 0 !important;
+  border: 1px solid #e5e5ec !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+}
+
+.sub_manage_plan_row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  gap: 12px;
+}
+
+.sub_manage_plan_row + .sub_manage_plan_row {
+  border-top: 1px solid #f0f0f0;
+}
+
+.sub_manage_plan_label {
+  color: #767676;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.sub_manage_plan_value {
+  color: #111111;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.sub_manage_price_wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sub_manage_price_badge {
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #6c55f6;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.sub_manage_price_wrap del {
+  color: #aaaaaa;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.sub_manage_price_wrap strong {
+  color: #111111;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.sub_manage_card_actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.sub_manage_card_actions button {
+  height: 44px;
+  border: 1px solid #e5e5ec;
+  border-radius: 8px;
+  background: #fafafa;
+  color: #505050;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: default;
+}
+
+.sub_manage_upgrade {
+  margin: 4px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.sub_manage_upgrade_btn {
+  width: 100%;
+  height: 52px;
+  border: 0;
+  border-radius: 12px;
+  background: #6c55f6;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.sub_manage_upgrade_desc {
+  margin: 0;
+  color: #767676;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.sub_manage_upgrade_desc strong {
+  color: #6c55f6;
+  font-weight: 700;
+}
+
+.sub_manage_close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #999999;
+  font-size: 30px;
+  font-weight: 200;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.sub_manage_page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0;
+  padding: 48px 0 20px;
+  background: #ffffff;
+}
+
+.sub_manage_top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 24px 12px;
+  text-align: center;
+}
+
+.sub_manage_badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1.5px solid #6c55f6;
+  background: #ffffff;
+  color: #6c55f6;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.sub_manage_title {
+  margin: 0 0 8px;
+  color: #111111;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.35;
+  letter-spacing: -0.025em;
+}
+
+.sub_manage_subtitle {
+  margin: 0;
+  color: #767676;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.sub_manage_hero_card {
+  margin: 10px 16px 0;
+  padding: 10px 16px 16px;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #6c55f6 0%, #8b6fff 100%);
+  overflow: hidden;
+}
+
+.sub_manage_hero_body {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.sub_manage_hero_img {
+  width: 100px;
+  height: 105px;
+  object-fit: contain;
+  object-position: bottom;
+  flex-shrink: 0;
+  transform: scaleX(-1);
+}
+
+.sub_manage_hero_text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.sub_manage_hero_label {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.sub_manage_hero_amount {
+  margin: 0;
+  color: #ffffff;
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.sub_manage_benefit_list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  border-radius: 12px;
+  background: #ffffff;
+  list-style: none;
+  overflow: hidden;
+}
+
+.sub_manage_benefit_list li {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 10px 16px;
+}
+
+.sub_manage_benefit_list li + li {
+  border-left: 1px solid #f0f0f0;
+}
+
+.sub_manage_benefit_icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.sub_manage_benefit_name {
+  font-size: 13px;
+  font-weight: 500;
+  color: #505050;
+}
+
+.sub_manage_benefit_amount {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111111;
+}
+
+.sub_manage_more_btn {
+  align-self: center;
+  border: 0;
+  background: transparent;
+  color: #6c55f6;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 8px;
+}
+
+.sub_manage_more_btn span {
+  font-size: 12px;
+}
+
+.sub_manage_benefits_list {
+  margin: 0 16px;
+  padding: 4px 0;
+}
+
+.sub_manage_row_left {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #505050;
+}
+
+.sub_manage_row_left i {
+  font-size: 17px;
+  color: #9999bb;
+}
+
+.sub_manage_card {
+  margin: 8px 16px;
+  padding: 16px 20px;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.sub_manage_card_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.sub_manage_card_title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111111;
+}
+
+.sub_manage_card_title em {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 6px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: #ede9ff;
+  color: #6c55f6;
+  font-size: 12px;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.sub_manage_card_badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: #ede9ff;
+  color: #6c55f6;
+  font-size: 13px;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.sub_manage_change_btn {
+  border: 0;
+  background: transparent;
+  color: #767676;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0;
+}
+
+.sub_manage_plan_tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: #ede9ff;
+  color: #6c55f6;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.sub_manage_card_row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 0;
+  font-size: 14px;
+  color: #505050;
+}
+
+.sub_manage_card_row + .sub_manage_card_row {
+  border-top: 1px solid #f5f5f8;
+}
+
+.sub_manage_card_link {
+  color: #767676;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.sub_manage_price_wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sub_manage_price_badge {
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #6c55f6;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.sub_manage_price_wrap del {
+  color: #aaaaaa;
+  font-size: 13px;
+}
+
+.sub_manage_price_wrap strong {
+  color: #111111;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.sub_manage_card_actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.sub_manage_card_actions button {
+  height: 42px;
+  border: 1px solid #e5e5ec;
+  border-radius: 8px;
+  background: #fafafa;
+  color: #505050;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: default;
+}
+
+.sub_manage_back_btn {
+  margin: 8px 16px 24px;
+  border: 0;
+  background: transparent;
+  color: #9999aa;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+}
