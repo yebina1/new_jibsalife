@@ -144,6 +144,8 @@
 }
 
 .signup_check_btn {
+  position: relative;
+  overflow: hidden;
   flex-shrink: 0;
   height: 54px;
   padding: 0 14px;
@@ -157,6 +159,42 @@
   cursor: pointer;
   white-space: nowrap;
   letter-spacing: var(--app-letter-spacing);
+}
+
+.signup_star_top,
+.signup_star_bottom {
+  position: absolute;
+  width: 300%;
+  height: 50%;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.signup_star_top {
+  top: -11px;
+  left: -250%;
+  background: radial-gradient(ellipse at center, rgba(109, 89, 248, 0.7) 0%, transparent 60%);
+  animation: signup_star_top 3s linear infinite alternate;
+}
+
+.signup_star_bottom {
+  bottom: -11px;
+  right: -250%;
+  background: radial-gradient(ellipse at center, rgba(109, 89, 248, 0.7) 0%, transparent 60%);
+  animation: signup_star_bottom 3s linear infinite alternate;
+}
+
+.signup_check_btn.is_checked .signup_star_top,
+.signup_check_btn.is_checked .signup_star_bottom {
+  display: none;
+}
+
+@keyframes signup_star_top {
+  to { left: 0%; }
+}
+
+@keyframes signup_star_bottom {
+  to { right: 0%; }
 }
 
 .signup_check_btn.is_checked {
