@@ -77,7 +77,6 @@ function CommunityVoteResult() {
 
   return (
     <div className="cv_wrap">
-      <GoldConfettiEffect />
       <PageHeader 
       title="투표 결과" 
       leftContent={<BackButton />} 
@@ -90,6 +89,7 @@ function CommunityVoteResult() {
 
       {/* 1위 */}
       <section className="cv_first_section">
+        <GoldConfettiEffect />
         <div className="cv_first_top">
           <Title
             as="h2"

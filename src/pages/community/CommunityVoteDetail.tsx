@@ -174,7 +174,7 @@ function CommunityVoteDetail() {
                     <span className="cvd_candidate_name">{item.name}</span>
                     <span className={`cvd_candidate_check${isSelected ? ' checked' : ''}`} aria-hidden="true">
                       <svg viewBox="0 0 20 20" fill="none">
-                        <circle cx="10" cy="10" r="10" fill={isSelected ? '#6D59F8' : '#E5E5EC'} />
+                        <circle cx="10" cy="10" r="10" fill={isSelected ? '#FC7B9B' : '#E5E5EC'} />
                         <path d="M6 10.5l3 3 5-5.5" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </span>
@@ -213,8 +213,8 @@ function CommunityVoteDetail() {
         <Alert onClose={() => setIsEditAlertOpen(false)}>
           <p className="cvd_edit_alert_msg">수정하시겠습니까?</p>
           <div className="cvd_edit_alert_btns">
-            <Button type="button" className="white_btn" onClick={() => setIsEditAlertOpen(false)}>아니요</Button>
-            <Button type="button" className="purple_btn" onClick={handleEditConfirm}>네</Button>
+            <Button type="button" className="purple_btn" onClick={() => setIsEditAlertOpen(false)}>아니요</Button>
+            <Button type="button" className="white_btn" onClick={handleEditConfirm}>네</Button>
           </div>
         </Alert>
       )}

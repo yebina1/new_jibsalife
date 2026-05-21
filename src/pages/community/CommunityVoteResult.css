@@ -8,16 +8,31 @@
 }
 
 .cv_wrap {
+  position: relative;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
 }
 
 /* ── 1위 ── */
 .cv_first_section {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 24px;
+  overflow: hidden;
   padding: 24px 16px 0;
+}
+
+.cv_first_section .gold_confetti_wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.cv_first_section > :not(.gold_confetti_wrap) {
+  position: relative;
+  z-index: 1;
 }
 
 .cv_first_title_row {
@@ -130,6 +145,8 @@
 }
 
 .cv_content_wrap {
+  position: relative;
+  z-index: 2;
   margin-top: -88px;
 }
 

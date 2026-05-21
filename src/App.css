@@ -241,9 +241,8 @@
 .white_radius_btn.layout_community_subtab_active:hover,
 .s_white_radius_btn.layout_community_subtab_active,
 .s_white_radius_btn.layout_community_subtab_active:hover {
-  background: #6D59F8;
+  background: #FC7B9B;
   color: #ffffff;
-  border-color: #6D59F8;
   font-weight: var(--font-weight-sb);
 }
 

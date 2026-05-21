@@ -197,10 +197,10 @@ html:has(.cv2_page) {
   width: auto;
   padding: 0 10px;
   height: 36px;
-  border: 1px solid #6D59F8;
+  border: 1px solid #FC7B9B;
   border-radius: 999px;
   background: transparent;
-  color: #6D59F8;
+  color: #FC7B9B;
   font-size: 14px;
   font-weight: 600;
   white-space: nowrap;
@@ -209,7 +209,7 @@ html:has(.cv2_page) {
 }
 
 .cv2_notify_btn.notified {
-  background: #6D59F8;
+  background: #FC7B9B;
   color: #fff;
 }
 
