@@ -1,3 +1,4 @@
+import { readSelectedPetProfileId } from './petProfiles'
 import { getUserScopedStorageKey } from './userScopedStorage'
 
 export type MissionActivityRecord = {
@@ -81,6 +82,10 @@ const POOP_KEYWORDS = [
 ]
 let recordSequence = 0
 
+function getMissionActivityStorageKey(petId = readSelectedPetProfileId()) {
+  return `${getUserScopedStorageKey(MISSION_ACTIVITY_RECORDS_STORAGE_KEY)}.${petId}`
+}
+
 function getTodayDateKey() {
   const now = new Date()
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
@@ -91,11 +96,11 @@ function getCurrentTime() {
   return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
 }
 
-export function readMissionActivityRecords(): MissionActivityRecord[] {
+export function readMissionActivityRecords(petId = readSelectedPetProfileId()): MissionActivityRecord[] {
   if (typeof window === 'undefined') return []
 
   try {
-    const savedValue = window.localStorage.getItem(getUserScopedStorageKey(MISSION_ACTIVITY_RECORDS_STORAGE_KEY))
+    const savedValue = window.localStorage.getItem(getMissionActivityStorageKey(petId))
     if (!savedValue) return []
 
     const parsedValue = JSON.parse(savedValue)
@@ -115,7 +120,7 @@ export function readMissionActivityRecords(): MissionActivityRecord[] {
   }
 }
 
-function writeMissionRecord(title: string, detail: string, color: string) {
+function writeMissionRecord(title: string, detail: string, color: string, petId = readSelectedPetProfileId()) {
   if (typeof window === 'undefined') return null
 
   recordSequence = (recordSequence + 1) % 1000
@@ -128,9 +133,9 @@ function writeMissionRecord(title: string, detail: string, color: string) {
     date: getTodayDateKey(),
     source: 'chat',
   }
-  const nextRecords = [nextRecord, ...readMissionActivityRecords()].slice(0, 100)
+  const nextRecords = [nextRecord, ...readMissionActivityRecords(petId)].slice(0, 100)
 
-  window.localStorage.setItem(getUserScopedStorageKey(MISSION_ACTIVITY_RECORDS_STORAGE_KEY), JSON.stringify(nextRecords))
+  window.localStorage.setItem(getMissionActivityStorageKey(petId), JSON.stringify(nextRecords))
   window.dispatchEvent(new CustomEvent(MISSION_ACTIVITY_RECORDS_CHANGE_EVENT, { detail: nextRecord }))
 
   return nextRecord

@@ -235,7 +235,7 @@ function getInitialVoteState(): { votedCardId: number | null; hasModified: boole
 
 function readCalendarRecords(petId?: number) {
   return [
-    ...readMissionActivityRecords().map(toMissionHistoryRecord),
+    ...readMissionActivityRecords(petId).map(toMissionHistoryRecord),
     ...readMissionHistoryRecordsWithDefaults(petId),
   ]
 }
