@@ -482,7 +482,9 @@ function Health() {
   const selectedRepeat = repeatOptions.find((option) => option.id === selectedRepeatId) ?? repeatOptions[0]
   const draftRepeat = repeatOptions.find((option) => option.id === draftRepeatId) ?? selectedRepeat
   const selectedQuickMessageOptions = categoryQuickMessageOptions[selectedCategory.id] ?? []
-  const isActive = selectedCategory.id === 'meal' || selectedCategory.id === 'walk' || memoText.trim() !== '' || selectedAmount !== ''
+  const hasAmountValue =
+    (selectedCategory.id === 'meal' || selectedCategory.id === 'walk') && feedAmount > 0
+  const isActive = hasAmountValue || memoText.trim() !== '' || selectedAmount !== ''
   const firstAvailableCategoryColor =
     categoryColorOptions.find((color) => !customCategories.some((category) => category.color === color)) ??
     categoryColorOptions[0]
@@ -757,7 +759,9 @@ function Health() {
   const handleCalendarMemoSave = () => {
     const primaryDetail = selectedCategory.id === 'meal' && feedAmount > 0
       ? `사료 ${feedAmount}g`
-      : selectedAmount
+      : selectedCategory.id === 'walk' && feedAmount > 0
+        ? `산책 ${feedAmount}분`
+        : selectedAmount
     const detail = [primaryDetail, memoText.trim()].filter(Boolean).join('\n').trim()
     if (!detail) return false
 

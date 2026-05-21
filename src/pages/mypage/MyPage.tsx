@@ -401,6 +401,7 @@ function MyPage() {
               name={profileName}
               breed=""
               details={`포인트: ${profilePoints.toLocaleString()}`}
+              className="mypage_summary_profile_card"
               careGuideLabel={
                 isDemoUser ? (
                   <span className="mypage_profile_badges">

@@ -39,6 +39,7 @@ import { writeVotedCandidate, writeVotedMissionId } from '../utils/communityVote
 import { isChallengeDayClaimed, markChallengeVoteCompleted, readCurrentDay } from '../utils/challengeStatus'
 import { consumeSignupWelcomeReward, readProfilePoints } from '../utils/profilePoints'
 import { showStateBarMessage } from '../utils/stateBarMessage'
+import { addUserNotification } from '../utils/userNotifications'
 import LazyImage from '../components/LazyImage'
 import { dailyPosts, knowledgeFeedItems } from './community/CommunityPetStory'
 import knowledge1 from '../img/petstory/Knowledge/knowledge1.png'
@@ -370,7 +371,7 @@ function Home() {
   const location = useLocation()
   const [profileSlides, setProfileSlides] = useState<ProfileSummarySlide[]>(readPetProfiles)
   const [summarySlideIndex, setSummarySlideIndex] = useState(getInitialSummarySlideIndex)
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, align: 'start' })
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, align: 'center' })
   const [selectedCardId, setSelectedCardId] = useState<number | null>(
     () => getInitialVoteState().votedCardId,
   )
@@ -761,7 +762,7 @@ function Home() {
     }, TARGET_CURSOR_EFFECT_DURATION_MS)
   }
 
-  const handleBestPoseVoteSelect = (id: number, event: MouseEvent<HTMLButtonElement>) => {
+  const handleBestPoseVoteSelect = (id: number, event: MouseEvent<HTMLElement>) => {
     if (votedCardId !== null && hasModified) return
 
     if (selectedCardId !== id) {
@@ -827,6 +828,11 @@ function Home() {
 
     const currentDay = readCurrentDay()
     if (markChallengeVoteCompleted() && currentDay === 2 && !isChallengeDayClaimed(currentDay)) {
+      addUserNotification({
+        title: '챌린지',
+        content: '오늘의 챌린지가 참여되었습니다. 포인트 받아주세요.',
+        path: '/community/challenge',
+      })
       showStateBarMessage('오늘의 챌린지가 참여되었습니다.\n포인트 받아주세요.', 5000, {
         actionLabel: '이동하기',
         onAction: () => navigate('/community/challenge'),
@@ -992,7 +998,10 @@ function Home() {
 
               return (
                 <article key={item.id} className="best_pose_vote_card">
-                  <div className="best_pose_vote_card_media">
+                  <div
+                    className="best_pose_vote_card_media"
+                    onClick={(event) => handleBestPoseVoteSelect(item.id, event)}
+                  >
                     <LazyImage
                       src={item.image}
                       alt={`${displayName} 포즈 사진`}
@@ -1025,7 +1034,10 @@ function Home() {
                       className={`best_pose_vote_card_like${isLiked ? ' is_active' : ''}`}
                       aria-label={`${displayName} 선택`}
                       aria-pressed={isLiked}
-                      onClick={(event) => handleBestPoseVoteSelect(item.id, event)}
+                      onClick={(event) => {
+                        event.stopPropagation()
+                        handleBestPoseVoteSelect(item.id, event)
+                      }}
                     >
                       <VoteHeartIcon active={isLiked} />
                     </button>

@@ -99,7 +99,13 @@
 .summary_slider_track {
   display: flex;
   align-items: stretch;
-  gap: 8px;
+  gap: 0;
+}
+
+.home_summary_section .summary_slider_track .summary_profile_card,
+.home_summary_section .summary_slider_track .summary_profile_card_add {
+  width: calc(100% - 40px);
+  flex-basis: calc(100% - 40px);
 }
 
 .summary_slider:active {
@@ -241,7 +247,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 18px;
   margin-inline: 16px;
   padding: 16px 16px;
@@ -262,6 +268,8 @@
 
 .home_ranking_banner_copy {
   display: grid;
+  min-width: 0;
+  flex: 1 1 auto;
   gap: 2px;
   font-family: 'Pretendard', sans-serif;
   font-size: 16px;
@@ -272,6 +280,7 @@
 
 .home_ranking_banner_copy p {
   margin: 0;
+  min-width: 0;
   color: #111111;
   font-family: var(--app-font-family);
   font-size: 16px;
@@ -281,6 +290,7 @@
 }
 
 .home_ranking_banner_copy > span {
+  justify-self: start;
   color: #505050;
   font-size: 12px;
   font-weight: 400;
@@ -298,7 +308,7 @@
 .home_ranking_banner_icon {
   width: 40px;
   height: auto;
-  flex: 0 0 auto;
+  flex: 0 0 40px;
   object-fit: contain;
 }
 
@@ -1346,22 +1356,13 @@
   }
 
   .home_ranking_banner_copy {
-    display: flex;
-    align-items: baseline;
-    gap: 8px;
-    white-space: nowrap;
-  }
-
-  .home_ranking_banner_copy p {
-    white-space: nowrap;
-  }
-
-  .home_ranking_banner_copy > span {
-    white-space: nowrap;
+    display: grid;
+    gap: 2px;
   }
 
   .home_ranking_banner_icon {
     width: 46px;
+    flex-basis: 46px;
   }
 }
 

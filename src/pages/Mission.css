@@ -1,4 +1,5 @@
 .mission_page {
+  --mission-fixed-profile-height: 56px;
   --mission-fixed-calendar-height: 174px;
   --mission-fixed-title-height: 62px;
   min-height: auto;
@@ -16,8 +17,8 @@
 }
 
 .mission_page.is_condensed {
-  height: calc(100dvh - var(--layout-header-height) - var(--layout-footer-height));
-  overflow: hidden;
+  min-height: calc(100dvh - var(--layout-header-height) - var(--layout-footer-height));
+  overflow: visible;
 }
 
 .mission_profile_header {
@@ -26,6 +27,20 @@
   justify-content: space-between;
   gap: 16px;
   margin-bottom: 16px;
+}
+
+.mission_page.is_condensed .mission_profile_header {
+  position: fixed;
+  top: var(--layout-header-height);
+  left: 50%;
+  z-index: 96;
+  width: min(100%, var(--layout-max-width));
+  min-height: var(--mission-fixed-profile-height);
+  margin: 0;
+  padding: 0 var(--layout-inline-padding) 16px;
+  box-sizing: border-box;
+  background: #ffffff;
+  transform: translateX(-50%);
 }
 
 .mission_profile_header h2 {
@@ -101,7 +116,7 @@
 
 .mission_calendar_section.is_condensed {
   position: fixed;
-  top: var(--layout-header-height);
+  top: calc(var(--layout-header-height) + var(--mission-fixed-profile-height));
   left: 50%;
   z-index: 95;
   width: min(100%, var(--layout-max-width));
@@ -290,10 +305,16 @@
   width: 100%;
   height: calc(var(--mission-calendar-row-height) * 6);
   overflow: hidden;
+  transition: height 260ms ease;
 }
 
 .mission_calendar_viewport.is_weekly {
   height: var(--mission-calendar-row-height);
+}
+
+.mission_calendar_track {
+  will-change: transform;
+  transition: transform 260ms ease;
 }
 
 .mission_calendar_grid {
@@ -388,7 +409,11 @@
 }
 
 .mission_history_section.is_condensed {
-  padding-top: calc(var(--mission-fixed-calendar-height) + var(--mission-fixed-title-height));
+  padding-top: calc(
+    var(--mission-fixed-profile-height) +
+    var(--mission-fixed-calendar-height) +
+    var(--mission-fixed-title-height)
+  );
 }
 
 .mission_history_section h2 {
@@ -402,7 +427,11 @@
 
 .mission_history_section.is_condensed h2 {
   position: fixed;
-  top: calc(var(--layout-header-height) + var(--mission-fixed-calendar-height));
+  top: calc(
+    var(--layout-header-height) +
+    var(--mission-fixed-profile-height) +
+    var(--mission-fixed-calendar-height)
+  );
   left: 50%;
   z-index: 90;
   width: min(100%, var(--layout-max-width));
@@ -425,23 +454,17 @@
 }
 
 .mission_history_section.is_condensed .mission_history_list {
-  position: fixed;
-  top: calc(
-    var(--layout-header-height) +
-    var(--mission-fixed-calendar-height) +
-    var(--mission-fixed-title-height)
-  );
-  left: 50%;
-  z-index: 89;
-  width: min(100%, var(--layout-max-width));
-  max-height: calc(100dvh - var(--layout-header-height) - var(--mission-fixed-calendar-height) - var(--mission-fixed-title-height) - var(--layout-footer-height));
-  padding: 0 var(--layout-inline-padding) 24px;
+  position: relative;
+  top: auto;
+  left: auto;
+  z-index: auto;
+  width: 100%;
+  max-height: none;
+  padding: 16px 0 24px;
   box-sizing: border-box;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  background: #ffffff;
-  transform: translateX(-50%);
-  -webkit-overflow-scrolling: touch;
+  overflow: visible;
+  background: transparent;
+  transform: none;
 }
 
 .mission_history_item {

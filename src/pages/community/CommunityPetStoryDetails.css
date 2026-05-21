@@ -404,16 +404,10 @@
 
 
 
-.cpsdetail_my_comment {
-  background: #F4F8FB;
-  padding: 10px;
-  margin: -10px;
-}
-
 .cpsdetail_comments {
   display: grid;
-  gap: 16px;
-  padding-block: 24px;
+  gap: 24px;
+  padding-top: 24px;
 }
 
 .cpsdetail_comments_title {
@@ -428,7 +422,14 @@
 
 .cpsdetail_comment_group {
   display: grid;
-  /* gap: 16px; */
+  gap: 16px;
+}
+
+.cpsdetail_comment_group.is_focus_target {
+  padding: 12px;
+  border: 1px solid rgba(108, 89, 247, 0.2);
+  border-radius: 16px;
+  background: transparent;
 }
 
 .cpsdetail_comment {
@@ -436,24 +437,10 @@
   grid-template-columns: 40px minmax(0, 1fr);
   gap: 10px;
   align-items: start;
-  padding-block: 10px;
 }
 
 .cpsdetail_reply {
-  padding-left: 50px;
-}
-
-.cpsdetail_reply_more_btn {
-  justify-self: start;
   margin-left: 50px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: #707070;
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 1.4;
-  cursor: pointer;
 }
 
 .cpsdetail_comments_more_btn {

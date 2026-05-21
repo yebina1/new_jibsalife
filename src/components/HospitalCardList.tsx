@@ -11,6 +11,7 @@ export type HospitalCardItem = {
   tags: readonly string[]
   openTime: string
   closeTime: string
+  statusLabelType?: 'hospital' | 'business'
 }
 
 type HospitalCardListProps = {
@@ -25,15 +26,20 @@ function toMinutes(time: string) {
   return hours * 60 + minutes
 }
 
-function getClinicStatus(openTime: string, closeTime: string) {
+function getClinicStatus(
+  openTime: string,
+  closeTime: string,
+  statusLabelType: HospitalCardItem['statusLabelType'] = 'hospital',
+) {
   const now = new Date()
   const currentMinutes = now.getHours() * 60 + now.getMinutes()
   const openMinutes = toMinutes(openTime)
   const closeMinutes = toMinutes(closeTime)
   const isOpen = currentMinutes >= openMinutes && currentMinutes < closeMinutes
+  const label = statusLabelType === 'business' ? (isOpen ? '영업중' : '영업 마감') : isOpen ? '진료 중' : '진료 마감'
 
   return {
-    label: isOpen ? '진료 중' : '진료 마감',
+    label,
     timeText: `${openTime} ~ ${closeTime}`,
     color: isOpen ? '#22C55E' : '#767676',
   }
@@ -43,7 +49,7 @@ function HospitalCardList({ items, likedNames, onToggleLike, onSelect }: Hospita
   return (
     <ul className="health_hospital_recommend_list">
       {items.map((item) => {
-        const status = getClinicStatus(item.openTime, item.closeTime)
+        const status = getClinicStatus(item.openTime, item.closeTime, item.statusLabelType)
         const isLiked = likedNames.includes(item.name)
 
         return (

@@ -241,6 +241,7 @@ function MissionRecordSheet({
       {confirmAction && (
         <ConfirmDialog
           message={confirmAction === 'delete' ? '삭제하시겠습니까?' : '수정하시겠습니까?'}
+          confirmLabel={confirmAction === 'delete' ? '삭제하기' : '수정하기'}
           onCancel={() => setConfirmAction(null)}
           onConfirm={handleConfirm}
         />

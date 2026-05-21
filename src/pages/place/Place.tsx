@@ -46,6 +46,7 @@ const hospitalPlaceItems: PlaceListItem[] = hospitalProfiles.map((hospital, inde
   closeTime: hospital.close,
   category: 'care',
   subcategory: 'hospital',
+  statusLabelType: 'hospital',
   createdAt: `2026-05-${String(18 - index).padStart(2, '0')}T10:00:00`,
   popularity: 98 - index * 4,
   routePath: `/health/hospitals/${hospital.id}`,
@@ -204,7 +205,13 @@ const otherPlaceItems: PlaceListItem[] = [
   },
 ]
 
-const placeItems: PlaceListItem[] = [...hospitalPlaceItems, ...otherPlaceItems]
+const placeItems: PlaceListItem[] = [
+  ...hospitalPlaceItems,
+  ...otherPlaceItems.map((item) => ({
+    ...item,
+    statusLabelType: 'business' as const,
+  })),
+]
 
 function parseDistance(distanceText: string) {
   const parsed = Number.parseFloat(distanceText.replace(/[^\d.]/g, ''))
