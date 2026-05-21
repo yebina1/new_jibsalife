@@ -62,7 +62,7 @@
   right: 0;
   left: 0;
   z-index: 0;
-  height: 178px;
+  height: 226px;
   background: #C4B5FD;
   content: '';
 }
@@ -83,12 +83,13 @@
 }
 
 .summary_slider_viewport {
+  margin-inline: calc(var(--layout-inline-padding) * -1);
   overflow-x: hidden;
   overflow-y: visible;
 }
 
 .summary_slider {
-  width: min(100%, 406px);
+  width: 100%;
   margin-inline: auto;
   padding: 6px 0 20px;
   touch-action: pan-y;
@@ -99,13 +100,35 @@
 .summary_slider_track {
   display: flex;
   align-items: stretch;
-  gap: 0;
+  gap: 12px;
+  padding-inline: var(--layout-inline-padding);
 }
 
 .home_summary_section .summary_slider_track .summary_profile_card,
 .home_summary_section .summary_slider_track .summary_profile_card_add {
-  width: calc(100% - 40px);
-  flex-basis: calc(100% - 40px);
+  width: calc(100% - 44px);
+  flex-basis: calc(100% - 44px);
+}
+
+.home_summary_section .summary_slider_track > :last-child {
+  margin-right: var(--layout-inline-padding);
+}
+
+.home_summary_section .summary_slider_track .home_summary_profile_add_card {
+  min-height: 212px;
+  padding: 20px;
+}
+
+.home_summary_section .home_summary_profile_add_card .summary_profile_card_add_button {
+  width: 72px;
+  height: 72px;
+  padding: 0;
+}
+
+.home_summary_section .home_summary_profile_add_card .summary_profile_card_add_button i {
+  width: 32px;
+  height: 32px;
+  font-size: 32px;
 }
 
 .summary_slider:active {

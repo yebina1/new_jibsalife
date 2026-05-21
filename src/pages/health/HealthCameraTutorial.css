@@ -2,6 +2,8 @@
   --health-cam-layout-width: min(100vw, 1440px);
   --health-cam-layout-gutter: max(0px, calc((100vw - var(--health-cam-layout-width)) / 2));
   --health-cam-tutorial-tabs-width: min(335px, calc(100vw - 40px));
+  --health-cam-tutorial-tabs-shell-radius: 10px;
+  --health-cam-tutorial-tab-radius: 8px;
   --health-cam-close-button-size: 36px;
   --health-cam-close-button-offset: 12px;
   --health-cam-tab-bottom-offset: calc(34px + env(safe-area-inset-bottom));
@@ -104,7 +106,7 @@
   width: var(--health-cam-tutorial-tabs-width);
   background: #f1f1f5;
   padding: 3px;
-  border-radius: 999px;
+  border-radius: var(--health-cam-tutorial-tabs-shell-radius);
   box-shadow:
     0 16px 32px rgba(0, 0, 0, 0.28),
     0 6px 14px rgba(0, 0, 0, 0.2);
@@ -122,6 +124,7 @@
 
 .health_cam_tutorial_tabs .health_cam_tab {
   position: relative;
+  border-radius: var(--health-cam-tutorial-tab-radius);
   color: transparent;
   z-index: 1;
 }

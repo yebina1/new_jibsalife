@@ -9,7 +9,9 @@
 }
 
 .layout_content > .mission_page {
-  min-height: auto;
+  min-height: calc(100dvh - var(--layout-header-height) - var(--layout-footer-height) - 24px);
+  padding-top: 24px;
+  box-sizing: border-box;
 }
 
 .layout:has(.mission_page) .header_right > button:first-child {
@@ -17,7 +19,7 @@
 }
 
 .mission_page.is_condensed {
-  min-height: calc(100dvh - var(--layout-header-height) - var(--layout-footer-height));
+  min-height: calc(100dvh - var(--layout-header-height) - var(--layout-footer-height) - 24px);
   overflow: visible;
 }
 

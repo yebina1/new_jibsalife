@@ -159,6 +159,141 @@ const otherPlaceItems: PlaceListItem[] = [
     popularity: 82,
   },
   {
+    id: 'pension-lake',
+    name: '레이크 펜션숙소',
+    image: hospitalProfiles[0]?.image ?? hospitalProfiles[1].image,
+    rating: '4.8',
+    reviewCount: 61,
+    distanceText: '7.4 KM',
+    tags: ['호수 뷰', '잔디 마당', '동반 객실'],
+    openTime: '15:00',
+    closeTime: '22:00',
+    category: 'travel',
+    subcategory: 'pension',
+    createdAt: '2026-05-07T14:20:00',
+    popularity: 91,
+  },
+  {
+    id: 'pension-sunset',
+    name: '선셋 펜션숙소',
+    image: hospitalProfiles[1]?.image ?? hospitalProfiles[0].image,
+    rating: '4.6',
+    reviewCount: 49,
+    distanceText: '9.1 KM',
+    tags: ['노을 뷰', '바비큐', '산책로'],
+    openTime: '15:00',
+    closeTime: '22:00',
+    category: 'travel',
+    subcategory: 'pension',
+    createdAt: '2026-05-06T16:10:00',
+    popularity: 85,
+  },
+  {
+    id: 'pension-valley',
+    name: '밸리 펜션숙소',
+    image: hospitalProfiles[2]?.image ?? hospitalProfiles[0].image,
+    rating: '4.5',
+    reviewCount: 33,
+    distanceText: '11.3 KM',
+    tags: ['계곡 근처', '대형 마당', '반려견 샤워'],
+    openTime: '14:30',
+    closeTime: '21:30',
+    category: 'travel',
+    subcategory: 'pension',
+    createdAt: '2026-05-05T13:00:00',
+    popularity: 78,
+  },
+  {
+    id: 'pension-garden',
+    name: '가든 펜션숙소',
+    image: hospitalProfiles[3]?.image ?? hospitalProfiles[1].image,
+    rating: '4.9',
+    reviewCount: 74,
+    distanceText: '6.8 KM',
+    tags: ['정원 포토존', '실내 놀이', '조식 포함'],
+    openTime: '15:00',
+    closeTime: '22:00',
+    category: 'travel',
+    subcategory: 'pension',
+    createdAt: '2026-05-04T11:45:00',
+    popularity: 95,
+  },
+  {
+    id: 'pension-morning',
+    name: '모닝 펜션숙소',
+    image: hospitalProfiles[4]?.image ?? hospitalProfiles[0].image,
+    rating: '4.4',
+    reviewCount: 27,
+    distanceText: '10.5 KM',
+    tags: ['조용한 위치', '소형견 추천', '주차 가능'],
+    openTime: '15:00',
+    closeTime: '21:00',
+    category: 'travel',
+    subcategory: 'pension',
+    createdAt: '2026-05-03T09:40:00',
+    popularity: 72,
+  },
+  {
+    id: 'pension-hill',
+    name: '힐사이드 펜션숙소',
+    image: hospitalProfiles[0]?.image ?? hospitalProfiles[2].image,
+    rating: '4.7',
+    reviewCount: 56,
+    distanceText: '12.0 KM',
+    tags: ['언덕 뷰', '개별 테라스', '동반 침구'],
+    openTime: '15:00',
+    closeTime: '22:30',
+    category: 'travel',
+    subcategory: 'pension',
+    createdAt: '2026-05-02T17:30:00',
+    popularity: 87,
+  },
+  {
+    id: 'pension-cloud',
+    name: '클라우드 펜션숙소',
+    image: hospitalProfiles[1]?.image ?? hospitalProfiles[3].image,
+    rating: '4.8',
+    reviewCount: 68,
+    distanceText: '8.9 KM',
+    tags: ['루프탑', '야외 운동장', '펫 어메니티'],
+    openTime: '15:00',
+    closeTime: '22:00',
+    category: 'travel',
+    subcategory: 'pension',
+    createdAt: '2026-05-01T12:15:00',
+    popularity: 89,
+  },
+  {
+    id: 'pension-river',
+    name: '리버 펜션숙소',
+    image: hospitalProfiles[2]?.image ?? hospitalProfiles[4].image,
+    rating: '4.5',
+    reviewCount: 44,
+    distanceText: '13.2 KM',
+    tags: ['강변 산책', '바비큐', '넓은 객실'],
+    openTime: '14:00',
+    closeTime: '21:30',
+    category: 'travel',
+    subcategory: 'pension',
+    createdAt: '2026-04-30T15:50:00',
+    popularity: 80,
+  },
+  {
+    id: 'pension-wood',
+    name: '우드 펜션숙소',
+    image: hospitalProfiles[3]?.image ?? hospitalProfiles[2].image,
+    rating: '4.6',
+    reviewCount: 39,
+    distanceText: '9.7 KM',
+    tags: ['숲속 숙소', '반려묘 가능', '실내 놀이존'],
+    openTime: '15:00',
+    closeTime: '22:00',
+    category: 'travel',
+    subcategory: 'pension',
+    createdAt: '2026-04-29T10:10:00',
+    popularity: 83,
+  },
+  {
     id: 'shop-paw',
     name: '포우 용품샵',
     image: hospitalProfiles[4]?.image ?? hospitalProfiles[0].image,
@@ -213,6 +348,16 @@ const placeItems: PlaceListItem[] = [
   })),
 ]
 
+const placeCategorySections: Array<{
+  id: Exclude<PlaceCategory, 'all'>
+  title: string
+}> = [
+  { id: 'care', title: '케어' },
+  { id: 'outing', title: '동반외출' },
+  { id: 'travel', title: '여행' },
+  { id: 'shopping', title: '쇼핑' },
+]
+
 function parseDistance(distanceText: string) {
   const parsed = Number.parseFloat(distanceText.replace(/[^\d.]/g, ''))
   return Number.isFinite(parsed) ? parsed : Number.POSITIVE_INFINITY
@@ -258,6 +403,30 @@ function Place() {
     return filtered
   }, [selectedCategory, selectedSort, selectedSub])
 
+  const visiblePlaceSections = useMemo(() => {
+    const activeSectionIds =
+      selectedCategory === 'all'
+        ? placeCategorySections.map((section) => section.id)
+        : placeCategorySections
+            .filter((section) => section.id === selectedCategory)
+            .map((section) => section.id)
+
+    return activeSectionIds
+      .map((sectionId) => {
+        const section = placeCategorySections.find((item) => item.id === sectionId)
+        if (!section) return null
+
+        return {
+          ...section,
+          items: visiblePlaces.filter((item) => item.category === section.id),
+        }
+      })
+      .filter((section): section is { id: Exclude<PlaceCategory, 'all'>; title: string; items: PlaceListItem[] } => {
+        if (!section) return false
+        return section.items.length > 0
+      })
+  }, [selectedCategory, visiblePlaces])
+
   const toggleLike = (name: string) => {
     setLikedNames((prev) => {
       const isLiked = prev.includes(name)
@@ -283,6 +452,10 @@ function Place() {
     })
   }
 
+  const handleMoveToCategory = (category: Exclude<PlaceCategory, 'all'>) => {
+    navigate(`/place?category=${category}&sub=all&sort=${selectedSort}`)
+  }
+
   return (
     <>
       <PageHeader
@@ -301,13 +474,31 @@ function Place() {
       />
 
       <main className="page place_page health_hospital_recommend_page">
-        {visiblePlaces.length > 0 ? (
-          <HospitalCardList
-            items={visiblePlaces}
-            likedNames={likedNames}
-            onToggleLike={toggleLike}
-            onSelect={handleSelectPlace}
-          />
+        {visiblePlaceSections.length > 0 ? (
+          <div className="place_sections">
+            {visiblePlaceSections.map((section) => (
+              <section key={section.id} className="place_section">
+                <div className="place_section_header">
+                  <h2>{section.title}</h2>
+                  {selectedCategory === 'all' ? (
+                    <button
+                      type="button"
+                      className="place_section_more"
+                      onClick={() => handleMoveToCategory(section.id)}
+                    >
+                      더보기 &gt;
+                    </button>
+                  ) : null}
+                </div>
+                <HospitalCardList
+                  items={selectedCategory === 'all' ? section.items.slice(0, 2) : section.items}
+                  likedNames={likedNames}
+                  onToggleLike={toggleLike}
+                  onSelect={handleSelectPlace}
+                />
+              </section>
+            ))}
+          </div>
         ) : (
           <div className="place_empty_state">아직 등록된 장소가 없어요.</div>
         )}
