@@ -51,14 +51,11 @@ const staticDemoNotificationItems: UserNotificationItem[] = [
     title: '커뮤니티',
     content: '내 댓글에 새로운 답글이 달렸어요.',
     createdAt: '2026-05-17T18:08:00+09:00',
-    path: `/community/petstory/detail/${demoCommunityCreatedPosts[1]?.id ?? 900002}/comments`,
+    path: '/community/petstory/detail/2',
     state: {
       returnTo: '/notification',
       initialComments: demoReplyComments,
-      replyTo: {
-        author: '뿌직뿌직',
-        commentId: 1001,
-      },
+      focusCommentId: 1001,
       storageKey: 'jibsalife.community.comments.notification.reply',
     },
   },

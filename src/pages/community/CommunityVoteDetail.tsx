@@ -12,6 +12,7 @@ import { hasVotedMission, readVotedCandidate, writeVotedCandidate, writeVotedMis
 import { isChallengeDayClaimed, markChallengeVoteCompleted, readCurrentDay } from '../../utils/challengeStatus'
 import { readProfilePoints, writeProfilePoints } from '../../utils/profilePoints'
 import { showStateBarMessage } from '../../utils/stateBarMessage'
+import { addUserNotification } from '../../utils/userNotifications'
 import { voteDetails, type CommunityVoteId } from './CommunityVoteData'
 
 const VOTE_REWARD_AMOUNT = 60
@@ -60,6 +61,11 @@ function CommunityVoteDetail() {
     const currentDay = readCurrentDay()
     if (currentDay !== 2 || isChallengeDayClaimed(currentDay)) return
 
+    addUserNotification({
+      title: '챌린지',
+      content: '오늘의 챌린지가 참여되었습니다. 포인트 받아주세요.',
+      path: '/community/challenge',
+    })
     showStateBarMessage('오늘의 챌린지가 참여되었습니다.\n포인트 받아주세요.', 5000, {
       actionLabel: '이동하기',
       onAction: () => navigate('/community/challenge'),

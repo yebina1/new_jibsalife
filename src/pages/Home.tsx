@@ -1,5 +1,5 @@
 import './Home.css'
-import { useEffect, useRef, useState, type ChangeEvent, type MouseEvent } from 'react'
+import { useEffect, useMemo, useRef, useState, type ChangeEvent, type MouseEvent } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 import ChevronIcon from '../components/ChevronIcon'
 import PageHeader from '../components/PageHeader'
@@ -39,6 +39,7 @@ import { writeVotedCandidate, writeVotedMissionId } from '../utils/communityVote
 import { isChallengeDayClaimed, markChallengeVoteCompleted, readCurrentDay } from '../utils/challengeStatus'
 import { consumeSignupWelcomeReward, readProfilePoints } from '../utils/profilePoints'
 import { showStateBarMessage } from '../utils/stateBarMessage'
+import { addUserNotification } from '../utils/userNotifications'
 import LazyImage from '../components/LazyImage'
 import { dailyPosts, knowledgeFeedItems } from './community/CommunityPetStory'
 import knowledge1 from '../img/petstory/Knowledge/knowledge1.png'
@@ -232,11 +233,11 @@ function getInitialVoteState(): { votedCardId: number | null; hasModified: boole
   }
 }
 
-function readCalendarRecords() {
+function readCalendarRecords(petId?: number) {
   return [
-    ...readMissionActivityRecords().map(toMissionHistoryRecord),
-    ...readMissionHistoryRecordsWithDefaults(),
-]
+    ...readMissionActivityRecords(petId).map(toMissionHistoryRecord),
+    ...readMissionHistoryRecordsWithDefaults(petId),
+  ]
 }
 
 function isMealRecord(record: MissionHistoryRecord) {
@@ -370,7 +371,7 @@ function Home() {
   const location = useLocation()
   const [profileSlides, setProfileSlides] = useState<ProfileSummarySlide[]>(readPetProfiles)
   const [summarySlideIndex, setSummarySlideIndex] = useState(getInitialSummarySlideIndex)
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, align: 'start' })
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, align: 'center' })
   const [selectedCardId, setSelectedCardId] = useState<number | null>(
     () => getInitialVoteState().votedCardId,
   )
@@ -397,13 +398,17 @@ function Home() {
   const summarySlides = [
     ...profileSlides,
     {
-      id: 3,
+      id: -1,
       type: 'add',
     },
   ] satisfies (ProfileSummarySlide | AddSummarySlide)[]
 
   const todaySummaryDate = formatTodaySummaryDate()
-  const todaySummaryStats = createSummaryStats(calendarRecords)
+  const summaryStatsByProfileId = useMemo(() => (
+    new Map(
+      profileSlides.map((profile) => [profile.id, createSummaryStats(readCalendarRecords(profile.id))]),
+    )
+  ), [profileSlides, calendarRecords])
   useEffect(() => {
     return () => {
       if (petIdPhoto?.startsWith('blob:')) {
@@ -761,7 +766,7 @@ function Home() {
     }, TARGET_CURSOR_EFFECT_DURATION_MS)
   }
 
-  const handleBestPoseVoteSelect = (id: number, event: MouseEvent<HTMLButtonElement>) => {
+  const handleBestPoseVoteSelect = (id: number, event: MouseEvent<HTMLElement>) => {
     if (votedCardId !== null && hasModified) return
 
     if (selectedCardId !== id) {
@@ -827,6 +832,11 @@ function Home() {
 
     const currentDay = readCurrentDay()
     if (markChallengeVoteCompleted() && currentDay === 2 && !isChallengeDayClaimed(currentDay)) {
+      addUserNotification({
+        title: '챌린지',
+        content: '오늘의 챌린지가 참여되었습니다. 포인트 받아주세요.',
+        path: '/community/challenge',
+      })
       showStateBarMessage('오늘의 챌린지가 참여되었습니다.\n포인트 받아주세요.', 5000, {
         actionLabel: '이동하기',
         onAction: () => navigate('/community/challenge'),
@@ -893,7 +903,11 @@ function Home() {
             <div className="summary_slider_track">
               {summarySlides.map((slide) =>
                 slide.type === 'add' ? (
-                  <SummaryProfileAddCard key={slide.id} onClick={openPetIdModal} />
+                  <SummaryProfileAddCard
+                    key={slide.id}
+                    className="home_summary_profile_add_card"
+                    onClick={openPetIdModal}
+                  />
                 ) : (
                   <SummaryProfileCard
                     key={slide.id}
@@ -901,7 +915,7 @@ function Home() {
                     name={slide.name}
                     breed={slide.breed || '-'}
                     details={createProfileDetails(slide)}
-                    stats={todaySummaryStats}
+                    stats={summaryStatsByProfileId.get(slide.id) ?? createSummaryStats(readCalendarRecords(slide.id))}
                     onEdit={() => openPetIdModal(slide)}
                     onStatEdit={() => navigate('/mission')}
                     onCareGuideClick={handleHealthReportClick}
@@ -992,7 +1006,10 @@ function Home() {
 
               return (
                 <article key={item.id} className="best_pose_vote_card">
-                  <div className="best_pose_vote_card_media">
+                  <div
+                    className="best_pose_vote_card_media"
+                    onClick={(event) => handleBestPoseVoteSelect(item.id, event)}
+                  >
                     <LazyImage
                       src={item.image}
                       alt={`${displayName} 포즈 사진`}
@@ -1025,7 +1042,10 @@ function Home() {
                       className={`best_pose_vote_card_like${isLiked ? ' is_active' : ''}`}
                       aria-label={`${displayName} 선택`}
                       aria-pressed={isLiked}
-                      onClick={(event) => handleBestPoseVoteSelect(item.id, event)}
+                      onClick={(event) => {
+                        event.stopPropagation()
+                        handleBestPoseVoteSelect(item.id, event)
+                      }}
                     >
                       <VoteHeartIcon active={isLiked} />
                     </button>

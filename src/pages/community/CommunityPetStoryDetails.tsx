@@ -65,6 +65,21 @@ type DetailComment = (typeof petStoryDetailComments)[number] & {
   parentId?: number
 }
 
+function normalizeComments(value: unknown, fallback: DetailComment[]) {
+  if (!Array.isArray(value)) return fallback
+
+  return value.filter((comment): comment is DetailComment => {
+    if (!comment || typeof comment !== 'object') return false
+
+    const candidate = comment as Record<string, unknown>
+    return (
+      typeof candidate.id === 'number' &&
+      typeof candidate.author === 'string' &&
+      typeof candidate.text === 'string'
+    )
+  })
+}
+
 const fallbackPosts: DetailPost[] = [
   {
     id: 1,
@@ -199,12 +214,12 @@ function readLikedCommentIds() {
   }
 }
 
-function readComments(postId: number, fallback: DetailComment[]): DetailComment[] {
-  if (typeof window === 'undefined') return fallback
+function readCommentsByStorageKey(storageKey: string | null | undefined, fallback: DetailComment[]) {
+  if (typeof window === 'undefined' || !storageKey) return fallback
 
   try {
-    const saved = window.localStorage.getItem(`jibsalife.community.comments.${postId}`)
-    return saved ? JSON.parse(saved) : fallback
+    const saved = window.localStorage.getItem(storageKey)
+    return saved ? normalizeComments(JSON.parse(saved), fallback) : fallback
   } catch {
     return fallback
   }
@@ -285,7 +300,15 @@ function CommunityPetStoryDetails() {
   const { postId } = useParams()
   const location = useLocation()
   const actionRowSlot = useActionRowSlot()
-  const detailState = (location.state as { post?: DetailPost; previousPage?: string; returnTo?: string; restoreScrollY?: number } | null) ?? null
+  const detailState = (location.state as {
+    post?: DetailPost
+    previousPage?: string
+    returnTo?: string
+    restoreScrollY?: number
+    initialComments?: DetailComment[]
+    storageKey?: string
+    focusCommentId?: number
+  } | null) ?? null
   const statePost = detailState?.post
   const fallbackPost = findFallbackPost(postId)
   const post: DetailPost = statePost
@@ -305,9 +328,12 @@ function CommunityPetStoryDetails() {
         ? [post.image]
         : [post.image, fallbackSideImage]
       : []
+  const initialComments = detailState?.initialComments ?? petStoryDetailComments.slice(0, post.comments)
+  const commentsStorageKey = detailState?.storageKey ?? `jibsalife.community.comments.${post.id}`
+  const focusCommentId = detailState?.focusCommentId ?? null
   const [activeGalleryIndex, setActiveGalleryIndex] = useState(0)
   const [visibleComments, setVisibleComments] = useState<DetailComment[]>(() =>
-    readComments(post.id, petStoryDetailComments.slice(0, post.comments))
+    readCommentsByStorageKey(commentsStorageKey, initialComments)
   )
   const [likedPostIds, setLikedPostIds] = useState<number[]>(readLikedPostIds)
   const [likedCommentIds, setLikedCommentIds] = useState<number[]>(readLikedCommentIds)
@@ -326,6 +352,7 @@ function CommunityPetStoryDetails() {
   const galleryRef = useRef<HTMLDivElement>(null)
   const footerRef = useRef<HTMLDivElement>(null)
   const pageRef = useRef<HTMLElement>(null)
+  const focusCommentRef = useRef<number | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const viewIncrementedForRef = useRef<number | null>(null)
   const lastScrollTopRef = useRef(0)
@@ -339,10 +366,10 @@ function CommunityPetStoryDetails() {
   const editCommentText = editCommentId !== null ? editCommentInitialText : undefined
 
   useEffect(() => {
-    setVisibleComments(readComments(post.id, petStoryDetailComments.slice(0, post.comments)))
+    setVisibleComments(readCommentsByStorageKey(commentsStorageKey, initialComments))
     setActiveGalleryIndex(0)
     galleryRef.current?.scrollTo({ left: 0 })
-  }, [post.id, post.comments])
+  }, [commentsStorageKey, initialComments, post.comments, post.id])
 
   useEffect(() => {
     if (viewIncrementedForRef.current === post.id) return
@@ -353,8 +380,22 @@ function CommunityPetStoryDetails() {
   }, [post.id, post.views])
 
   useEffect(() => {
-    window.localStorage.setItem(`jibsalife.community.comments.${post.id}`, JSON.stringify(visibleComments))
-  }, [visibleComments, post.id])
+    window.localStorage.setItem(commentsStorageKey, JSON.stringify(visibleComments))
+  }, [commentsStorageKey, visibleComments])
+
+  useEffect(() => {
+    if (focusCommentId === null || focusCommentRef.current === focusCommentId) return
+
+    const frameId = window.requestAnimationFrame(() => {
+      const target = document.querySelector<HTMLElement>(`[data-comment-group-id="${focusCommentId}"]`)
+      if (!target) return
+
+      target.scrollIntoView({ block: 'center', behavior: 'smooth' })
+      focusCommentRef.current = focusCommentId
+    })
+
+    return () => window.cancelAnimationFrame(frameId)
+  }, [focusCommentId, visibleComments])
 
   useEffect(() => {
     window.localStorage.setItem(likedPostsStorageKey, JSON.stringify(likedPostIds))
@@ -741,7 +782,11 @@ function CommunityPetStoryDetails() {
               const replies = repliesMap[comment.id] ?? []
 
               return (
-                <div key={comment.id} className="cpsdetail_comment_group">
+                <div
+                  key={comment.id}
+                  className={`cpsdetail_comment_group${focusCommentId === comment.id ? ' is_focus_target' : ''}`}
+                  data-comment-group-id={comment.id}
+                >
                   {renderComment(comment)}
                   {replies.map((reply) => renderComment(reply, true))}
                 </div>
