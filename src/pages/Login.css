@@ -65,6 +65,10 @@
   width: 100%;
 }
 
+.login_input_wrap .input_field {
+  padding-right: 75px;
+}
+
 
 .login_input_actions {
   position: absolute;

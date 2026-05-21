@@ -587,12 +587,7 @@ function Mission() {
 
     return Math.floor(Math.max(selectedIndex, 0) / 7)
   }, [calendarDays, selectedDay])
-  const visibleCalendarDays = useMemo(() => {
-    if (!isWeeklyCalendar) return calendarDays
-
-    const weekStartIndex = selectedWeekIndex * 7
-    return calendarDays.slice(weekStartIndex, weekStartIndex + 7)
-  }, [calendarDays, isWeeklyCalendar, selectedWeekIndex])
+  const calendarTranslateY = isWeeklyCalendar ? selectedWeekIndex * 49 : 0
   const firstAvailableCategoryColor = categoryColorOptions[0] ?? ''
   const selectedCategory =
     categories.find((category) => category.id === selectedCategoryId) ?? categories[0]
@@ -725,10 +720,13 @@ function Mission() {
       month: selectedDay.month,
       day: Number(selectedDay.label),
     }
+    const now = new Date()
     const nextPeriod = createPeriodDateTime(
       nextAddDate.year,
       nextAddDate.month,
       nextAddDate.day,
+      now.getHours(),
+      now.getMinutes(),
     )
 
     setAddDate(nextAddDate)
@@ -771,7 +769,7 @@ function Mission() {
       setIsCalendarCondensed(false)
       resetScrollTop()
     }
-    const isHistoryListAtTop = () => (historyListRef.current?.scrollTop ?? 0) <= 0
+    const isHistoryListAtTop = () => getScrollTop() <= 4
     const syncCalendarMode = () => {
       if (!canCondenseCalendar) {
         setIsCalendarCondensed(false)
@@ -1336,11 +1334,15 @@ function Mission() {
 
             <div className={`mission_calendar_viewport${isWeeklyCalendar ? ' is_weekly' : ''}`}>
               <div
+                className="mission_calendar_track"
+                style={{ transform: `translateY(-${calendarTranslateY}px)` }}
+              >
+              <div
                 key={`${calendarYear}-${calendarMonth}`}
-                className={`mission_calendar_grid${isWeeklyCalendar ? ' is_weekly' : ''} slide_${monthSlideDirection}`}
+                className={`mission_calendar_grid slide_${monthSlideDirection}`}
                 aria-label={`${calendarYear}년 ${calendarMonth}월 달력`}
               >
-                {visibleCalendarDays.map((day) => (
+                {calendarDays.map((day) => (
                   (() => {
                     const dayDateKey = getDateKey(day.year, day.month, Number(day.label))
                     const dayRecordColors = recordedDateColors.get(dayDateKey) ?? []
@@ -1371,6 +1373,7 @@ function Mission() {
                     )
                   })()
                 ))}
+              </div>
               </div>
             </div>
           </div>

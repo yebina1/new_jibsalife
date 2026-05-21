@@ -22,6 +22,21 @@ type DetailComment = (typeof petStoryDetailComments)[number] & {
   parentId?: number
 }
 
+function normalizeComments(value: unknown, fallback: DetailComment[]) {
+  if (!Array.isArray(value)) return fallback
+
+  return value.filter((comment): comment is DetailComment => {
+    if (!comment || typeof comment !== 'object') return false
+
+    const candidate = comment as Record<string, unknown>
+    return (
+      typeof candidate.id === 'number' &&
+      typeof candidate.author === 'string' &&
+      typeof candidate.text === 'string'
+    )
+  })
+}
+
 function formatRelativeTime(createdAt: string): string {
   const diff = Date.now() - new Date(createdAt).getTime()
   const minutes = Math.floor(diff / 60_000)
@@ -74,7 +89,7 @@ function readComments(
 
   try {
     const saved = window.localStorage.getItem(commentsStorageKey)
-    return saved ? JSON.parse(saved) : fallback
+    return saved ? normalizeComments(JSON.parse(saved), fallback) : fallback
   } catch {
     return fallback
   }

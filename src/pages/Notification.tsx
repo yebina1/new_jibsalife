@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router'
 import './Notification.css'
 import BackButton from '../components/html/BackButton'
@@ -12,7 +12,9 @@ import {
   readUserNotifications,
   formatRelativeTime,
   type UserNotificationItem,
+  USER_NOTIFICATIONS_CHANGE_EVENT,
 } from '../utils/userNotifications'
+import { CHALLENGE_STATUS_CHANGED_EVENT } from '../utils/challengeStatus'
 
 type NotificationItem = {
   id: number
@@ -41,10 +43,25 @@ function readInitialReadIds(): Set<number> {
 function Notification() {
   const navigate = useNavigate()
   const [readIds, setReadIds] = useState<Set<number>>(readInitialReadIds)
+  const [notificationsVersion, setNotificationsVersion] = useState(0)
   const notificationItems = useMemo(
     () => readUserNotifications().map(toNotificationItem),
-    [],
+    [notificationsVersion],
   )
+
+  useEffect(() => {
+    const refresh = () => setNotificationsVersion((prev) => prev + 1)
+
+    window.addEventListener(USER_NOTIFICATIONS_CHANGE_EVENT, refresh)
+    window.addEventListener(CHALLENGE_STATUS_CHANGED_EVENT, refresh)
+    window.addEventListener('storage', refresh)
+
+    return () => {
+      window.removeEventListener(USER_NOTIFICATIONS_CHANGE_EVENT, refresh)
+      window.removeEventListener(CHALLENGE_STATUS_CHANGED_EVENT, refresh)
+      window.removeEventListener('storage', refresh)
+    }
+  }, [])
 
   const handleItemClick = (item: NotificationItem) => {
     setReadIds((prev) => {

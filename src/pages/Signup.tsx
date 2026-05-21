@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import Input from '../components/html/Input'
 import Button from '../components/html/Button'
 import Title from '../components/Title'
 import PageHeader from '../components/PageHeader'
 import BackButton from '../components/html/BackButton'
-import Alert from '../components/Alert'
 import helloIcon from '../svg/hello_icon.svg'
 import loginPetImg from '../img/illust_login_pet.png'
 import xIcon from '../img/x-icon.png'
@@ -13,9 +12,9 @@ import eyeOnIcon from '../svg/eye.svg'
 import eyeOffIcon from '../svg/eye_off.svg'
 import grayCheckIcon from '../img/gray-check.png'
 import blueCheckIcon from '../img/blue-check.png'
-import { hasAuthAccount, saveAuthAccount } from '../utils/authAccounts'
+import { findAuthAccount, hasAuthAccount, markLoggedIn, saveAuthAccount, shouldShowProfileSetupForAccount } from '../utils/authAccounts'
 import { markSignupWelcomeRewardPending } from '../utils/profilePoints'
-import { clearSignupProfileDraft, readSignupProfileDraft } from '../utils/signupProfileDraft'
+import { clearSignupProfileDraft, hydrateCurrentUserProfileFromAccount, readSignupProfileDraft } from '../utils/signupProfileDraft'
 import { seedSignupNotificationsForUser } from '../utils/userNotifications'
 import './Signup.css'
 
@@ -32,6 +31,7 @@ type Terms = {
 
 function Signup() {
   const navigate = useNavigate()
+
   const goingToTermsRef = useRef(false)
   const [email, setEmail] = useState(() => {
     try { return JSON.parse(sessionStorage.getItem('signup_form') ?? '{}').email ?? '' } catch { return '' }
@@ -50,7 +50,6 @@ function Signup() {
   })
   const [passwordConfirmError, setPasswordConfirmError] = useState('')
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false)
-  const [isSignupCompleteOpen, setIsSignupCompleteOpen] = useState(false)
   const [terms, setTerms] = useState<Terms>(() => {
     try {
       const saved = sessionStorage.getItem('signup_terms')
@@ -152,6 +151,17 @@ function Signup() {
     }
   }
 
+  const handleFillDummy = () => {
+    setEmail('my123@jibsa.app')
+    setEmailChecked(false)
+    setEmailError('')
+    setPassword('welcome1!')
+    setPasswordError('')
+    setPasswordConfirm('welcome1!')
+    setPasswordConfirmError('')
+    setTerms({ all: true, age: true, service: true, privacy: true, marketing: true })
+  }
+
   const handleSubmit = (e: { preventDefault(): void }) => {
     e.preventDefault()
     if (!isFormValid) return
@@ -176,7 +186,13 @@ function Signup() {
     clearSignupProfileDraft()
     sessionStorage.removeItem('signup_terms')
     sessionStorage.removeItem('signup_form')
-    setIsSignupCompleteOpen(true)
+
+    const account = findAuthAccount(email, password)
+    if (account) {
+      markLoggedIn(account)
+      hydrateCurrentUserProfileFromAccount(account)
+      navigate(shouldShowProfileSetupForAccount(account) ? '/onboarding?setup=profile' : '/home')
+    }
   }
 
   return (
@@ -184,22 +200,26 @@ function Signup() {
       <PageHeader title="회원가입" leftContent={<BackButton to="/login" />} />
       <div className="signup_wrapper">
       <div className="signup_page">
-      <div className="signup_hero">
-        <Title
-          as="h2"
-          className="signup_hero_copy"
-          title={(
-            <>
-              집사인생에 오신 것을<br />환영해요{' '}
-              <img src={helloIcon} alt="" aria-hidden="true" width={24} height={24} className="signup_hello_icon" />
-            </>
-          )}
-        >
-          <p className="signup_hero_sub">
-            반려동물과 함께하는 소중한 순간을<br />기록하고 관리해 보세요.
-          </p>
-        </Title>
-        <img src={loginPetImg} alt="반려동물 일러스트" className="signup_hero_img" />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div className="signup_hero">
+          <Title
+            as="h2"
+            className="signup_hero_copy"
+            title={(
+              <>
+                집사인생에 오신 것을<br />환영해요{' '}
+                <img src={helloIcon} alt="" aria-hidden="true" width={24} height={24} className="signup_hello_icon" />
+              </>
+            )}
+          >
+            <p className="signup_hero_sub">
+              반려동물과 함께하는 소중한 순간을<br />기록하고 관리해 보세요.
+            </p>
+          </Title>
+          <img src={loginPetImg} alt="반려동물 일러스트" className="signup_hero_img" />
+        </div>
+
+        <Link to="#" className="login_guest_link" style={{ textAlign: 'left' }} onClick={handleFillDummy}>더미 넣기</Link>
       </div>
 
       <form className="signup_form" onSubmit={handleSubmit}>
@@ -217,14 +237,16 @@ function Signup() {
                 onChange={handleEmailChange}
                 onBlur={handleEmailBlur}
               />
-              <button
-                type="button"
-                className={`signup_check_btn${emailChecked ? ' is_checked' : ''}`}
-                onClick={handleEmailCheck}
-                disabled={emailError !== '' || email.trim() === ''}
-              >
-                중복확인
-              </button>
+              <div className={`signup_star_border_wrap${emailChecked ? ' is_checked' : ''}`}>
+                <button
+                  type="button"
+                  className={`signup_check_btn${emailChecked ? ' is_checked' : ''}`}
+                  onClick={handleEmailCheck}
+                  disabled={emailError !== '' || email.trim() === ''}
+                >
+                  중복확인
+                </button>
+              </div>
             </div>
             {emailError && <span className="signup_email_error">{emailError}</span>}
             {emailChecked && <span className="signup_email_success">사용 가능한 이메일입니다.</span>}
@@ -414,16 +436,6 @@ function Signup() {
       </form>
     </div>
     </div>
-    {isSignupCompleteOpen && (
-      <Alert dialogClassName="signup_complete_dialog" onClose={() => navigate('/login')}>
-        <Title as="h3" title="회원가입이 완료되었습니다." className="signup_complete_title">
-          <p className="h4_regular">로그인 후 서비스를 이용해보세요.</p>
-        </Title>
-        <button type="button" className="purple_btn" onClick={() => navigate('/login')}>
-          로그인하기
-        </button>
-      </Alert>
-    )}
     </>
   )
 }

@@ -62,7 +62,7 @@
   right: 0;
   left: 0;
   z-index: 0;
-  height: 178px;
+  height: 226px;
   background: #C4B5FD;
   content: '';
 }
@@ -83,12 +83,13 @@
 }
 
 .summary_slider_viewport {
+  margin-inline: calc(var(--layout-inline-padding) * -1);
   overflow-x: hidden;
   overflow-y: visible;
 }
 
 .summary_slider {
-  width: min(100%, 406px);
+  width: 100%;
   margin-inline: auto;
   padding: 6px 0 20px;
   touch-action: pan-y;
@@ -99,7 +100,35 @@
 .summary_slider_track {
   display: flex;
   align-items: stretch;
-  gap: 8px;
+  gap: 12px;
+  padding-inline: var(--layout-inline-padding);
+}
+
+.home_summary_section .summary_slider_track .summary_profile_card,
+.home_summary_section .summary_slider_track .summary_profile_card_add {
+  width: calc(100% - 44px);
+  flex-basis: calc(100% - 44px);
+}
+
+.home_summary_section .summary_slider_track > :last-child {
+  margin-right: var(--layout-inline-padding);
+}
+
+.home_summary_section .summary_slider_track .home_summary_profile_add_card {
+  min-height: 212px;
+  padding: 20px;
+}
+
+.home_summary_section .home_summary_profile_add_card .summary_profile_card_add_button {
+  width: 72px;
+  height: 72px;
+  padding: 0;
+}
+
+.home_summary_section .home_summary_profile_add_card .summary_profile_card_add_button i {
+  width: 32px;
+  height: 32px;
+  font-size: 32px;
 }
 
 .summary_slider:active {
@@ -241,7 +270,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 18px;
   margin-inline: 16px;
   padding: 16px 16px;
@@ -262,6 +291,8 @@
 
 .home_ranking_banner_copy {
   display: grid;
+  min-width: 0;
+  flex: 1 1 auto;
   gap: 2px;
   font-family: 'Pretendard', sans-serif;
   font-size: 16px;
@@ -272,6 +303,7 @@
 
 .home_ranking_banner_copy p {
   margin: 0;
+  min-width: 0;
   color: #111111;
   font-family: var(--app-font-family);
   font-size: 16px;
@@ -281,6 +313,7 @@
 }
 
 .home_ranking_banner_copy > span {
+  justify-self: start;
   color: #505050;
   font-size: 12px;
   font-weight: 400;
@@ -298,7 +331,7 @@
 .home_ranking_banner_icon {
   width: 40px;
   height: auto;
-  flex: 0 0 auto;
+  flex: 0 0 40px;
   object-fit: contain;
 }
 
@@ -1346,22 +1379,13 @@
   }
 
   .home_ranking_banner_copy {
-    display: flex;
-    align-items: baseline;
-    gap: 8px;
-    white-space: nowrap;
-  }
-
-  .home_ranking_banner_copy p {
-    white-space: nowrap;
-  }
-
-  .home_ranking_banner_copy > span {
-    white-space: nowrap;
+    display: grid;
+    gap: 2px;
   }
 
   .home_ranking_banner_icon {
     width: 46px;
+    flex-basis: 46px;
   }
 }
 

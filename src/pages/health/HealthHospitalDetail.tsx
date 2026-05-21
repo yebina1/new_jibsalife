@@ -23,7 +23,7 @@ function HealthHospitalDetail() {
   return (
     <>
       <PageHeader
-        title="병원 상세"
+        title="병원 정보"
         leftContent={<BackButton />}
         rightContent={
           <>

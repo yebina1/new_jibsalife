@@ -207,25 +207,23 @@ const LEGACY_DEFAULT_MISSION_HISTORY_COLORS = new Set([
   SYMPTOM_COLOR.toLowerCase(),
 ])
 
-function getMissionHistoryStorageKey() {
-  return `${getUserScopedStorageKey(MISSION_HISTORY_RECORDS_STORAGE_KEY)}.${readSelectedPetProfileId()}`
+function getMissionHistoryStorageKey(petId = readSelectedPetProfileId()) {
+  return `${getUserScopedStorageKey(MISSION_HISTORY_RECORDS_STORAGE_KEY)}.${petId}`
 }
 
-function getDefaultMissionHistoryRecords() {
-  const selectedPetId = readSelectedPetProfileId()
-
-  if (selectedPetId === 1) return LEEYORI_MISSION_HISTORY_RECORDS
-  if (selectedPetId === 2) return PUNGPUNGI_MISSION_HISTORY_RECORDS
+function getDefaultMissionHistoryRecords(petId = readSelectedPetProfileId()) {
+  if (petId === 1) return LEEYORI_MISSION_HISTORY_RECORDS
+  if (petId === 2) return PUNGPUNGI_MISSION_HISTORY_RECORDS
 
   return DEFAULT_MISSION_HISTORY_RECORDS
 }
 
-function getDefaultMissionHistoryRecordIds() {
-  return new Set(getDefaultMissionHistoryRecords().map((record) => record.id))
+function getDefaultMissionHistoryRecordIds(petId = readSelectedPetProfileId()) {
+  return new Set(getDefaultMissionHistoryRecords(petId).map((record) => record.id))
 }
 
-function getDefaultMissionHistoryRecordMap() {
-  return new Map(getDefaultMissionHistoryRecords().map((record) => [record.id, record]))
+function getDefaultMissionHistoryRecordMap(petId = readSelectedPetProfileId()) {
+  return new Map(getDefaultMissionHistoryRecords(petId).map((record) => [record.id, record]))
 }
 
 function isMissionHistoryRecord(record: unknown): record is MissionHistoryRecord {
@@ -259,11 +257,11 @@ function normalizeMissionHistoryRecord(record: MissionHistoryRecord): MissionHis
   return record
 }
 
-export function readStoredMissionHistoryRecords() {
+export function readStoredMissionHistoryRecords(petId = readSelectedPetProfileId()) {
   if (typeof window === 'undefined') return []
 
   try {
-    const savedValue = window.localStorage.getItem(getMissionHistoryStorageKey())
+    const savedValue = window.localStorage.getItem(getMissionHistoryStorageKey(petId))
     if (!savedValue) return []
 
     const parsedValue = JSON.parse(savedValue)
@@ -275,11 +273,11 @@ export function readStoredMissionHistoryRecords() {
   }
 }
 
-export function readMissionHistoryRecordsWithDefaults() {
-  const storedRecords = readStoredMissionHistoryRecords()
-  const defaultRecords = getDefaultMissionHistoryRecords()
-  const defaultRecordIds = getDefaultMissionHistoryRecordIds()
-  const defaultRecordMap = getDefaultMissionHistoryRecordMap()
+export function readMissionHistoryRecordsWithDefaults(petId = readSelectedPetProfileId()) {
+  const storedRecords = readStoredMissionHistoryRecords(petId)
+  const defaultRecords = getDefaultMissionHistoryRecords(petId)
+  const defaultRecordIds = getDefaultMissionHistoryRecordIds(petId)
+  const defaultRecordMap = getDefaultMissionHistoryRecordMap(petId)
 
   if (storedRecords.length === 0) return isCurrentDemoUser() ? defaultRecords : []
 

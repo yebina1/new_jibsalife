@@ -143,13 +143,64 @@
   color: #006ae6;
 }
 
-.signup_check_btn {
+/* ── Star border wrapper ──────────────────────────────── */
+
+@property --signup-border-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.signup_star_border_wrap {
+  position: relative;
+  display: inline-flex;
   flex-shrink: 0;
+  padding: 2px;
+  border-radius: 10px;
+  background: conic-gradient(
+    from var(--signup-border-angle),
+    transparent 0%,
+    rgba(109, 89, 248, 0.6) 3%,
+    rgba(109, 89, 248, 1) 10%,
+    rgba(109, 89, 248, 0.6) 17%,
+    transparent 20%,
+    transparent 50%,
+    rgba(109, 89, 248, 0.6) 53%,
+    rgba(109, 89, 248, 1) 60%,
+    rgba(109, 89, 248, 0.6) 67%,
+    transparent 70%,
+    transparent 100%
+  );
+  animation: signup_border_spin 3.5s linear infinite;
+}
+
+.signup_star_border_wrap.is_checked {
+  padding: 0;
+  animation: none;
+  background: none;
+}
+
+.signup_star_border_wrap:has(:disabled) {
+  opacity: 0.45;
+  cursor: not-allowed;
+  animation: none;
+  background: none;
+}
+
+@keyframes signup_border_spin {
+  to { --signup-border-angle: 360deg; }
+}
+
+/* ── Check button ─────────────────────────────────────── */
+
+.signup_check_btn {
+  position: relative;
+  z-index: 1;
   height: 54px;
   padding: 0 14px;
-  border: 1px solid rgba(80, 80, 80, 0.28);
+  border: 1px solid #A28BFA;
   border-radius: 8px;
-  background: transparent;
+  background: #ffffff;
   color: #6d59f8;
   font-size: 14px;
   font-weight: 600;
@@ -162,12 +213,11 @@
 .signup_check_btn.is_checked {
   background: #6d59f8;
   color: #ffffff;
-  border: none;
+  border-radius: 8px;
 }
 
 .signup_check_btn:disabled {
   cursor: not-allowed;
-  opacity: 0.45;
 }
 
 /* ── Password stack ───────────────────────────────────── */

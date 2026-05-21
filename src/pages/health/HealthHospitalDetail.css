@@ -12,9 +12,11 @@
 .health_hospital_detail_image {
   display: block;
   width: 100%;
-  height: 228px;
+  height: auto;
+  max-height: 420px;
   border-radius: 0;
-  object-fit: cover;
+  object-fit: contain;
+  background: #f6f4ef;
 }
 
 .health_hospital_detail_intro {
@@ -165,7 +167,7 @@
 
 @media (max-width: 420px) {
   .health_hospital_detail_image {
-    height: 208px;
+    max-height: 280px;
   }
 
   .health_hospital_detail_title_wrap h1 {
