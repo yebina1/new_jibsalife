@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import Input from '../components/html/Input'
 import Button from '../components/html/Button'
 import Title from '../components/Title'
@@ -152,6 +152,17 @@ function Signup() {
     }
   }
 
+  const handleFillDummy = () => {
+    setEmail('my123@jibsa.app')
+    setEmailChecked(false)
+    setEmailError('')
+    setPassword('welcome1!')
+    setPasswordError('')
+    setPasswordConfirm('welcome1!')
+    setPasswordConfirmError('')
+    setTerms({ all: true, age: true, service: true, privacy: true, marketing: true })
+  }
+
   const handleSubmit = (e: { preventDefault(): void }) => {
     e.preventDefault()
     if (!isFormValid) return
@@ -184,22 +195,26 @@ function Signup() {
       <PageHeader title="회원가입" leftContent={<BackButton to="/login" />} />
       <div className="signup_wrapper">
       <div className="signup_page">
-      <div className="signup_hero">
-        <Title
-          as="h2"
-          className="signup_hero_copy"
-          title={(
-            <>
-              집사인생에 오신 것을<br />환영해요{' '}
-              <img src={helloIcon} alt="" aria-hidden="true" width={24} height={24} className="signup_hello_icon" />
-            </>
-          )}
-        >
-          <p className="signup_hero_sub">
-            반려동물과 함께하는 소중한 순간을<br />기록하고 관리해 보세요.
-          </p>
-        </Title>
-        <img src={loginPetImg} alt="반려동물 일러스트" className="signup_hero_img" />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div className="signup_hero">
+          <Title
+            as="h2"
+            className="signup_hero_copy"
+            title={(
+              <>
+                집사인생에 오신 것을<br />환영해요{' '}
+                <img src={helloIcon} alt="" aria-hidden="true" width={24} height={24} className="signup_hello_icon" />
+              </>
+            )}
+          >
+            <p className="signup_hero_sub">
+              반려동물과 함께하는 소중한 순간을<br />기록하고 관리해 보세요.
+            </p>
+          </Title>
+          <img src={loginPetImg} alt="반려동물 일러스트" className="signup_hero_img" />
+        </div>
+
+        <Link to="#" className="login_guest_link" style={{ textAlign: 'left' }} onClick={handleFillDummy}>더미 넣기</Link>
       </div>
 
       <form className="signup_form" onSubmit={handleSubmit}>
@@ -223,6 +238,8 @@ function Signup() {
                 onClick={handleEmailCheck}
                 disabled={emailError !== '' || email.trim() === ''}
               >
+                <span className="signup_star_top" aria-hidden="true" />
+                <span className="signup_star_bottom" aria-hidden="true" />
                 중복확인
               </button>
             </div>

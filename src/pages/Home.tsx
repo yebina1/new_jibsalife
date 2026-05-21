@@ -1,5 +1,5 @@
 import './Home.css'
-import { useEffect, useRef, useState, type ChangeEvent, type MouseEvent } from 'react'
+import { useEffect, useMemo, useRef, useState, type ChangeEvent, type MouseEvent } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 import ChevronIcon from '../components/ChevronIcon'
 import PageHeader from '../components/PageHeader'
@@ -233,11 +233,11 @@ function getInitialVoteState(): { votedCardId: number | null; hasModified: boole
   }
 }
 
-function readCalendarRecords() {
+function readCalendarRecords(petId?: number) {
   return [
-    ...readMissionActivityRecords().map(toMissionHistoryRecord),
-    ...readMissionHistoryRecordsWithDefaults(),
-]
+    ...readMissionActivityRecords(petId).map(toMissionHistoryRecord),
+    ...readMissionHistoryRecordsWithDefaults(petId),
+  ]
 }
 
 function isMealRecord(record: MissionHistoryRecord) {
@@ -398,13 +398,17 @@ function Home() {
   const summarySlides = [
     ...profileSlides,
     {
-      id: 3,
+      id: -1,
       type: 'add',
     },
   ] satisfies (ProfileSummarySlide | AddSummarySlide)[]
 
   const todaySummaryDate = formatTodaySummaryDate()
-  const todaySummaryStats = createSummaryStats(calendarRecords)
+  const summaryStatsByProfileId = useMemo(() => (
+    new Map(
+      profileSlides.map((profile) => [profile.id, createSummaryStats(readCalendarRecords(profile.id))]),
+    )
+  ), [profileSlides, calendarRecords])
   useEffect(() => {
     return () => {
       if (petIdPhoto?.startsWith('blob:')) {
@@ -899,7 +903,11 @@ function Home() {
             <div className="summary_slider_track">
               {summarySlides.map((slide) =>
                 slide.type === 'add' ? (
-                  <SummaryProfileAddCard key={slide.id} onClick={openPetIdModal} />
+                  <SummaryProfileAddCard
+                    key={slide.id}
+                    className="home_summary_profile_add_card"
+                    onClick={openPetIdModal}
+                  />
                 ) : (
                   <SummaryProfileCard
                     key={slide.id}
@@ -907,7 +915,7 @@ function Home() {
                     name={slide.name}
                     breed={slide.breed || '-'}
                     details={createProfileDetails(slide)}
-                    stats={todaySummaryStats}
+                    stats={summaryStatsByProfileId.get(slide.id) ?? createSummaryStats(readCalendarRecords(slide.id))}
                     onEdit={() => openPetIdModal(slide)}
                     onStatEdit={() => navigate('/mission')}
                     onCareGuideClick={handleHealthReportClick}

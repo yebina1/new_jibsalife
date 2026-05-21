@@ -1,4 +1,5 @@
 ﻿.onboarding_page {
+  --layout-status-bar-height: calc(41px + env(safe-area-inset-top, 0px));
   --onboarding-action-height: 54px;
   --onboarding-action-bottom: calc(40px + env(safe-area-inset-bottom, 0px));
   --onboarding-start-image-top: 358px;
@@ -74,7 +75,7 @@
 
 @keyframes onboarding_float_b {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
+  50% { transform: translateY(-9px); }
 }
 
 .onboarding_welcome_float {
@@ -85,13 +86,13 @@
 .onboarding_welcome_float_heart {
   top: 31px;
   left: 14px;
-  animation: onboarding_float_a 2.8s ease-in-out infinite;
+  animation: onboarding_float_a 2.2s ease-in-out infinite;
 }
 
 .onboarding_welcome_float_camera {
   top: 31px;
   right: 2px;
-  animation: onboarding_float_b 3.2s ease-in-out infinite;
+  animation: onboarding_float_b 2.5s ease-in-out infinite;
   animation-delay: -1.6s;
 }
 
@@ -267,13 +268,22 @@
   height: 100%;
 }
 
+.onboarding_page .onboarding_layout:has(.onboarding_intro_visual) .onboarding_layout_action {
+  position: fixed;
+  bottom: calc(120px + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(calc(100vw - 32px), 358px);
+  z-index: 20;
+}
+
 .onboarding_page .onboarding_layout:has(.onboarding_intro_visual) .onboarding_layout_header {
   gap: 8px;
 }
 
 .onboarding_page .onboarding_layout:has(.onboarding_intro_visual) .onboarding_layout_progress_row {
   position: fixed;
-  top: calc(var(--layout-status-bar-height) + 16px);
+  top: calc(var(--layout-status-bar-height) + 36px);
   left: 50%;
   z-index: 20;
   display: grid;
@@ -463,11 +473,32 @@
 .onboarding_page .onboarding_layout:has(.onboarding_guardian_grid) .onboarding_layout_header,
 .onboarding_page .onboarding_layout:has(.onboarding_name_form) .onboarding_layout_header {
   position: fixed;
-  top: calc(var(--layout-status-bar-height) + 84px);
+  top: calc(var(--layout-status-bar-height) + 36px);
   left: 50%;
   z-index: 30;
   width: min(340px, calc(100vw - 48px));
   transform: translateX(-50%);
+}
+
+.onboarding_page .onboarding_layout:has(.onboarding_guardian_grid) .onboarding_layout_progress_row,
+.onboarding_page .onboarding_layout:has(.onboarding_name_form) .onboarding_layout_progress_row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding-right: 0;
+}
+
+.onboarding_page .onboarding_layout:has(.onboarding_guardian_grid) .onboarding_layout_progress,
+.onboarding_page .onboarding_layout:has(.onboarding_name_form) .onboarding_layout_progress {
+  grid-column: 2;
+}
+
+.onboarding_page .onboarding_layout:has(.onboarding_guardian_grid) .onboarding_layout_top_action_inline_slot,
+.onboarding_page .onboarding_layout:has(.onboarding_name_form) .onboarding_layout_top_action_inline_slot {
+  position: static;
+  grid-column: 3;
+  justify-self: end;
+  transform: none;
 }
 
 .onboarding_page .onboarding_layout:has(.onboarding_guardian_grid) .onboarding_layout_body,
@@ -477,32 +508,52 @@
   overflow: visible;
 }
 
-.onboarding_page .onboarding_layout:has(.onboarding_guardian_grid) .onboarding_layout_visual,
-.onboarding_page .onboarding_layout:has(.onboarding_name_form) .onboarding_layout_visual {
+.onboarding_page .onboarding_layout:has(.onboarding_guardian_grid) .onboarding_layout_visual {
   position: fixed;
-  top: calc(var(--layout-status-bar-height) + 186px);
+  top: calc(var(--layout-status-bar-height) + 138px);
   left: 50%;
   z-index: 20;
+  width: min(360px, calc(100vw - 32px));
   overflow: visible;
   transform: translateX(-50%);
 }
 
-.onboarding_page .onboarding_layout:has(.onboarding_guardian_grid) .onboarding_layout_visual {
-  width: min(360px, calc(100vw - 32px));
-}
-
 .onboarding_page .onboarding_layout:has(.onboarding_name_form) .onboarding_layout_visual {
+  position: fixed;
+  top: calc(var(--layout-status-bar-height) + 210px);
+  left: 50%;
+  z-index: 20;
   width: min(205px, calc(100vw - 32px));
+  overflow: visible;
+  transform: translateX(-50%);
 }
 
-.onboarding_page .onboarding_layout:has(.onboarding_guardian_grid) .onboarding_guardian_name_form,
-.onboarding_page .onboarding_layout:has(.onboarding_name_form) .onboarding_name_form {
+.onboarding_page .onboarding_layout:has(.onboarding_guardian_grid) .onboarding_guardian_name_form {
   position: fixed;
-  top: calc(var(--layout-status-bar-height) + 520px);
+  top: calc(var(--layout-status-bar-height) + 472px);
   left: 50%;
   z-index: 20;
   width: min(360px, calc(100vw - 32px));
   transform: translateX(-50%);
+}
+
+.onboarding_page .onboarding_layout:has(.onboarding_name_form) .onboarding_name_form {
+  position: fixed;
+  top: calc(var(--layout-status-bar-height) + 476px);
+  left: 50%;
+  z-index: 20;
+  width: min(360px, calc(100vw - 32px));
+  transform: translateX(-50%);
+}
+
+.onboarding_page .onboarding_layout:has(.onboarding_guardian_grid) .onboarding_layout_action,
+.onboarding_page .onboarding_layout:has(.onboarding_name_form) .onboarding_layout_action {
+  position: fixed;
+  bottom: calc(120px + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(calc(100vw - 32px), 358px);
+  z-index: 20;
 }
 
 @media (min-width: 768px) {

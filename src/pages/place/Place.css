@@ -11,6 +11,11 @@
   padding-top: 24px;
 }
 
+.place_sections {
+  display: grid;
+  gap: 40px;
+}
+
 .layout:has(.place_page) .header_right .header_icon {
   stroke-width: 1.5;
 }
@@ -25,8 +30,10 @@
 }
 
 .place_section_header {
-  display: grid;
-  gap: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .place_section_header h2 {
@@ -171,6 +178,19 @@
   font-weight: 500;
   line-height: 1.5;
   letter-spacing: -0.025em;
+}
+
+.place_section_more {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #767676;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+  white-space: nowrap;
+  cursor: pointer;
 }
 
 @media (max-width: 420px) {
