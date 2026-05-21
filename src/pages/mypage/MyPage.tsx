@@ -49,6 +49,16 @@ const disabledMyProfileStatLabels = ['댓글', '뱃지', '쿠폰'] as const
 
 const LOCATION_STORAGE_KEY = 'mypage-location'
 const DEFAULT_LOCATION_MESSAGE = '위치 정보를 등록하고\n맞춤 서비스를 받아 보세요.'
+const HIGH_ACCURACY_LOCATION_OPTIONS: PositionOptions = {
+  enableHighAccuracy: true,
+  timeout: 10000,
+  maximumAge: 0,
+}
+const FALLBACK_LOCATION_OPTIONS: PositionOptions = {
+  enableHighAccuracy: false,
+  timeout: 15000,
+  maximumAge: 30000,
+}
 
 type SavedLocation = {
   latitude: number
@@ -63,6 +73,13 @@ function formatCoordinateLocation(latitude: number, longitude: number) {
 
 function formatAddressLocation(address: string) {
   return `현재 위치 ${address}`
+}
+
+function canRequestBrowserLocation() {
+  const hostname = window.location.hostname
+  const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '::1'
+
+  return window.isSecureContext || isLocalhost
 }
 
 function pickAddressPart(...values: Array<string | undefined>) {
@@ -307,6 +324,11 @@ function MyPage() {
   }
 
   const handleLocationSetting = () => {
+    if (!canRequestBrowserLocation()) {
+      setLocationMessage('휴대폰에서는 HTTPS 주소에서만 위치 권한을 사용할 수 있어요.')
+      return
+    }
+
     if (!navigator.geolocation) {
       setLocationMessage('이 브라우저에서는 위치 기능을 지원하지 않아요.')
       return
@@ -315,48 +337,60 @@ function MyPage() {
     setIsLocating(true)
     setLocationMessage('GPS로 현재 위치를 확인하고 있어요...')
 
-    navigator.geolocation.getCurrentPosition(
-      ({ coords }) => {
-        const nextLocation: SavedLocation = {
-          latitude: coords.latitude,
-          longitude: coords.longitude,
-          savedAt: new Date().toISOString(),
-        }
+    const saveLocation = ({ coords }: GeolocationPosition) => {
+      const nextLocation: SavedLocation = {
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+        savedAt: new Date().toISOString(),
+      }
 
-        reverseGeocodeLocation(nextLocation.latitude, nextLocation.longitude)
-          .then((address) => {
-            const nextSavedLocation = address ? { ...nextLocation, address } : nextLocation
+      reverseGeocodeLocation(nextLocation.latitude, nextLocation.longitude)
+        .then((address) => {
+          const nextSavedLocation = address ? { ...nextLocation, address } : nextLocation
 
-            window.localStorage.setItem(LOCATION_STORAGE_KEY, JSON.stringify(nextSavedLocation))
-            setSavedLocation(nextSavedLocation)
-            setLocationMessage(
-              address
-                ? formatAddressLocation(address)
-                : formatCoordinateLocation(nextLocation.latitude, nextLocation.longitude),
-            )
-          })
-          .catch(() => {
-            window.localStorage.setItem(LOCATION_STORAGE_KEY, JSON.stringify(nextLocation))
-            setSavedLocation(nextLocation)
-            setLocationMessage(formatCoordinateLocation(nextLocation.latitude, nextLocation.longitude))
-          })
-          .finally(() => {
-            setIsLocating(false)
-          })
-      },
-      (error) => {
-        setLocationMessage(
-          error.code === error.PERMISSION_DENIED
-            ? '위치 권한이 거부됐어요. 브라우저 권한을 확인해 주세요.'
-            : '위치를 가져오지 못했어요. 잠시 후 다시 시도해 주세요.',
+          window.localStorage.setItem(LOCATION_STORAGE_KEY, JSON.stringify(nextSavedLocation))
+          setSavedLocation(nextSavedLocation)
+          setLocationMessage(
+            address
+              ? formatAddressLocation(address)
+              : formatCoordinateLocation(nextLocation.latitude, nextLocation.longitude),
+          )
+        })
+        .catch(() => {
+          window.localStorage.setItem(LOCATION_STORAGE_KEY, JSON.stringify(nextLocation))
+          setSavedLocation(nextLocation)
+          setLocationMessage(formatCoordinateLocation(nextLocation.latitude, nextLocation.longitude))
+        })
+        .finally(() => {
+          setIsLocating(false)
+        })
+    }
+
+    const handleLocationError = (error: GeolocationPositionError, didRetry = false) => {
+      if (error.code === error.TIMEOUT && !didRetry) {
+        setLocationMessage('GPS 확인이 지연되어 기본 위치로 다시 확인하고 있어요...')
+        navigator.geolocation.getCurrentPosition(
+          saveLocation,
+          (fallbackError) => handleLocationError(fallbackError, true),
+          FALLBACK_LOCATION_OPTIONS,
         )
-        setIsLocating(false)
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0,
-      },
+        return
+      }
+
+      const messageByCode: Record<number, string> = {
+        [error.PERMISSION_DENIED]: '위치 권한이 거부됐어요. 브라우저 권한을 확인해 주세요.',
+        [error.POSITION_UNAVAILABLE]: '현재 위치를 확인할 수 없어요. GPS나 위치 서비스를 켜 주세요.',
+        [error.TIMEOUT]: '위치 확인 시간이 초과됐어요. 잠시 후 다시 시도해 주세요.',
+      }
+
+      setLocationMessage(messageByCode[error.code] ?? '위치를 가져오지 못했어요. 잠시 후 다시 시도해 주세요.')
+      setIsLocating(false)
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      saveLocation,
+      (error) => handleLocationError(error),
+      HIGH_ACCURACY_LOCATION_OPTIONS,
     )
   }
 
