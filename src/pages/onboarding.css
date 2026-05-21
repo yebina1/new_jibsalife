@@ -408,9 +408,6 @@
   line-height: 1;
 }
 
-.onboarding_guardian_grid:has(.is_selected) .onboarding_guardian_card:not(.is_selected) .onboarding_guardian_card_check i {
-  color: transparent;
-}
 
 .onboarding_guardian_card.is_selected .onboarding_guardian_card_check {
   background: #6d59f8;

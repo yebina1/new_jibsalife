@@ -5,7 +5,6 @@ import Button from '../components/html/Button'
 import Title from '../components/Title'
 import PageHeader from '../components/PageHeader'
 import BackButton from '../components/html/BackButton'
-import Alert from '../components/Alert'
 import helloIcon from '../svg/hello_icon.svg'
 import loginPetImg from '../img/illust_login_pet.png'
 import xIcon from '../img/x-icon.png'
@@ -13,9 +12,9 @@ import eyeOnIcon from '../svg/eye.svg'
 import eyeOffIcon from '../svg/eye_off.svg'
 import grayCheckIcon from '../img/gray-check.png'
 import blueCheckIcon from '../img/blue-check.png'
-import { hasAuthAccount, saveAuthAccount } from '../utils/authAccounts'
+import { findAuthAccount, hasAuthAccount, markLoggedIn, saveAuthAccount, shouldShowProfileSetupForAccount } from '../utils/authAccounts'
 import { markSignupWelcomeRewardPending } from '../utils/profilePoints'
-import { clearSignupProfileDraft, readSignupProfileDraft } from '../utils/signupProfileDraft'
+import { clearSignupProfileDraft, hydrateCurrentUserProfileFromAccount, readSignupProfileDraft } from '../utils/signupProfileDraft'
 import { seedSignupNotificationsForUser } from '../utils/userNotifications'
 import './Signup.css'
 
@@ -32,6 +31,7 @@ type Terms = {
 
 function Signup() {
   const navigate = useNavigate()
+
   const goingToTermsRef = useRef(false)
   const [email, setEmail] = useState(() => {
     try { return JSON.parse(sessionStorage.getItem('signup_form') ?? '{}').email ?? '' } catch { return '' }
@@ -50,7 +50,6 @@ function Signup() {
   })
   const [passwordConfirmError, setPasswordConfirmError] = useState('')
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false)
-  const [isSignupCompleteOpen, setIsSignupCompleteOpen] = useState(false)
   const [terms, setTerms] = useState<Terms>(() => {
     try {
       const saved = sessionStorage.getItem('signup_terms')
@@ -187,7 +186,13 @@ function Signup() {
     clearSignupProfileDraft()
     sessionStorage.removeItem('signup_terms')
     sessionStorage.removeItem('signup_form')
-    setIsSignupCompleteOpen(true)
+
+    const account = findAuthAccount(email, password)
+    if (account) {
+      markLoggedIn(account)
+      hydrateCurrentUserProfileFromAccount(account)
+      navigate(shouldShowProfileSetupForAccount(account) ? '/onboarding?setup=profile' : '/home')
+    }
   }
 
   return (
@@ -232,16 +237,16 @@ function Signup() {
                 onChange={handleEmailChange}
                 onBlur={handleEmailBlur}
               />
-              <button
-                type="button"
-                className={`signup_check_btn${emailChecked ? ' is_checked' : ''}`}
-                onClick={handleEmailCheck}
-                disabled={emailError !== '' || email.trim() === ''}
-              >
-                <span className="signup_star_top" aria-hidden="true" />
-                <span className="signup_star_bottom" aria-hidden="true" />
-                중복확인
-              </button>
+              <div className={`signup_star_border_wrap${emailChecked ? ' is_checked' : ''}`}>
+                <button
+                  type="button"
+                  className={`signup_check_btn${emailChecked ? ' is_checked' : ''}`}
+                  onClick={handleEmailCheck}
+                  disabled={emailError !== '' || email.trim() === ''}
+                >
+                  중복확인
+                </button>
+              </div>
             </div>
             {emailError && <span className="signup_email_error">{emailError}</span>}
             {emailChecked && <span className="signup_email_success">사용 가능한 이메일입니다.</span>}
@@ -431,16 +436,6 @@ function Signup() {
       </form>
     </div>
     </div>
-    {isSignupCompleteOpen && (
-      <Alert dialogClassName="signup_complete_dialog" onClose={() => navigate('/login')}>
-        <Title as="h3" title="회원가입이 완료되었습니다." className="signup_complete_title">
-          <p className="h4_regular">로그인 후 서비스를 이용해보세요.</p>
-        </Title>
-        <button type="button" className="purple_btn" onClick={() => navigate('/login')}>
-          로그인하기
-        </button>
-      </Alert>
-    )}
     </>
   )
 }

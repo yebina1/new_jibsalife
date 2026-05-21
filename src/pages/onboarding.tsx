@@ -486,11 +486,6 @@ function Onboarding() {
 
   const renderPetNameStep = () => (
     <OnboardingLayout
-      step={3}
-      totalSteps={6}
-      topActionLabel="건너뛰기"
-      topActionInline
-      onTopAction={handlePetNameNext}
       title="우리 아이 이름이 뭐예요?"
       subtitle="아이의 이름을 입력해주세요."
       bodyGap={32}
