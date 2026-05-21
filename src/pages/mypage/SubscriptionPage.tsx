@@ -8,8 +8,8 @@ import Button from '../../components/html/Button'
 import { isCurrentDemoUser } from '../../utils/userScopedStorage'
 
 const manageBenefitItems = [
-  { key: 'ai', icon: '🤖', label: 'AI 심화 분석', amount: '10,000원' },
-  { key: 'consulting', icon: '👤', label: '전문가 상담 연결', amount: '2,500원' },
+  { key: 'ai', icon: '🤖', img: null, label: 'AI 심화 분석', amount: '10,000원' },
+  { key: 'consulting', icon: '👤', img: null, label: '전문가 상담 연결', amount: '2,500원' },
 ]
 
 const benefits = [
@@ -55,9 +55,11 @@ function SubscriptionPage() {
             </div>
           </div>
           <ul className="sub_manage_benefit_list">
-            {manageBenefitItems.map(({ key, icon, label, amount }) => (
+            {manageBenefitItems.map(({ key, icon, img, label, amount }) => (
               <li key={key}>
-                <span className="sub_manage_benefit_icon">{icon}</span>
+                <span className="sub_manage_benefit_icon">
+                  {img ? <img src={img} alt="" aria-hidden="true" className={`sub_manage_benefit_img sub_manage_benefit_img_${key}`} /> : icon}
+                </span>
                 <span className="sub_manage_benefit_name">{label}</span>
                 <span className="sub_manage_benefit_amount">{amount}</span>
               </li>
