@@ -1,0 +1,58 @@
+.community_reward_point_card {
+  appearance: none;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  width: 100%;
+  min-height: 104px;
+  gap: 16px;
+  padding: 20px;
+  border: 0;
+  border-radius: 20px;
+  background: #f5f2ff;
+  box-sizing: border-box;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.community_reward_point_card .chevron_icon_svg {
+  width: 20px;
+  height: 20px;
+}
+
+.community_reward_point_icon {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+}
+
+.community_reward_point_icon img {
+  display: block;
+  width: 32px;
+  height: 32px;
+}
+
+.community_reward_point_copy {
+  display: grid;
+  gap: 2px;
+}
+
+.community_reward_point_copy .p_regular {
+  color: #505050;
+}
+
+.community_reward_point_copy h3 {
+  color: #6d59f8;
+  font-family: 'Pretendard', 'SUIT', system-ui, sans-serif;
+  font-size: clamp(20px, 1.2vw, 22px);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.community_reward_point_arrow {
+  display: inline-flex;
+  align-items: center;
+}

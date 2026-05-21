@@ -1,0 +1,286 @@
+﻿.mypage_page {
+  display: grid;
+  gap: 48px;
+  background: #ffffff;
+  color: #111111;
+}
+
+.mypage_header_gear {
+  position: relative;
+}
+
+.mypage_header_gear {
+  color: #999999;
+  cursor: default;
+  pointer-events: none;
+}
+
+.mypage_header_gear .header_icon {
+  color: #999999;
+  stroke: #999999;
+}
+
+.mypage_location_card {
+  display: flex;
+  height: 64px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-inline: calc(var(--layout-inline-padding, 16px) * -1);
+  padding: 12px calc(var(--layout-inline-padding, 16px) + 20px);
+  background: #8B6EFF;
+  box-sizing: border-box;
+}
+
+.mypage_location_card p {
+  display: grid;
+  margin: 0;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.mypage_location_card small {
+  color: #8d7cf2;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+
+.mypage_location_card button:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.mypage_location_card .s_white_radius_btn {
+  color: #111111;
+  font-size: var(--font-point-sm);
+  font-weight: var(--font-weight-sb);
+  line-height: var(--line-height-sm);
+}
+
+.mypage_location_card .s_white_radius_btn svg {
+  color: #111111;
+  stroke: #111111;
+}
+
+.mypage_location_card svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+}
+
+.mypage_profile_section {
+  display: grid;
+  gap: 16px;
+}
+
+.mypage_profile_heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 2px;
+}
+
+.mypage_profile_heading h3 {
+  margin: 0;
+  color: #000000;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.mypage_subscription_badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 24px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #7b5cff;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.mypage_profile_card_wrap {
+  position: relative;
+}
+
+.mypage_profile_card_wrap .mypage_summary_profile_card {
+  width: 100%;
+  min-height: 188px;
+  flex-basis: auto;
+  border: 1px solid #e5e5ec;
+  background: #ffffff;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.mypage_profile_card_wrap .mypage_summary_profile_card::before {
+  display: none;
+}
+
+.mypage_profile_card_wrap .mypage_summary_profile_card .profile_image {
+  border: 1px solid #e5e5ec;
+  background: #f8f8fb;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.mypage_profile_card_wrap .mypage_summary_profile_card .summary_profile_card_stats {
+  border-top-color: #e5e5ec;
+}
+
+.mypage_profile_card_wrap .summary_profile_card_edit {
+  color: #999999;
+  cursor: default;
+  pointer-events: none;
+}
+
+.mypage_profile_card_wrap .summary_profile_card_stat_edit {
+  display: none;
+}
+
+.mypage_profile_card_wrap .summary_profile_card_stat_item {
+  cursor: default;
+}
+
+.mypage_profile_card_wrap .summary_profile_card_stat_item.is_clickable {
+  color: inherit;
+  cursor: pointer;
+}
+
+.mypage_profile_badges {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+  color: #111111;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+}
+
+.mypage_profile_badges img {
+  display: block;
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  object-fit: cover;
+}
+
+.mypage_menu_section {
+  background: #ffffff;
+}
+
+.mypage_menu_section h2 {
+  margin: 0;
+  color: #111111;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.mypage_menu_section ul {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #E5E5EC;
+  border-radius: 12px;
+  overflow: hidden;
+  list-style: none;
+}
+
+.mypage_menu_button {
+  display: flex;
+  width: 100%;
+  height: auto;
+  align-items: center;
+  justify-content: space-between;
+  border: 0;
+  background: #fff;
+  padding: 16px 20px;
+}
+
+.mypage_activity_section li:first-child .mypage_menu_button {
+  padding: 20px 20px 16px;
+}
+
+.mypage_activity_section li:last-child .mypage_menu_button {
+  padding: 16px 20px 20px;
+}
+
+.mypage_menu_left {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: 12px;
+  color: #111;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.mypage_menu_left svg {
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
+  fill: none;
+  color: #505050;
+  stroke: #505050;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mypage_menu_button > .chevron_icon {
+  color: #444444;
+}
+
+.mypage_menu_button:disabled {
+  cursor: default;
+}
+
+.mypage_menu_button:disabled .mypage_menu_left,
+.mypage_menu_button:disabled > .chevron_icon {
+  color: #999999;
+}
+
+@media (max-width: 420px) {
+  .mypage_page {
+    gap: 48px;
+  }
+
+  .mypage_profile_heading h1 {
+    font-size: 32px;
+  }
+
+  .mypage_location_card {
+    padding: 12px 20px;
+  }
+
+}
+
+@media (max-width: 360px) {
+  .mypage_profile_heading {
+    gap: 14px;
+  }
+
+  .mypage_profile_heading h1 {
+    font-size: 29px;
+  }
+
+  .mypage_location_card {
+    padding: 12px 20px;
+  }
+
+}

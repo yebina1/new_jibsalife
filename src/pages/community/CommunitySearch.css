@@ -1,0 +1,431 @@
+.cs_page {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: #ffffff;
+  color: #111111;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  animation: cs_slide_in 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@keyframes cs_slide_in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* 헤더 (sticky) */
+.cs_sticky_header {
+  background: #ffffff;
+}
+
+.cs_sticky_header--active {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.cs_header {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-inline: 8px 16px;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+.cs_back_btn {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.cs_back_btn svg {
+  width: 22px;
+  height: 22px;
+}
+
+.cs_input_wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: #F5F5F7;
+  border-radius: 100px;
+  padding: 0 12px;
+  height: 40px;
+  gap: 8px;
+}
+
+.cs_input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 400;
+  color: #111111;
+  outline: none;
+  font-family: inherit;
+  letter-spacing: -0.025em;
+  min-width: 0;
+}
+
+.cs_input::placeholder {
+  color: #999999;
+}
+
+.cs_input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.cs_search_icon_btn {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cs_search_icon_btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* 탭 */
+.cs_tabs {
+  display: flex;
+  border-bottom: 1px solid #E5E5EC;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+.cs_tab {
+  flex: 1;
+  height: 48px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-size: 15px;
+  font-weight: 500;
+  color: #999999;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: -0.025em;
+  transition: color 0.15s, border-color 0.15s;
+  margin-bottom: -1px;
+}
+
+.cs_tab.is_active {
+  color: #111111;
+  font-weight: 600;
+  border-bottom-color: var(--primary-purple, #6D59F8);
+}
+
+/* 콘텐츠 */
+.cs_content {
+  padding-top: 24px;
+  padding-inline: 16px;
+  padding-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* 섹션 */
+.cs_section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.cs_section_title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #111111;
+  letter-spacing: -0.025em;
+  line-height: 1.4;
+}
+
+/* 인기 검색어 칩 */
+.cs_popular_chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cs_chip {
+  height: 36px;
+  padding: 0 16px;
+  border: 1px solid #E5E5EC;
+  border-radius: 100px;
+  background: #ffffff;
+  font-size: 13px;
+  font-weight: 500;
+  color: #505050;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: -0.025em;
+}
+
+/* 최근 검색어 헤더 */
+.cs_recent_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cs_more_wrap {
+  position: relative;
+}
+
+.cs_more_btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #999999;
+  font-size: 12px;
+  padding: 4px 8px;
+  letter-spacing: 3px;
+  line-height: 1;
+}
+
+.cs_dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #E5E5EC;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 200;
+  min-width: 96px;
+  overflow: hidden;
+}
+
+.cs_dropdown_item {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: #111111;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  letter-spacing: -0.025em;
+}
+
+/* 서브 컨트롤 (펫스토리 탭 활성 시) */
+.cs_sub_controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 4px;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+.cs_sort_wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.cs_sort_btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 34px;
+  padding: 0 12px;
+  border: 1px solid #E5E5EC;
+  border-radius: 100px;
+  background: #ffffff;
+  font-size: 13px;
+  font-weight: 500;
+  color: #505050;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: -0.025em;
+  white-space: nowrap;
+}
+
+.cs_sort_chevron {
+  width: 14px;
+  height: 14px;
+  color: #505050;
+}
+
+.cs_sort_dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  background: #ffffff;
+  border: 1px solid #E5E5EC;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 200;
+  min-width: 88px;
+  overflow: hidden;
+}
+
+.cs_sort_option {
+  display: block;
+  width: 100%;
+  padding: 11px 16px;
+  background: none;
+  border: none;
+  font-size: 13px;
+  color: #111111;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  letter-spacing: -0.025em;
+}
+
+.cs_sort_option.is_active {
+  color: var(--primary-purple, #6D59F8);
+  font-weight: 600;
+}
+
+.cs_sub_tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.cs_sub_tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.cs_sub_tab {
+  flex-shrink: 0;
+  height: 34px;
+  padding: 0 16px;
+  border: 1px solid #E5E5EC;
+  border-radius: 100px;
+  background: #ffffff;
+  font-size: 13px;
+  font-weight: 500;
+  color: #505050;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: -0.025em;
+  white-space: nowrap;
+}
+
+.cs_sub_tab.is_active {
+  background: var(--primary-purple, #6D59F8);
+  border-color: var(--primary-purple, #6D59F8);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* 검색 결과 목록 */
+.cs_results {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.cs_results li {
+  border-bottom: 1px solid #F5F5F7;
+}
+
+.cs_results li:last-child {
+  border-bottom: none;
+}
+
+/* 빈 결과 */
+.cs_empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 16px;
+}
+
+.cs_empty_text {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+  color: #999999;
+  letter-spacing: -0.025em;
+}
+
+/* 최근 검색어 목록 */
+.cs_recent_list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.cs_recent_item {
+  display: flex;
+  align-items: center;
+  padding-block: 14px;
+  border-bottom: 1px solid #F5F5F7;
+}
+
+.cs_recent_item:last-child {
+  border-bottom: none;
+}
+
+.cs_recent_text_btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #111111;
+  font-family: inherit;
+  letter-spacing: -0.025em;
+  text-align: left;
+  flex: 1;
+  min-width: 0;
+}
+
+.cs_clock_icon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+}
+
+.cs_delete_btn {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.cs_delete_btn svg {
+  width: 16px;
+  height: 16px;
+}

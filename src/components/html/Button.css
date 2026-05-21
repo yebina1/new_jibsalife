@@ -1,0 +1,243 @@
+.purple_btn {
+  width: 100%;
+  height: 54px;
+  border-radius: 12px;
+  background: #6D59F8;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.purple_btn:disabled {
+  background: #A5ADB8;
+  color: #ffffff;
+  cursor: not-allowed;
+}
+
+.purple_btn.is_disabled {
+  background: #A5ADB8;
+  color: #ffffff;
+}
+
+.s_purple_btn {
+  display: flex;
+  padding: 6px 10px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 12px;
+  background: #6D59F8;
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.s_purple_btn:disabled,
+.s_purple_btn.is_disabled {
+  display: flex;
+  padding: 6px 10px;
+  border-radius: 12px;
+  background: #A5ADB8;
+  color: #ffffff;
+  cursor: not-allowed;
+}
+
+.square_btn {
+  display: inline-flex;
+  width: min(100%, 343px);
+  height: 54px;
+  align-items: center;
+  justify-content: center;
+  justify-self: center;
+  padding: 10px 16px;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 12px;
+}
+
+.deactivation_btn {
+  width: 100%;
+  height: 54px;
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(90deg, #8f72f4, #836bea);
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.deactivation_btn.is_disabled {
+  background: #A5ADB8;
+}
+
+.white_btn {
+  width: 100%;
+  min-width: 0;
+  height: 54px;
+  border-radius: 12px;
+  background: var(--white);
+  color: #111111;
+  font-size: 16px;
+  font-weight: 600;
+  border: 1px solid #E5E5EC;
+}
+
+.white_btn.is_disabled {
+  color: #a5adb8;
+  border-color: #e5e5ec;
+  cursor: not-allowed;
+}
+
+
+
+.white_radius_btn {
+  height: 46px;
+  min-width: max-content;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  flex-shrink: 0;
+  background: #fff;
+  color: #111;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+  border-radius: 999px;
+  border: 1px solid #E5E5EC;
+}
+
+.white_radius_btn .button_label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+}
+
+.white_radius_btn .button_icon_asset {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 14px, 500 */
+.s_white_radius_btn {
+  min-width: max-content;
+  min-height: calc((var(--font-body-sm) * var(--line-height-sm)) + 20px + 2px);
+  padding: 10px 16px;
+  color: #505050;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-size: var(--font-body-sm);
+  font-weight: var(--font-weight-md);
+  line-height: var(--line-height-sm);
+  background: #fff;
+  border-radius: 999px;
+  border: 1px solid #E5E5EC;
+}
+
+.s_white_radius_btn_label {
+  display: block;
+  color: inherit;
+  font-size: var(--font-body-sm);
+  font-weight: inherit;
+  line-height: var(--line-height-sm);
+}
+
+.s_white_radius_btn.layout_community_subtab_active .s_white_radius_btn_label {
+  color: #ffffff;
+  font-weight: var(--font-weight-sb);
+}
+
+.button_icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 12px;
+  background: #6d59f8;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.button_icon_asset {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+  flex: 0 0 auto;
+}
+
+.button_icon_asset svg,
+.button_icon_asset img {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+.button_disabled_outline {
+  border: 1px solid #E5E5EC;
+  color: #999999;
+}
+
+.button_challenge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 40px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid #E5E5EC;
+  background: #ffffff;
+  color: #505050;
+  font-family: 'Pretendard', 'SUIT', system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.45;
+  letter-spacing: -0.025em;
+}
+
+.button_challenge.is_filled {
+  border-color: #605dd1;
+  background: #605dd1;
+  color: #ffffff;
+}
+
+.button_challenge.is_complete {
+  border-color: #E5E5EC;
+  background: #ffffff;
+  color: #999999;
+  cursor: default;
+}
+
+.button_challenge.is_disabled {
+  border-color: #A5ADB8;
+  background: #A5ADB8;
+  color: #ffffff;
+  cursor: not-allowed;
+}
+
+.light_purple_radius_btn {
+  background: #9A8BFF;
+  font-size: 16px;
+  font-weight: 600;
+  min-width: 152px;
+  padding: 11px 24px;
+  color: #fff;
+  border-radius: 999px;
+  text-align: center;
+}

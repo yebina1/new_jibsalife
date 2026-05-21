@@ -1,0 +1,16 @@
+.home_indicator {
+  position: relative;
+  height: 34px;
+  background: #ffffff;
+}
+
+.home_indicator span {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 134px;
+  height: 5px;
+  border-radius: 999px;
+  background: #000000;
+}

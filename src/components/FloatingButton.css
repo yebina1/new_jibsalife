@@ -1,0 +1,331 @@
+.floating_button {
+  position: fixed;
+  z-index: 120;
+  display: inline-flex;
+  width: 56px;
+  height: 56px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 50%;
+  background: #6D59F8;
+  color: #ffffff;
+  box-shadow: 0 1px 2px rgba(196, 181, 253, 1);
+  cursor: pointer;
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.floating_button.is_scroll_hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px);
+}
+
+.floating_write_button {
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border-radius: 50%;
+  gap: 0;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(196, 181, 253, 1);
+  transition:
+    width 220ms ease,
+    gap 220ms ease,
+    padding 220ms ease,
+    box-shadow 220ms ease,
+    transform 220ms ease;
+}
+
+.floating_write_button.is_expanded {
+  width: 104px;
+  border-radius: 999px;
+  gap: 4px;
+  padding: 0 16px;
+  justify-content: flex-start;
+  box-shadow: 0 1px 2px rgba(196, 181, 253, 1);
+  transform: translateY(-2px);
+}
+
+.floating_write_button .floating_button_icon_frame {
+  flex: 0 0 24px;
+}
+
+.floating_write_button_label {
+  max-width: 0;
+  overflow: hidden;
+  color: #ffffff;
+  font-family: 'Pretendard', 'SUIT', system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateX(0);
+  transition:
+    max-width 220ms ease,
+    opacity 180ms ease,
+    transform 220ms ease;
+}
+
+.floating_write_button.is_expanded .floating_write_button_label {
+  max-width: 48px;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.floating_button_ai {
+  right: 24px;
+  bottom: 118px;
+}
+
+.floating_button_ai_chat {
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.floating_button_ai_chat .floating_button_icon_frame {
+  position: relative;
+  width: 104px;
+  height: 108px;
+  isolation: isolate;
+}
+
+.floating_button_ai_chat .floating_ai_chat_base {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  width: 76px;
+  height: auto;
+  aspect-ratio: 64 / 67;
+  object-fit: contain;
+  image-rendering: auto;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  transform-origin: center;
+}
+
+.floating_button_ai_chat .floating_ai_chat_bubble_image {
+  position: absolute;
+  width: 30px;
+  height: auto;
+  aspect-ratio: 30 / 27;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.floating_button_ai_chat .floating_ai_chat_bubble_image {
+  top: 6px;
+  right: 2px;
+  z-index: 3;
+  pointer-events: none;
+  image-rendering: auto;
+  backface-visibility: hidden;
+  transform-origin: center;
+  will-change: transform;
+  animation: floating-ai-bubble-bounce 1.35s ease-in-out infinite;
+}
+
+.floating_button_ai_chat.floating_button_ai_chat_home .floating_button_icon_frame {
+  width: clamp(104px, 9vw, 148px);
+  height: clamp(108px, 9.5vw, 154px);
+}
+
+.floating_button_ai_chat.floating_button_ai_chat_home .floating_ai_chat_base {
+  width: clamp(76px, 6.6vw, 108px);
+}
+
+.floating_button_ai_chat.floating_button_ai_chat_home .floating_ai_chat_bubble_image {
+  top: clamp(4px, 0.55vw, 10px);
+  right: clamp(2px, 0.4vw, 6px);
+  width: clamp(30px, 2.6vw, 42px);
+}
+
+@keyframes floating-ai-bubble-bounce {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  45% {
+    transform: translate3d(0, -8px, 0);
+  }
+}
+
+.floating_button_community {
+  right: 18px;
+  bottom: 118px;
+}
+
+.floating_button_icon_frame img {
+  display: block;
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  image-rendering: auto;
+  backface-visibility: hidden;
+  transform-origin: center;
+}
+
+.floating_button_icon_frame {
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+}
+
+.floating_button_icon_frame i {
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.floating_button_icon_frame i::before {
+  display: block;
+  width: 24px;
+  height: 24px;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 24px;
+  color: #ffffff;
+}
+
+/* 글쓰기 팝업 메뉴 */
+.floating_write_backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 118;
+  background: transparent;
+}
+
+/* 버튼과 메뉴를 함께 고정하는 컨테이너 */
+.floating_write_container {
+  position: fixed;
+  right: 18px;
+  bottom: 118px;
+  z-index: 120;
+  height: 56px;
+  opacity: 1;
+  transition: opacity 220ms ease;
+}
+
+.floating_write_container.is_hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 컨테이너 안에서 버튼은 독립 고정 해제 */
+.floating_write_container > .floating_button {
+  position: relative;
+  right: auto;
+  bottom: auto;
+}
+
+.floating_write_menu {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 12px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  pointer-events: none;
+  transform: translateY(calc(100% + 12px));
+  transition:
+    transform 280ms cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    opacity 200ms ease;
+  opacity: 0;
+}
+
+.floating_write_menu.is_open {
+  pointer-events: auto;
+  transform: translateY(0);
+  opacity: 1;
+}
+
+@media (min-width: 768px) {
+  .floating_button_ai {
+    right: max(24px, calc((100vw - var(--layout-max-width, 1440px)) / 2 + 24px));
+    bottom: 118px;
+  }
+
+  .floating_write_container {
+    right: max(18px, calc((100vw - var(--layout-max-width, 1440px)) / 2 + 18px));
+  }
+}
+
+@media (min-width: 1200px) {
+  .floating_write_button {
+    width: clamp(56px, 4.5vw, 72px);
+    height: clamp(56px, 4.5vw, 72px);
+  }
+
+  .floating_write_button.is_expanded {
+    width: clamp(104px, 8.2vw, 136px);
+    gap: clamp(4px, 0.45vw, 8px);
+    padding-inline: clamp(16px, 1.15vw, 22px);
+  }
+
+  .floating_write_button .floating_button_icon_frame {
+    flex-basis: clamp(24px, 1.9vw, 30px);
+    width: clamp(24px, 1.9vw, 30px);
+    height: clamp(24px, 1.9vw, 30px);
+  }
+
+  .floating_write_button .floating_button_icon_frame i,
+  .floating_write_button .floating_button_icon_frame i::before {
+    width: clamp(24px, 1.9vw, 30px);
+    height: clamp(24px, 1.9vw, 30px);
+    font-size: clamp(24px, 1.9vw, 30px);
+    line-height: clamp(24px, 1.9vw, 30px);
+  }
+
+  .floating_write_button_label {
+    font-size: clamp(14px, 1vw, 18px);
+  }
+
+  .floating_write_button.is_expanded .floating_write_button_label {
+    max-width: clamp(48px, 4vw, 64px);
+  }
+
+  .floating_write_container {
+    height: clamp(56px, 4.5vw, 72px);
+  }
+
+  .floating_write_menu {
+    bottom: calc(100% + clamp(12px, 1vw, 16px));
+    gap: clamp(8px, 0.8vw, 12px);
+  }
+}
+
+@media (max-width: 420px) {
+  .floating_button_ai {
+    right: 16px;
+    bottom: 112px;
+  }
+
+  .floating_write_container {
+    right: 16px;
+    bottom: 112px;
+  }
+
+  .floating_write_button.is_expanded {
+    width: 104px;
+  }
+}

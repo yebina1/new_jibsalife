@@ -1,0 +1,125 @@
+.community_reward_page {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 48px;
+  background: #ffffff;
+}
+
+.community_reward_usage {
+  display: grid;
+  gap: 18px;
+  padding: 24px;
+}
+
+.community_reward_usage h5 {
+  margin: 0;
+  color: #222222;
+  font-family: 'Pretendard', 'SUIT', system-ui, sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+  text-align: center;
+}
+
+.community_reward_usage ul {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.community_reward_usage li {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.community_reward_usage_icon {
+  display: grid;
+  width: 56px;
+  height: 56px;
+  place-items: center;
+  border: 1px solid rgba(139, 92, 246, 0.1);
+  border-radius: 50%;
+  color: #7a57f6;
+  background: #ffffff;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.community_reward_usage_icon svg {
+  width: 28px;
+  height: 28px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+
+.community_reward_usage_icon_inner {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border-radius: 50%;
+  background: #7a57f6;
+  color: #ffffff;
+}
+
+.community_reward_usage_icon_inner svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2.1;
+}
+
+.community_reward_usage li .p_regular {
+  color: #999999;
+}
+
+.community_reward_actions {
+  display: grid;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.community_reward_confirm,
+.community_reward_secondary {
+  border-radius: 12px;
+}
+
+.community_reward_confirm {
+  background: #6D59F8;
+}
+
+.community_reward_secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: 1px solid #e5e5ec;
+  background: #ffffff;
+  color: #111111;
+}
+
+.community_reward_secondary {
+  font-family: 'Pretendard', 'SUIT', system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+}
+
+@media (max-width: 420px) {
+  .community_reward_page {
+    gap: 48px;
+  }
+}

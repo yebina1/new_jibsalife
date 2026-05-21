@@ -1,0 +1,141 @@
+.layout_indicator_only:has(.notification_page) {
+  background: #ffffff;
+}
+
+.layout_indicator_only .layout_content:has(.notification_page) {
+  padding-bottom: 0;
+  background: #ffffff;
+}
+
+.notification_page {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(
+    100dvh - var(--layout-header-height, 97px) - var(--layout-footer-height, 34px)
+  );
+  margin-inline: calc(var(--layout-inline-padding, 16px) * -1);
+  background: #ffffff;
+  color: #111111;
+}
+
+/* ── 헤더 ── */
+
+.notification_header {
+  position: fixed;
+  top: var(--layout-status-bar-height, 41px);
+  left: 50%;
+  width: min(100%, var(--layout-max-width, 1440px));
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-inline: 8px 16px;
+  background: #ffffff;
+  border-bottom: 1px solid rgba(229, 229, 229, 0.8);
+  transform: translateX(-50%);
+  z-index: 150;
+  box-sizing: border-box;
+}
+
+.notification_title {
+  margin: 0;
+  color: #111111;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+}
+
+/* ── 알림 목록 ── */
+
+.notification_list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.notification_item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 18px 11px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  background: #FAFAFA;
+  cursor: pointer;
+}
+
+.notification_item.is_unread {
+  background: #EDE9FE;
+}
+
+.notification_icon {
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.notification_body {
+  flex: 1;
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.notification_item_title {
+  margin: 0;
+  color: #111111;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+}
+
+.notification_item_content {
+  margin: 0;
+  color: #505050;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+  white-space: pre-line;
+}
+
+.notification_time {
+  flex: 0 0 auto;
+  align-self: flex-start;
+  padding-top: 1px;
+  color: #8E8E93;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+/* ── 빈 상태 ── */
+
+.notification_empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 40px 16px 24px;
+  margin-top: auto;
+}
+
+
+.notification_empty_text {
+  margin: 0;
+  color: #111111;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+  text-align: center;
+}
+
+.notification_empty_img {
+  width: 227px;
+  height: 179px;
+  object-fit: contain;
+}

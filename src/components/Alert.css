@@ -1,0 +1,36 @@
+.alert_layer {
+  position: fixed;
+  inset: 0;
+  z-index: 1003;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  box-sizing: border-box;
+  overscroll-behavior: contain;
+}
+
+.alert_dim {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: auto;
+  height: auto;
+  padding: 0;
+  border: 0;
+  background: rgb(0 0 0 / 45%);
+}
+
+.alert {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  width: min(100%, 600px);
+  overflow: hidden;
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at top center, rgb(255 255 255 / 88%), transparent 56%),
+    #ffffff;
+  box-shadow: 0 24px 60px rgb(0 0 0 / 16%);
+  padding: 24px 16px;
+}

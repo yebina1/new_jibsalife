@@ -1,0 +1,71 @@
+.hospital_list {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.hospital_list button {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) 42px;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #111111;
+  text-align: left;
+  cursor: pointer;
+}
+
+.hospital_list_image,
+.hospital_list_action {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #9c6769;
+}
+
+.hospital_list_action {
+  justify-self: end;
+}
+
+.hospital_list strong {
+  display: block;
+  margin-bottom: 8px;
+  color: #111111;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.hospital_list p {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  color: #111111;
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+.hospital_list p i {
+  color: #a34d50;
+  font-size: 14px;
+}
+
+.hospital_list p span {
+  margin-left: 28px;
+}
+
+.hospital_list .hospital_list_meta {
+  gap: 28px;
+  margin-top: 10px;
+}
+
+.hospital_list .hospital_list_meta span {
+  margin-left: 0;
+}

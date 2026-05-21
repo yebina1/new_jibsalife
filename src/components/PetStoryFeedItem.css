@@ -1,0 +1,196 @@
+.cpsd_item.pet_story_feed_item {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  padding-block: 16px;
+  border: 0;
+  border-bottom: 1px solid #f1f2f5;
+  border-radius: 0;
+  background: #fff;
+  cursor: pointer;
+}
+
+.pet_story_feed_item_content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+}
+
+.pet_story_feed_item_body {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  gap: 16px;
+}
+
+.pet_story_feed_item_text {
+  flex: 1;
+  gap: 6px;
+}
+
+.pet_story_feed_item_tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #f1edff;
+  color: #6d59f8;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.45;
+  margin-bottom: 6px;
+}
+
+.pet_story_feed_item_tag--knowledge {
+  color: #0174C8;
+  background: #E0F0FE;
+}
+
+.pet_story_feed_item_title {
+  margin: 0;
+  color: #171717;
+  font-size: 22px;
+  font-weight: 800;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-clamp: 2;
+}
+
+.pet_story_feed_item_meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+}
+
+.pet_story_feed_item_meta p {
+  margin: 0;
+  color: #505050;
+  font-size: 14px;
+  line-height: 1.45;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pet_story_feed_item_meta p:first-child:not(:last-child) {
+  flex: 0 1 auto;
+  padding-right: 8px;
+  border-right: 1px solid #e5e5ec;
+}
+
+.pet_story_feed_item_time {
+  flex: 0 0 auto;
+}
+
+.pet_story_feed_item_thumb {
+  width: 76px;
+  height: 76px;
+  border-radius: 14px;
+  object-fit: cover;
+  background: #f4f4f5;
+}
+
+.pet_story_feed_item_bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.pet_story_feed_item_actions {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 24px;
+}
+
+.pet_story_feed_item_actions span {
+  font-size: 14px;
+  color: #111;
+}
+
+.pet_story_feed_item_action,
+.pet_story_feed_item_more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  color: #0d0d0f;
+  font: inherit;
+  line-height: 1;
+}
+
+.pet_story_feed_item_action {
+  gap: 7px;
+  min-width: 0;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.pet_story_feed_item_action svg {
+  width: 27px;
+  height: 27px;
+  flex: 0 0 auto;
+  stroke-width: 1.9;
+}
+
+.pet_story_feed_item_action svg.lucide-eye {
+  width: 20px;
+  height: 20px;
+}
+
+.pet_story_feed_item_like {
+  padding: 0;
+  cursor: pointer;
+}
+
+.pet_story_feed_item_like.active {
+  color: #6d59f8;
+}
+
+.pet_story_feed_item_more {
+  width: 20px;
+  height: 20px;
+  color: #505050;
+  cursor: pointer;
+}
+
+.pet_story_feed_item_more svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2.3;
+}
+
+@media (max-width: 420px) {
+  .cpsd_item.pet_story_feed_item {
+    grid-template-columns: minmax(0, 1fr) 104px;
+    column-gap: 14px;
+  }
+
+  .pet_story_feed_item_thumb {
+    width: 76px;
+    height: 76px;
+  }
+
+  .pet_story_feed_item_title {
+    font-size: 20px;
+  }
+
+  .pet_story_feed_item_meta p {
+    font-size: 14px;
+  }
+
+  .pet_story_feed_item_actions {
+    gap: 20px;
+  }
+}

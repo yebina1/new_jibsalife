@@ -1,0 +1,456 @@
+.layout:has(.cw_page_vote) {
+  --layout-inline-padding: 12px;
+  --layout-footer-height: 86px;
+}
+
+.layout:has(.cw_page_vote) .layout_content {
+  background: #ffffff;
+}
+
+.layout:has(.cw_page_vote) .header {
+  --page-header-height: 64px;
+  --page-header-padding-inline: 20px;
+  --page-header-title-size: 18px;
+  --page-header-title-weight: 700;
+}
+
+.layout:has(.cw_page_vote) .header_right .vw_submit_btn {
+  min-width: 47px;
+  min-height: 34px;
+  padding: 7px 10px;
+  border-radius: 12px;
+  background: #6D59F8;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.layout:has(.cw_page_vote) .header_right .vw_submit_btn:disabled,
+.layout:has(.cw_page_vote) .header_right .vw_submit_btn.is_disabled {
+  background: #A5ADB8;
+}
+
+.page.cw_page_vote {
+  padding-block: 8px 18px;
+}
+
+.cw_page_vote .cw_form {
+  flex: 1 1 auto;
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 593px;
+  padding-block: 18px;
+  border-color: #BCBCBC;
+  border-radius: 12px;
+}
+
+.cw_page_vote .cw_form:has(.vw_photo_items_section) {
+  flex: 0 0 auto;
+  min-height: 0;
+}
+
+.cw_page_vote .cw_form:has(.vw_ox_items_section) {
+  flex: 0 0 auto;
+  min-height: 0;
+}
+
+.cw_page_vote .cw_form:has(.vw_text_items_section) {
+  flex: 0 0 auto;
+  min-height: 0;
+}
+
+.cw_page_vote .cw_section {
+  border-bottom-color: #E5E5EC;
+}
+
+.cw_page_vote .cw_board_toggle {
+  padding: 16px 16px;
+  color: #111111;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.cw_page_vote .cw_board_toggle span {
+  font-size: 16px;
+}
+
+.cw_page_vote .cw_board_toggle.is_open {
+  border-color: #e5e5ec;
+  border-bottom: 1px solid #505050;
+  border-radius: 8px 8px 0 0;
+  box-shadow: none;
+}
+
+.cw_page_vote .cw_board_menu {
+  top: calc(100% - 1px);
+  border-radius: 0 0 8px 8px;
+  border-color: #e5e5ec;
+  border-top: 0;
+  box-shadow: none;
+}
+
+.cw_page_vote .cw_board_option {
+  padding: 14px 17px;
+  font-size: 14px;
+}
+
+.cw_page_vote .cw_placeholder {
+  color: #505050;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.cw_page_vote .cw_chevron_icon {
+  color: #505050;
+  font-size: 20px;
+}
+
+.vw_form_top_group {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.vw_title_content_group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.vw_title_content_group .cw_section {
+  border-bottom: 1px solid #E5E5EC;
+}
+
+.vw_title_content_group .cw_section:last-child {
+  border-bottom: 0;
+}
+
+.cw_page_vote .cw_title_input.input_field {
+  padding: 12px 17px 12px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.cw_page_vote .cw_title_input::placeholder {
+  color: rgba(80, 80, 80, 0.6);
+}
+
+.cw_page_vote .cw_content_textarea::placeholder {
+  color: rgba(80, 80, 80, 0.6);
+}
+
+.cw_page_vote .cw_content_section {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 338px;
+  background: none;
+}
+
+.cw_page_vote .cw_form:has(.vw_photo_items_section) .cw_content_section {
+  flex: 0 0 auto;
+  min-height: 0;
+}
+
+.cw_page_vote .cw_form:has(.vw_ox_items_section) .cw_content_section,
+.cw_page_vote .cw_form:has(.vw_text_items_section) .cw_content_section {
+  flex: 0 0 auto;
+  min-height: 0;
+}
+
+.cw_page_vote .cw_content_section::before {
+  content: "";
+  position: absolute;
+  top: 58px;
+  left: 50%;
+  width: 98px;
+  height: 103px;
+  background-image: var(--cw-write-bg-image);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  opacity: 1;
+  pointer-events: none;
+  transform: translateX(-50%);
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.cw_page_vote .cw_content_section.is_bg_hidden::before {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-4px);
+}
+
+.cw_page_vote .cw_content_textarea.input_field {
+  position: relative;
+  z-index: 1;
+  min-height: 65px;
+  max-height: 65px;
+  padding: 12px 17px;
+  color: #111111;
+  font-size: 14px;
+  line-height: 1.45;
+  overflow: hidden;
+  resize: none;
+}
+
+/* 투표 기간 선택 */
+.vw_duration_row {
+  order: 999;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  width: calc(100% + 32px);
+  min-height: 55px;
+  margin: 0 -16px;
+  padding: 0 17px;
+  box-sizing: border-box;
+  flex-wrap: nowrap;
+}
+
+.vw_duration_label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111111;
+  white-space: nowrap;
+}
+
+.vw_duration_btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #111111;
+  padding: 0;
+  height: auto;
+  min-width: 0;
+  font-family: inherit;
+}
+
+.vw_duration_btn.active {
+  color: #111111;
+}
+
+.vw_duration_check_icon {
+  display: block;
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.vw_duration_btn.active .vw_duration_check_icon {
+  width: 18px;
+  height: 18px;
+}
+
+.layout:has(.cw_page_vote) .cw_action_row {
+  align-items: center;
+  gap: 18px;
+  min-height: 52px;
+  padding: 13px 20px 18px;
+  border-top: 0;
+}
+
+.layout:has(.cw_page_vote) .cw_action_row .p_regular {
+  gap: 4px;
+  color: #111111;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.layout:has(.cw_page_vote) .cw_action_icon {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
+
+/* 투표 항목 공통 */
+.vw_items_section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  box-sizing: border-box;
+}
+
+.vw_items_title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111111;
+}
+
+.vw_photo_items_section {
+  gap: 24px;
+  padding: 0;
+}
+
+.vw_items_list {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+
+/* 사진 투표 항목 */
+.vw_item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.vw_item_image_btn {
+  width: 100%;
+  height: 125px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 10px;
+  background: #E5E5EC;
+  cursor: pointer;
+  overflow: hidden;
+  padding: 0;
+}
+
+.vw_item_image_preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.vw_item_image_plus {
+  display: inline-flex;
+  width: 50px;
+  height: 50px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #F4F4F8;
+  color: #111111;
+  font-size: 0;
+  font-weight: 400;
+  line-height: 1;
+  position: relative;
+}
+
+.vw_item_image_plus::before,
+.vw_item_image_plus::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 22px;
+  height: 3px;
+  border-radius: 999px;
+  background: currentColor;
+  transform: translate(-50%, -50%);
+}
+
+.vw_item_image_plus::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.vw_item_label_row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-bottom: 1px solid #767676;
+  padding: 6px 8px;
+}
+
+.vw_item_label_input.input_field {
+  flex: 1;
+  height: auto;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+  color: #111111;
+  font-size: 16px;
+  box-shadow: none;
+  outline: none;
+}
+
+.vw_item_label_input.input_field:focus {
+  border: 0;
+  box-shadow: none;
+}
+
+.vw_item_clear_btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #767676;
+  height: auto;
+  min-width: 0;
+  line-height: 1;
+}
+
+.vw_item_clear_btn i {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.vw_item_label_input.input_field::placeholder {
+  color: rgba(80, 80, 80, 0.6);
+}
+
+/* 일반 투표 항목 */
+.vw_text_items_list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.vw_text_item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border: 1.5px solid #E5E5EC;
+  border-radius: 12px;
+  background: #ffffff;
+  box-sizing: border-box;
+}
+
+.vw_text_item_circle {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #BCBCBC;
+  background: #ffffff;
+  display: block;
+}
+
+.vw_text_item_input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 15px;
+  font-weight: 500;
+  color: #111111;
+  outline: none;
+  font-family: inherit;
+  letter-spacing: -0.025em;
+  min-width: 0;
+}
+
+.vw_text_item_input::placeholder {
+  color: rgba(80, 80, 80, 0.6);
+}
+
+.confirm_dialog_vote_submit {
+  gap: 24px;
+}
+

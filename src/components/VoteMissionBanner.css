@@ -1,0 +1,49 @@
+.vote_mission_banner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 132px;
+  align-items: end;
+  gap: 12px;
+  min-height: 156px;
+  padding: 18px 16px;
+  background: #A7D8F8;
+  box-sizing: border-box;
+}
+
+.vote_mission_banner_title {
+  gap: 5px;
+  min-width: 0;
+}
+
+.vote_mission_banner_timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #BB0600;
+  font-size: var(--font-body-sm);
+  font-weight: var(--font-weight-md);
+  line-height: var(--line-height-sm);
+}
+
+.vote_mission_banner_timer img {
+  display: block;
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.vote_mission_banner_title h2 {
+  word-break: keep-all;
+  padding-bottom: 4px;
+}
+
+.vote_mission_banner_title p {
+  color: #505050;
+}
+
+.vote_mission_banner_img {
+  display: block;
+  width: 132px;
+  height: 132px;
+  object-fit: contain;
+  align-self: center;
+}

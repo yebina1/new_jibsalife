@@ -1,0 +1,252 @@
+.layout_content:has(.cc_page) {
+  padding: 0;
+}
+
+.cc_page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  min-height: 100%;
+}
+
+.cc_page .co_challenge_card {
+  width: calc(100% - 32px);
+  box-sizing: border-box;
+}
+
+.community_overview_section {
+  display: grid;
+  gap: 16px;
+  margin: 0 0 48px;
+}
+
+.community_overview_section:last-child {
+  margin-bottom: 0;
+}
+
+.community_overview_challenge_grid {
+  display: grid;
+  gap: 14px;
+}
+
+.community_challenge_card {
+  display: grid;
+  overflow: hidden;
+  gap: 0;
+  border: 1px solid #e5e5ec;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.community_challenge_card_image {
+  width: 100%;
+  aspect-ratio: 1.46 / 1;
+  border-radius: 8px 8px 0 0;
+  object-fit: cover;
+}
+
+.community_challenge_card_body {
+  display: grid;
+  padding: 12px 8px 8px;
+  border-radius: 0 0 8px 8px;
+}
+
+.community_challenge_card_body h3 {
+  display: block;
+  margin: 0;
+  color: #111111;
+  font-family: 'Pretendard', 'SUIT', system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.45;
+  letter-spacing: -0.025em;
+  white-space: pre-line;
+  word-break: keep-all;
+}
+
+.community_challenge_card_meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+  color: #505050;
+  font-family: 'Pretendard', 'SUIT', system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: -0.025em;
+}
+
+.community_challenge_card_meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.cc_progress_section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+  padding: 24px 16px; 
+  background: #F5F3FF;
+}
+
+.cc_title {
+  font-size: 28px;
+  font-weight: 600;
+  color: #6D59F8;
+  text-align: center;
+}
+
+.cc_cheer_img {
+  width: 100%;
+  max-width: 320px;
+  object-fit: contain;
+}
+
+/* 스탬프 */
+.cc_stamp_row {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.cc_stamp_wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.cc_stamp_today_arrow {
+  width: 9px;
+  height: 9px;
+  display: block;
+}
+
+.cc_stamp_item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #E5E5EC;
+  border-radius: 50%;
+  background: #F3F4F6;
+  box-sizing: border-box;
+}
+
+.cc_stamp_active {
+  background: #6C59F7;
+}
+
+.cc_stamp_icon {
+  display: block;
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  filter: brightness(0) invert(0.6);
+}
+
+.cc_stamp_active .cc_stamp_icon {
+  filter: brightness(0) invert(1);
+}
+
+.cc_stamp_today {
+  border-color: #6C59F7;
+}
+
+/* 보상 카드 */
+.cc_reward_card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 20px;
+  border-radius: 16px;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.cc_reward_desc {
+  color: #6B7280;
+}
+
+.cc_reward_point {
+  color: #6D59F8;
+  font-weight: 600;
+}
+
+.cc_point_icon {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.cc_day_list_section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  padding-inline: 16px;
+  padding-bottom: 48px;
+}
+
+.cc_day_scroll_wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.cc_day_dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.cc_day_dot {
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #E0DFEC;
+  flex-shrink: 0;
+}
+
+.cc_day_dot_active {
+  background: #6D59F8;
+}
+
+.cc_day_scroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+  scroll-snap-type: x proximity;
+  margin-inline: -16px;
+  cursor: grab;
+  user-select: none;
+}
+
+.cc_day_scroll::before,
+.cc_day_scroll::after {
+  content: '';
+  flex: 0 0 calc(50% - 98px);
+}
+
+.cc_day_scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.cc_day_scroll .cdc_card {
+  flex: 0 0 auto;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+}

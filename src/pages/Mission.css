@@ -1,0 +1,1200 @@
+.mission_page {
+  --mission-fixed-profile-height: 56px;
+  --mission-fixed-calendar-height: 174px;
+  --mission-fixed-title-height: 62px;
+  min-height: auto;
+  overflow: visible;
+  background: #ffffff;
+  color: #171717;
+}
+
+.layout_content > .mission_page {
+  min-height: auto;
+}
+
+.layout:has(.mission_page) .header_right > button:first-child {
+  display: none;
+}
+
+.mission_page.is_condensed {
+  min-height: calc(100dvh - var(--layout-header-height) - var(--layout-footer-height));
+  overflow: visible;
+}
+
+.mission_profile_header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.mission_page.is_condensed .mission_profile_header {
+  position: fixed;
+  top: var(--layout-header-height);
+  left: 50%;
+  z-index: 96;
+  width: min(100%, var(--layout-max-width));
+  min-height: var(--mission-fixed-profile-height);
+  margin: 0;
+  padding: 0 var(--layout-inline-padding) 16px;
+  box-sizing: border-box;
+  background: #ffffff;
+  transform: translateX(-50%);
+}
+
+.mission_profile_header h2 {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  color: #111111;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 25.2px;
+  letter-spacing: -0.025em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mission_pet_switch_button {
+  display: inline-flex;
+  width: auto;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: #505050;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: -0.025em;
+  white-space: nowrap;
+}
+
+.mission_pet_switch_button .button_label > span:nth-of-type(1) {
+  display: inline-flex;
+}
+
+.mission_pet_switch_button .button_label > span:nth-of-type(2) {
+  display: none;
+}
+
+.mission_pet_switch_button.has_selected_pet .button_label > span:nth-of-type(1) {
+  display: none;
+}
+
+.mission_pet_switch_button.has_selected_pet .button_label > span:nth-of-type(2) {
+  display: inline-flex;
+}
+
+.mission_pet_switch_button .button_label {
+  display: inline-flex;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  line-height: 20px;
+}
+
+.mission_pet_switch_button strong {
+  color: #111111;
+  font-weight: 700;
+}
+
+.mission_pet_switch_button .chevron_icon_md {
+  --chevron-color: #505050;
+  align-self: center;
+  transform: none;
+}
+
+.mission_calendar_section {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  padding: 0;
+}
+
+.mission_calendar_section.is_condensed {
+  position: fixed;
+  top: calc(var(--layout-header-height) + var(--mission-fixed-profile-height));
+  left: 50%;
+  z-index: 95;
+  width: min(100%, var(--layout-max-width));
+  padding: 0 var(--layout-inline-padding);
+  box-sizing: border-box;
+  background: #ffffff;
+  transform: translateX(-50%);
+}
+
+.mission_day {
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.mission_view_sort {
+  position: relative;
+  z-index: 50;
+  justify-self: end;
+}
+
+.mission_view_sort.open {
+  z-index: 400;
+}
+
+.mission_view_sort_toggle {
+  min-width: 70px;
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid #d8dbe7;
+  border-radius: 999px;
+  background: var(--white);
+  color: var(--font-block);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.mission_view_sort_toggle::after {
+  display: inline-block;
+  margin-left: 8px;
+  color: #6D59F8;
+  content: '▼';
+  transform: scale(0.7);
+}
+
+.mission_view_sort_menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  display: grid;
+  min-width: 70px;
+  padding: 8px 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 8px 20px rgba(17, 24, 39, 0.08);
+}
+
+.mission_view_sort_option {
+  padding: 7px 0;
+  color: #111111;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.mission_view_sort_option.active {
+  color: #6D59F8;
+  font-weight: 900;
+}
+
+.mission_month_bar {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.mission_today_chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 0;
+  min-width: 52px;
+  min-height: 34px;
+  padding: 4px 8px;
+  border-color: rgb(255 255 255 / 52%);
+  background: linear-gradient(135deg, rgb(255 255 255 / 0.82), rgb(246 242 255 / 0.58));
+  box-shadow:
+    0 8px 18px rgb(109 89 248 / 0.08),
+    inset 0 1px 0 rgb(255 255 255 / 0.84);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+}
+
+.mission_today_chip.is_active {
+  border-color: rgb(109 89 248 / 0.18);
+  background: linear-gradient(135deg, rgb(235 229 255 / 0.96), rgb(220 210 255 / 0.84));
+}
+
+.mission_today_chip .button_label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.mission_month_title {
+  display: inline-flex;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  color: #111111;
+  font-size: var(--font-title-h3);
+  font-weight: var(--font-weight-sb);
+  line-height: 28px;
+  letter-spacing: 0;
+  cursor: pointer;
+  text-shadow: 0 1px 0 rgb(255 255 255 / 0.58);
+}
+
+.mission_month_title i {
+  width: 28px;
+  height: 28px;
+  color: #484c58;
+  font-size: 28px;
+  line-height: 28px;
+}
+
+.mission_calendar_card {
+  --mission-calendar-row-height: 49px;
+  width: 100%;
+  height: auto;
+  padding: 17px;
+  box-sizing: border-box;
+  border: 1px solid rgb(255 255 255 / 0.52);
+  border-radius: 12px;
+  background:
+    linear-gradient(145deg, rgb(237 233 254 / 0.78) 0%, rgb(245 241 255 / 0.66) 42%, rgb(255 255 255 / 0.72) 100%);
+  box-shadow:
+    0 16px 34px rgb(109 89 248 / 0.08),
+    inset 0 1px 0 rgb(255 255 255 / 0.88);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+}
+
+.mission_weekdays,
+.mission_calendar_grid {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.mission_weekdays {
+  height: var(--mission-calendar-row-height);
+  align-items: center;
+  margin-bottom: 0;
+}
+
+.mission_weekdays span {
+  display: flex;
+  width: var(--mission-calendar-row-height);
+  height: var(--mission-calendar-row-height);
+  align-items: center;
+  justify-content: center;
+  justify-self: center;
+  color: #767676;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22.4px;
+  letter-spacing: 0;
+  text-align: center;
+}
+
+.mission_calendar_viewport {
+  width: 100%;
+  height: calc(var(--mission-calendar-row-height) * 6);
+  overflow: hidden;
+  transition: height 260ms ease;
+}
+
+.mission_calendar_viewport.is_weekly {
+  height: var(--mission-calendar-row-height);
+}
+
+.mission_calendar_track {
+  will-change: transform;
+  transition: transform 260ms ease;
+}
+
+.mission_calendar_grid {
+  grid-auto-rows: var(--mission-calendar-row-height);
+  row-gap: 0;
+  transition: opacity 180ms ease;
+}
+
+.mission_calendar_grid.slide_next {
+  animation: mission-slide-next 260ms ease-out;
+}
+
+.mission_calendar_grid.slide_prev {
+  animation: mission-slide-prev 260ms ease-out;
+}
+
+.mission_calendar_dock {
+  display: flex;
+  width: 100%;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.mission_calendar_dock span {
+  display: block;
+  width: 64px;
+  height: 6px;
+  border-radius: 999px;
+  background: #e3dfdc;
+}
+
+.mission_day {
+  display: inline-flex;
+  position: relative;
+  width: var(--mission-calendar-row-height);
+  height: var(--mission-calendar-row-height);
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  border-radius: 50%;
+  color: #111111;
+  cursor: pointer;
+}
+
+.mission_day.muted {
+  color: var(--font-disable);
+}
+
+.mission_day > span:first-child {
+  color: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 22.4px;
+  letter-spacing: 0;
+}
+
+.mission_day.selected {
+  background: radial-gradient(circle at center, #C4B5FD 0 21px, transparent 22px);
+  color: var(--font-block);
+}
+
+.mission_day.has_record::after {
+  content: none;
+}
+
+.mission_day_record_dots {
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  display: flex;
+  max-width: 24px;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  transform: translateX(-50%);
+}
+
+.mission_day_record_dot {
+  width: 4px;
+  height: 4px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+}
+
+.mission_history_section {
+  padding: 48px 0 0;
+}
+
+.mission_history_section.is_condensed {
+  padding-top: calc(
+    var(--mission-fixed-profile-height) +
+    var(--mission-fixed-calendar-height) +
+    var(--mission-fixed-title-height)
+  );
+}
+
+.mission_history_section h2 {
+  margin: 0 0 16px;
+  color: var(--font-block);
+  font-size: var(--font-title-h4);
+  font-weight: var(--font-weight-sb);
+  line-height: var(--app-line-height);
+  letter-spacing: var(--app-letter-spacing);
+}
+
+.mission_history_section.is_condensed h2 {
+  position: fixed;
+  top: calc(
+    var(--layout-header-height) +
+    var(--mission-fixed-profile-height) +
+    var(--mission-fixed-calendar-height)
+  );
+  left: 50%;
+  z-index: 90;
+  width: min(100%, var(--layout-max-width));
+  min-height: var(--mission-fixed-title-height);
+  margin: 0;
+  padding: 16px var(--layout-inline-padding);
+  box-sizing: border-box;
+  background: #ffffff;
+  transform: translateX(-50%);
+}
+
+.mission_history_list {
+  display: grid;
+  min-height: auto;
+  align-self: start;
+  align-content: start;
+  gap: 20px;
+  grid-auto-rows: max-content;
+  padding-bottom: 24px;
+}
+
+.mission_history_section.is_condensed .mission_history_list {
+  position: relative;
+  top: auto;
+  left: auto;
+  z-index: auto;
+  width: 100%;
+  max-height: none;
+  padding: 16px 0 24px;
+  box-sizing: border-box;
+  overflow: visible;
+  background: transparent;
+  transform: none;
+}
+
+.mission_history_item {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 6px minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.mission_history_thumb {
+  width: 4px;
+  height: 100%;
+  margin: 3px 0 0;
+  align-self: stretch;
+  border-radius: 0;
+}
+
+.mission_history_body {
+  display: grid;
+  gap: 2px;
+}
+
+.mission_history_body strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 0;
+  color: var(--font-block);
+  font-size: var(--font-title-h5);
+  font-weight: var(--font-weight-sb);
+  line-height: var(--app-line-height);
+  letter-spacing: var(--app-letter-spacing);
+}
+
+.mission_history_edit_icon {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.mission_history_body p {
+  margin: 0;
+  color: #505050;
+  white-space: pre-line;
+}
+
+.mission_history_media {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.mission_history_media img,
+.mission_history_media video {
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  object-fit: cover;
+  background: #f2f2f6;
+}
+
+.mission_history_item time {
+  align-self: center;
+  padding-top: 0;
+  color: #505050;
+}
+
+.mission_pet_switch_sheet {
+  display: grid;
+  gap: 10px;
+}
+
+.mission_pet_switch_list {
+  display: grid;
+  gap: 0;
+}
+
+.mission_pet_switch_option {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  min-height: 104px;
+  padding: 20px 10px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: #111111;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.mission_pet_switch_option img {
+  display: block;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.mission_pet_switch_copy {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.mission_pet_switch_copy strong {
+  overflow: hidden;
+  color: #111111;
+  font-size: var(--font-title-h5);
+  font-weight: var(--font-weight-sb);
+  line-height: var(--app-line-height);
+  letter-spacing: var(--app-letter-spacing);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mission_pet_switch_meta,
+.mission_pet_switch_meta span {
+  overflow: hidden;
+  color: #505050;
+  font-size: var(--font-body-sm);
+  font-weight: var(--font-weight-rg);
+  line-height: var(--line-height-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mission_pet_switch_meta {
+  display: flex;
+  gap: 4px;
+  min-width: 0;
+}
+
+.mission_pet_switch_meta .mission_pet_switch_dot {
+  color: var(--font-block);
+}
+
+.mission_pet_switch_copy b {
+  color: var(--font-block);
+  font-weight: 700;
+}
+
+.mission_pet_switch_option.is_selected {
+  background: #F5F3FF;
+}
+
+.mission_pet_switch_option.is_selected .mission_pet_switch_copy strong {
+  color: #6d59f8;
+}
+
+.mission_pet_switch_close {
+  width: 100%;
+  margin: 0 0 10px 0;
+}
+
+.mission_date_picker_sheet {
+  margin-inline: -16px;
+}
+
+.mission_notice {
+  margin: 34px 0 0;
+  color: #8f8f97;
+  font-size: 11px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.mission_category_picker {
+  padding-block: 0 28px;
+}
+
+.mission_category_picker_top {
+  display: grid;
+  position: relative;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  min-height: 76px;
+}
+
+.mission_category_picker_top span {
+  color: #c6c6ce;
+  font-size: 12px;
+}
+
+.mission_category_picker_top button {
+  position: relative;
+  z-index: 1;
+  justify-self: end;
+  color: #34343d;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.mission_category_picker_top h2 {
+  position: static;
+  justify-self: center;
+  margin: 0;
+  color: #111111;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.mission_category_grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.mission_category_option {
+  display: flex;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  min-height: 0;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 14px;
+  border-radius: 18px;
+  background: #f1f5f4;
+  color: #0f0f12;
+  font-size: 16px;
+  font-weight: 500;
+  transition: background-color 160ms ease, transform 160ms ease;
+}
+
+.mission_category_option.active {
+  background: #b8a7f7;
+}
+
+.mission_category_option:active {
+  transform: scale(0.98);
+}
+
+.mission_category_dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+}
+
+.mission_repeat_picker {
+  padding-block: 0 28px;
+}
+
+.mission_repeat_picker h2 {
+  margin: 0 0 16px;
+  color: #111111;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.mission_repeat_grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.mission_repeat_option {
+  display: flex;
+  width: 100%;
+  min-height: 82px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  background: #f1f5f4;
+  color: #0f0f12;
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color 160ms ease, transform 160ms ease;
+}
+
+.mission_repeat_option.active {
+  background: #b8a7f7;
+}
+
+.mission_repeat_option:active {
+  transform: scale(0.98);
+}
+
+.mission_repeat_actions {
+  margin-top: 38px;
+}
+
+.mission_category_plus {
+  display: flex;
+  width: 38px;
+  height: 38px;
+  align-items: center;
+  justify-content: center;
+  color: #111111;
+  font-size: 48px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.mission_category_add {
+  padding-block: 0 28px;
+}
+
+.mission_category_add h2 {
+  margin: 28px 0 20px;
+  color: #111111;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.mission_category_add input {
+  width: 100%;
+  height: 56px;
+  padding: 0 14px;
+  border: 1px solid #e5e3dc;
+  border-radius: 10px;
+  color: #111111;
+  font-size: 16px;
+  outline: none;
+}
+
+.mission_category_add input::placeholder {
+  color: #c4c4c8;
+}
+
+.mission_category_add input:disabled {
+  background: #f2f2f6;
+  color: #999999;
+  cursor: not-allowed;
+}
+
+.mission_category_color_grid {
+  display: grid;
+  grid-template-columns: repeat(4, 38px);
+  justify-content: space-between;
+  row-gap: 12px;
+  margin-top: 16px;
+  padding: 20px;
+  border: 1px solid #e8e6df;
+  border-radius: 8px;
+}
+
+.mission_category_color {
+  display: flex;
+  width: 34px;
+  height: 34px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #ffffff;
+  font-size: 18px;
+}
+
+.mission_category_color.used {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.mission_category_color.selected {
+  outline: 3px solid rgba(160, 141, 255, 0.28);
+  outline-offset: 2px;
+}
+
+.mission_category_color:disabled {
+  filter: saturate(0.65);
+}
+
+.mission_category_actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 38px;
+}
+
+.mission_category_prev,
+.mission_category_confirm {
+  width: 100%;
+  height: 54px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.mission_category_prev.white_btn {
+  border-color: #6D59F8;
+  color: #6D59F8;
+}
+
+.mission_category_confirm {
+  border: 1px solid #6D59F8;
+  background: #6D59F8;
+  color: #ffffff;
+}
+
+.mission_category_confirm:disabled {
+  border-color: #A5ADB8;
+  background: #A5ADB8;
+  color: #ffffff;
+  cursor: not-allowed;
+}
+
+.mission_period_picker {
+  position: relative;
+  padding-block: 20px;
+}
+
+.mission_period_inline {
+  width: 100%;
+}
+
+.mission_period_tabs,
+.mission_period_month,
+.mission_period_dimmed {
+  display: none !important;
+}
+
+.mission_period_rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.mission_period_row {
+  display: flex;
+  min-height: 63px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 0;
+  border-bottom: 1px solid #E5E5EC;
+  color: #111111;
+}
+
+.mission_period_row_label {
+  flex: 0 0 auto;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.mission_period_row_value {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  color: #505050;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.45;
+  text-align: right;
+}
+
+.mission_period_row_value .chevron_icon {
+  flex: 0 0 auto;
+}
+
+.mission_period_chevron {
+  transform: rotate(90deg);
+  transition: transform 160ms ease;
+}
+
+.mission_period_chevron.up {
+  transform: rotate(-90deg);
+}
+
+.mission_period_wheel {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 2.75fr) minmax(50px, 0.65fr) minmax(38px, 0.45fr) minmax(42px, 0.5fr);
+  height: 150px;
+  margin-top: 14px;
+  box-sizing: border-box;
+  padding: 0 16px;
+  overflow: hidden;
+}
+
+.mission_period_wheel_selector {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  left: 16px;
+  height: 44px;
+  transform: translateY(-50%);
+  border-radius: 10px;
+  background: #C4B5FD;
+  pointer-events: none;
+}
+
+.mission_period_wheel_column {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-snap-type: y mandatory;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.mission_period_wheel_column::-webkit-scrollbar {
+  display: none;
+}
+
+.mission_period_wheel_column::before,
+.mission_period_wheel_column::after {
+  flex: 0 0 53px;
+  content: '';
+}
+
+.mission_period_wheel_column button {
+  display: flex;
+  flex: 0 0 44px;
+  height: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  color: #999999;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 44px;
+  scroll-snap-align: center;
+  text-align: center;
+  transition: color 80ms linear, font-size 80ms linear, font-weight 80ms linear;
+}
+
+.mission_period_wheel_column.date button {
+  justify-content: center;
+  padding-right: 4px;
+  font-size: 14px;
+}
+
+.mission_period_wheel_column button:not(.active),
+.mission_period_wheel_column.date button:not(.active) {
+  color: #999999;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.mission_period_wheel_column button.active {
+  color: #111111;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 44px;
+}
+
+.mission_period_wheel_column.date button.active {
+  color: #111111;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 44px;
+}
+
+.mission_period_new_actions {
+  margin-top: 28px;
+}
+
+.mission_period_tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.mission_period_tabs button {
+  width: 100%;
+  height: 40px;
+  border-radius: 999px;
+  background: #f1f5f4;
+  color: #1b1b1f;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.mission_period_tabs button.active {
+  background: #A08DFF;
+  color: #ffffff;
+}
+
+.mission_period_month {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  margin: 22px 0 18px;
+}
+
+.mission_period_weekdays,
+.mission_period_grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.mission_period_weekdays {
+  margin-bottom: 12px;
+}
+
+.mission_period_weekdays span {
+  display: flex;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  color: #777982;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.mission_period_grid {
+  row-gap: 10px;
+}
+
+.mission_period_day {
+  display: flex;
+  width: 38px;
+  height: 38px;
+  align-items: center;
+  justify-content: center;
+  justify-self: center;
+  border-radius: 50%;
+  color: #222226;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.mission_period_day.muted {
+  color: #c2c3c8;
+}
+
+.mission_period_day.selected {
+  background: #dce7ff;
+  color: #2d3655;
+}
+
+.mission_period_actions {
+  margin-top: 32px;
+}
+
+.mission_period_date_dropdown {
+  position: absolute;
+  top: calc(100% + 18px);
+  right: -26px;
+  left: -26px;
+  z-index: 30;
+  background: #ffffff;
+  border-radius: 0;
+  border-top: 1px solid #ececf1;
+  overflow: hidden;
+}
+
+.mission_period_date_dropdown .date_picker,
+.mission_period_date_dropdown .date_picker.inline {
+  width: 100%;
+  border-radius: 0;
+}
+
+.mission_period_dimmed {
+  position: relative;
+  margin-inline: -16px;
+  padding-inline: 16px;
+  overscroll-behavior: none;
+  pointer-events: none;
+  touch-action: none;
+}
+
+.mission_period_dimmed::before {
+  position: absolute;
+  inset: 0 0 -500px;
+  z-index: 5;
+  background: rgba(0, 0, 0, 0.45);
+  content: '';
+}
+
+.mission_period_dim_close {
+  position: absolute;
+  inset: 0 0 -500px;
+  z-index: 6;
+  cursor: default;
+  pointer-events: auto;
+}
+
+
+@keyframes mission-slide-next {
+  from {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes mission-slide-prev {
+  from {
+    opacity: 0;
+    transform: translateX(-28px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 420px) {
+  .mission_calendar_section {
+    padding-right: 0;
+    padding-left: 0;
+  }
+}

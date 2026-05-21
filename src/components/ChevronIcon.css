@@ -1,0 +1,43 @@
+.chevron_icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: var(--chevron-frame-size);
+  height: var(--chevron-frame-size);
+  color: var(--chevron-color);
+}
+
+.chevron_icon_svg {
+  display: block;
+  width: var(--chevron-frame-size);
+  height: var(--chevron-frame-size);
+  overflow: visible;
+}
+
+.chevron_icon_path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--chevron-stroke-width);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.chevron_icon_lg {
+  --chevron-frame-size: 28px;
+  --chevron-stroke-width: 2;
+  --chevron-color: #111111;
+}
+
+.chevron_icon_md {
+  --chevron-frame-size: 20px;
+  --chevron-stroke-width: 1.5;
+  --chevron-color: #111111;
+}
+
+.chevron_icon_sm {
+  --chevron-frame-size: 16px;
+  --chevron-stroke-width: 1.5;
+  --chevron-color: #505050;
+}

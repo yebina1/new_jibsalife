@@ -1,0 +1,32 @@
+.point_alert_content {
+  display: grid;
+  gap: 48px;
+  width: 100%;
+}
+
+.point_alert_message {
+  display: grid;
+  gap: 10px;
+  text-align: center;
+}
+
+.point_alert_message_title {
+  color: #111111;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.point_alert_message_body {
+  margin: 0;
+  color: #505050;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.point_alert_confirm {
+  width: 100%;
+  border-radius: 12px;
+}

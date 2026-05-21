@@ -1,0 +1,181 @@
+.co_challenge_card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.co_challenge_card_first {
+  align-items: center;
+  padding: 20px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+
+.wcc_header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.co_challenge_card_first .co_challenge_info {
+  gap: 4px;
+}
+
+.co_challenge_info strong {
+  font-size: 28px;
+  font-weight: 600;
+  color: #6D59F8;
+}
+
+.wcc_timer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin: 0;
+  color: #EF4444;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.wcc_timer svg {
+  stroke: #EF4444;
+  flex-shrink: 0;
+}
+
+.co_challenge_info h2 strong {
+  font-size: 24px;
+  font-weight: 600;
+  color: #6D59F8;
+}
+
+.co_day_label {
+  color: #767676;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.co_challenge_desc {
+  font-size: 18px;
+  line-height: 1.4;
+  color: #111;
+  margin: 0;
+}
+
+.co_challenge_meta {
+  display: flex;
+  gap: 32px;
+}
+
+.co_challenge_meta p {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.45;
+  color: #505050;
+}
+
+.wcc_img_wrapper {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+}
+
+.wcc_challenge_img {
+  width: 200px;
+  height: 168px;
+  object-fit: cover;
+}
+
+/* 이미지 위 흰 반투명 배경 (CommunityChallenge) */
+.wcc_img_overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.5);
+  pointer-events: none;
+}
+
+/* 카드 전체 흰 반투명 오버레이 (CommunityOverview) */
+.wcc_card_overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.wcc_complete_stamp {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.wcc_mission_check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  height: 44px;
+  border: 1px dashed #C4B8FF;
+  border-radius: 12px;
+  background: transparent;
+  color: #A89EF0;
+  font-family: var(--app-font-family);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.wcc_mission_check_done {
+  border-style: solid;
+  border-color: #6D59F8;
+  background: #F5F3FF;
+  color: #6D59F8;
+  cursor: default;
+}
+
+.wcc_like_btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: auto;
+  padding: 0 24px;
+  height: 44px;
+  border: 1px solid #E5E5EC;
+  border-radius: 999px;
+  background: transparent;
+  color: #9CA3AF;
+  font-family: var(--app-font-family);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.wcc_like_btn_active {
+  border-color: #F43F5E;
+  color: #F43F5E;
+  background: #FFF1F2;
+}
+
+.wcc_like_btn svg {
+  flex-shrink: 0;
+}
+
+.wcc_like_btn_active svg {
+  fill: #F43F5E;
+}

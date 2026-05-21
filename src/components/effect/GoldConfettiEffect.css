@@ -1,0 +1,31 @@
+.gold_confetti_wrap {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.gold_confetti_piece {
+  position: absolute;
+  top: -16px;
+  border-radius: 2px;
+  opacity: 0;
+  animation: gold_confetti_fall linear infinite;
+  transform-origin: center center;
+  will-change: transform, opacity;
+}
+
+@keyframes gold_confetti_fall {
+  0% {
+    transform: translateY(0) rotate(var(--rot));
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(105vh) rotate(calc(var(--rot) + var(--spin)));
+    opacity: 0;
+  }
+}

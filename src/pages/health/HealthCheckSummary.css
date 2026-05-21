@@ -1,0 +1,99 @@
+.health_check_summary_page {
+  display: flex;
+  flex-direction: column;
+  gap: 34px;
+  background: #ffffff;
+}
+
+.health_check_summary_intro {
+  display: flex;
+  width: min(100%, 430px);
+  align-items: flex-start;
+  gap: 34px;
+  margin: 0 auto;
+}
+
+.health_check_summary_icon {
+  display: block;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  margin-top: 72px;
+}
+
+.health_check_summary_intro .title {
+  gap: 16px;
+}
+
+.health_check_summary_intro .title p {
+  color: #111111;
+  font-size: 16px;
+}
+
+.health_check_summary_actions,
+.health_check_summary_today {
+  width: min(100%, 430px);
+  margin: 0 auto;
+}
+
+.health_check_summary_actions h3,
+.health_check_summary_today h3 {
+  margin: 0 0 20px;
+  color: #111111;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.health_check_summary_actions {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.health_check_summary_today {
+  margin-top: -6px;
+}
+
+.health_check_summary_today > div {
+  display: flex;
+  min-height: 110px;
+  align-items: center;
+  justify-content: center;
+  background: #d9d9d9;
+}
+
+.health_check_summary_today p {
+  margin: 0;
+  color: #111111;
+  font-size: 13px;
+}
+
+@media (max-width: 360px) {
+  .health_check_summary_intro,
+  .health_check_summary_actions,
+  .health_check_summary_today {
+    width: 100%;
+  }
+
+  .health_check_summary_intro {
+    gap: 18px;
+  }
+
+  .health_check_summary_icon {
+    width: 32px;
+    height: 32px;
+    margin-top: 52px;
+  }
+
+  .health_check_summary_intro .title {
+    gap: 22px;
+  }
+
+  .health_check_summary_intro .title h2 {
+    font-size: 22px;
+  }
+
+  .health_check_summary_intro .title p {
+    font-size: 17px;
+  }
+}
