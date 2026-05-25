@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router'
 import Button from '../components/html/Button'
 import Input from '../components/html/Input'
+import EntryShell from '../components/EntryShell'
 import Title from '../components/Title'
 import loginPetImg from '../img/illust_login_pet.png'
 import helloIcon from '../svg/hello_icon.svg'
@@ -38,14 +39,18 @@ function Login() {
   }
 
   return (
-    <div className="login_page">
+    <EntryShell className="login_page">
       <div className="login_hero">
         <Title
           as="h2"
           className="login_hero_text"
           title={(
             <>
-              집사인생에 오신 것을<br />환영해요 <img src={helloIcon} alt="" aria-hidden="true" width={28} height={28} style={{ verticalAlign: '-4px' }} />
+              집사인생에 오신 것을
+              <br />
+              <span className="login_hero_line">
+                환영해요 <img src={helloIcon} alt="" aria-hidden="true" width={28} height={28} style={{ verticalAlign: '-4px' }} />
+              </span>
             </>
           )}
         >
@@ -145,7 +150,7 @@ function Login() {
           <strong>1000P 증정!</strong>
         </p>
       </div>
-    </div>
+    </EntryShell>
   )
 }
 

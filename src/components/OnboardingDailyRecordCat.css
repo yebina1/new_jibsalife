@@ -1,0 +1,35 @@
+.onboarding_daily_record_svg {
+  display: block;
+}
+
+.onboarding_daily_record_pencil {
+  transform-box: fill-box;
+  transform-origin: 50% 52%;
+  animation: onboarding-daily-record-pencil-write 0.9s ease-in-out infinite;
+}
+
+.onboarding_daily_record_pencil_body,
+.onboarding_daily_record_pencil_eraser,
+.onboarding_daily_record_pencil_tip {
+  transform-box: fill-box;
+  transform-origin: 50% 52%;
+}
+
+@keyframes onboarding-daily-record-pencil-write {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+
+  25% {
+    transform: translate(0.4px, 0.4px) rotate(2.2deg);
+  }
+
+  50% {
+    transform: translate(0.7px, -0.4px) rotate(-1.4deg);
+  }
+
+  75% {
+    transform: translate(0.4px, 0.4px) rotate(1.8deg);
+  }
+}

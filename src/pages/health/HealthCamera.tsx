@@ -531,9 +531,21 @@ function HealthCamera({ captureOnly = false }: HealthCameraProps) {
     setDraftPeriodEnd(updater)
   }
 
-  const continueAfterGuide = () => {
+  const continueAfterGuide = async () => {
     if (mode === 'memo') {
       setIsMemoSheetOpen(true)
+      return
+    }
+
+    try {
+      const preflightStream = await navigator.mediaDevices.getUserMedia({
+        video: isAudioMode ? false : { facingMode: cameraFacingMode },
+        audio: mode === 'video' || isAudioMode,
+      })
+
+      preflightStream.getTracks().forEach((track) => track.stop())
+    } catch {
+      setCameraError(isAudioMode ? '마이크 권한을 허용해 주세요.' : '카메라 권한을 허용해 주세요.')
       return
     }
 

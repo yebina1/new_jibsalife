@@ -369,6 +369,10 @@ type VoteTargetCursorEffect = {
 function Home() {
   const navigate = useNavigate()
   const location = useLocation()
+  const navigationState = location.state as {
+    restoreScrollY?: number
+    openPetProfileModal?: boolean
+  } | null
   const [profileSlides, setProfileSlides] = useState<ProfileSummarySlide[]>(readPetProfiles)
   const [summarySlideIndex, setSummarySlideIndex] = useState(getInitialSummarySlideIndex)
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, align: 'center' })
@@ -557,7 +561,7 @@ function Home() {
   }, [])
 
   useEffect(() => {
-    const restoreScrollY = (location.state as { restoreScrollY?: number } | null)?.restoreScrollY
+    const restoreScrollY = navigationState?.restoreScrollY
 
     if (typeof restoreScrollY !== 'number') return
 
@@ -565,7 +569,7 @@ function Home() {
       window.scrollTo({ top: restoreScrollY, behavior: 'auto' })
       navigate(location.pathname, { replace: true, state: null })
     })
-  }, [location.pathname, location.state, navigate])
+  }, [location.pathname, navigate, navigationState])
 
   useSwipeNav('/place', '/community/overview')
 
@@ -671,6 +675,22 @@ function Home() {
     })
     setIsPetIdModalOpen(true)
   }
+
+  useEffect(() => {
+    if (!navigationState?.openPetProfileModal || isPetIdModalOpen) return
+
+    requestAnimationFrame(() => {
+      openPetIdModal(profileSlides[summarySlideIndex])
+      navigate(location.pathname, { replace: true, state: null })
+    })
+  }, [
+    isPetIdModalOpen,
+    location.pathname,
+    navigate,
+    navigationState,
+    profileSlides,
+    summarySlideIndex,
+  ])
 
   const closePetIdModal = () => {
     setIsPetIdModalOpen(false)

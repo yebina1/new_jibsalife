@@ -72,6 +72,7 @@ function MissionRecordSheet({
   const handleRepeatInfoClick = () => {
     showStateBarMessage('설정한 주기에 맞춰 기록이 자동 등록돼요.\n(ex. 매일, 매주)', 3000, {
       placement: 'sheet',
+      variant: 'warning',
     })
   }
   const isAmountInputCategory =

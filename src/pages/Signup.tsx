@@ -207,8 +207,13 @@ function Signup() {
             className="signup_hero_copy"
             title={(
               <>
-                집사인생에 오신 것을<br />환영해요{' '}
-                <img src={helloIcon} alt="" aria-hidden="true" width={24} height={24} className="signup_hello_icon" />
+                집사인생에 오신 것을
+                <br />
+                <span className="signup_hero_line">
+                  환영해요
+                  {' '}
+                  <img src={helloIcon} alt="" aria-hidden="true" width={24} height={24} className="signup_hello_icon" />
+                </span>
               </>
             )}
           >

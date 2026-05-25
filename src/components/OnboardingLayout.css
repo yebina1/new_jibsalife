@@ -103,6 +103,13 @@
 
 .onboarding_layout_progress_divider {
   font-size: var(--font-title-h4);
+  font-weight: var(--font-weight-rg);
+  line-height: var(--app-line-height);
+}
+
+.onboarding_layout_progress_total {
+  font-size: var(--font-title-h4);
+  font-weight: var(--font-weight-rg);
   line-height: var(--app-line-height);
 }
 

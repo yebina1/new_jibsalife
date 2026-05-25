@@ -1,6 +1,7 @@
 export const STATE_BAR_MESSAGE_EVENT = 'state-bar-message'
 
 export type StateBarMessagePlacement = 'footer' | 'notification' | 'sheet' | 'top'
+export type StateBarMessageVariant = 'success' | 'warning' | 'error' | 'info'
 
 export type StateBarMessageDetail = {
   eventId?: number
@@ -8,6 +9,7 @@ export type StateBarMessageDetail = {
   duration?: number
   placement?: StateBarMessagePlacement
   closeButton?: boolean
+  variant?: StateBarMessageVariant
   actionLabel?: string
   onAction?: () => void
 }
@@ -15,6 +17,7 @@ export type StateBarMessageDetail = {
 export type StateBarMessageOptions = {
   placement?: StateBarMessagePlacement
   closeButton?: boolean
+  variant?: StateBarMessageVariant
   actionLabel?: string
   onAction?: () => void
 }
@@ -58,6 +61,7 @@ export function showStateBarMessage(
         duration,
         placement: options.placement,
         closeButton: options.closeButton,
+        variant: options.variant,
         actionLabel: options.actionLabel,
         onAction: options.onAction,
       },

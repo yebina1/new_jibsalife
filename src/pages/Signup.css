@@ -32,7 +32,7 @@
   display: flex;
   flex-direction: column;
   gap: 48px;
-  padding-top: 24px;
+  padding-top: 28px;
 }
 
 /* ── Hero ─────────────────────────────────────────────── */
@@ -59,6 +59,13 @@
   line-height: 1.4;
 }
 
+.signup_hero_line {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
 .signup_hello_icon {
   vertical-align: -3px;
 }
@@ -75,9 +82,25 @@
   height: 120px;
   object-fit: contain;
   flex-shrink: 0;
+  transform-origin: center 62%;
+  animation: signup_hero_clap_bob 1s ease-in-out infinite;
 }
 
 /* ── Form ─────────────────────────────────────────────── */
+
+@keyframes signup_hero_clap_bob {
+  0%, 100% {
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+
+  35% {
+    transform: translateY(-1px) scale(1.015) rotate(-0.4deg);
+  }
+
+  55% {
+    transform: translateY(0.5px) scale(0.995) rotate(0.4deg);
+  }
+}
 
 .signup_form {
   display: flex;

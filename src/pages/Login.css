@@ -33,11 +33,34 @@
   align-items: center;
 }
 
+.login_hero_line {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
 .login_hero_img {
   width: 140px;
   height: 111.78px;
   object-fit: contain;
   flex-shrink: 0;
+  transform-origin: center 62%;
+  animation: login_hero_clap_bob 1s ease-in-out infinite;
+}
+
+@keyframes login_hero_clap_bob {
+  0%, 100% {
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+
+  35% {
+    transform: translateY(-1px) scale(1.015) rotate(-0.4deg);
+  }
+
+  55% {
+    transform: translateY(0.5px) scale(0.995) rotate(0.4deg);
+  }
 }
 
 /* Form */

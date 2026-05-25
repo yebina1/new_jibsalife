@@ -175,14 +175,17 @@ export function seedSignupNotificationsForUser(userId: string) {
       title: '가입을 환영해요!',
       content: '가입 축하 사인업 1,000P가 지급되었어요.',
       createdAt: now.toISOString(),
-      path: '/home',
+      path: '/mypage',
     },
     {
       id: justBeforeNow.getTime(),
       title: '반려동물 정보를 입력해 주세요.',
       content: '프로필을 완성하면 더 정확한 이상 신호 감지와 건강 리포트를 받을 수 있어요.',
       createdAt: justBeforeNow.toISOString(),
-      path: '/onboarding?setup=profile',
+      path: '/home',
+      state: {
+        openPetProfileModal: true,
+      },
     },
   ])
 }

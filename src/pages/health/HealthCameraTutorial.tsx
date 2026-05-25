@@ -14,9 +14,10 @@ type Props = {
   isCameraTabActive: boolean
   isRecordTabActive: boolean
   onAdvance: () => void
+  onSkip: () => void
 }
 
-function HealthCameraTutorial({ step, isCameraTabActive, isRecordTabActive, onAdvance }: Props) {
+function HealthCameraTutorial({ step, isCameraTabActive, isRecordTabActive, onAdvance, onSkip }: Props) {
   const tabsClassName = [
     'health_cam_tabs',
     'health_cam_tutorial_tabs',
@@ -34,6 +35,18 @@ function HealthCameraTutorial({ step, isCameraTabActive, isRecordTabActive, onAd
       aria-label={step === 'close' ? '촬영 가이드' : '촬영 가이드 다음'}
     >
       <span className="health_cam_tutorial_backdrop" aria-hidden="true" />
+      <span className="health_cam_tutorial_topbar">
+        <button
+          type="button"
+          className="health_cam_tutorial_skip"
+          onClick={(event) => {
+            event.stopPropagation()
+            onSkip()
+          }}
+        >
+          건너뛰기
+        </button>
+      </span>
       <span className="health_cam_tutorial_focus_box" aria-hidden="true">
         <span />
       </span>

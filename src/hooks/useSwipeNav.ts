@@ -1,6 +1,11 @@
 import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router'
 
+function isInsideSwipeNav(target: EventTarget | null): boolean {
+  const element = target instanceof Element ? target : null
+  return Boolean(element?.closest('.layout_nav'))
+}
+
 function isInsideHorizontalScroll(target: EventTarget | null): boolean {
   let node = target instanceof Element ? target : null
   while (node && node !== document.body) {
@@ -23,6 +28,7 @@ export function useSwipeNav(leftSwipe?: string, rightSwipe?: string) {
     if (!leftSwipe && !rightSwipe) return
 
     const onStart = (e: TouchEvent) => {
+      if (!isInsideSwipeNav(e.target)) return
       if (isInsideHorizontalScroll(e.target)) return
       startX.current = e.touches[0].clientX
       startY.current = e.touches[0].clientY

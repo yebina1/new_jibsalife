@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
+import EntryShell from '../components/EntryShell'
+import OnboardingDailyRecordCat from '../components/OnboardingDailyRecordCat'
 import OnboardingLayout from '../components/OnboardingLayout'
 import Input from '../components/html/Input'
 import onboardingWelcomeImage from '../img/onboarding/onboarding1.png'
@@ -7,8 +9,6 @@ import onboardingDogLoverImage from '../img/onboarding/onboarding2_doglover.png'
 import onboardingCatLoverImage from '../img/onboarding/onboarding2_catlover.png'
 import onboardingDogNameImage from '../img/onboarding/onboarding3_dog.png'
 import onboardingCatNameImage from '../img/onboarding/onboarding3_cat.png'
-import onboardingDogRecordImage from '../img/onboarding/onboarding4_dog.png'
-import onboardingCatRecordImage from '../img/onboarding/onboarding4_cat.png'
 import onboardingShareImage from '../img/onboarding/onboarding5.png'
 import onboardingDogChatImage from '../img/onboarding/onboarding6_dog.png'
 import onboardingCatChatImage from '../img/onboarding/onboarding6_cat.png'
@@ -37,6 +37,7 @@ import onboardingDecoration3 from '../svg/onboarding/paw3.svg'
 import onboardingDecoration4 from '../svg/onboarding/paw4.svg'
 import onboardingDecoration5 from '../svg/onboarding/paw5.svg'
 import onboardingDecoration6 from '../svg/onboarding/paw6.svg'
+import foodBowlImage from '../img/food_bowl.png'
 import defaultPetThumbnail from '../img/petstory/daily/daily_thumbnail.jpg'
 import './onboarding.css'
 
@@ -71,9 +72,9 @@ const introSlides = [
     step: 'daily' as const,
     progress: 1,
     title: '우리 아이의\n일상을 기록해보세요',
-    subtitle: '식사, 활동, 배변 기록으로\n건강 변화를 쉽게 확인할 수 있어요.',
-    dogImage: onboardingDogRecordImage,
-    catImage: onboardingCatRecordImage,
+    subtitle: '식사, 활동, 배변 기록 등으로\n건강 변화를 쉽게 확인할 수 있어요.',
+    dogImage: '',
+    catImage: '',
     alt: '일상 기록 안내 일러스트',
   },
   {
@@ -144,8 +145,6 @@ const onboardingCriticalImageSources = [
 ] as const
 
 const onboardingDeferredImageSources = [
-  onboardingDogRecordImage,
-  onboardingCatRecordImage,
   onboardingShareImage,
   onboardingDogChatImage,
   onboardingCatChatImage,
@@ -390,6 +389,7 @@ function Onboarding() {
           ? slide.dogImage
           : slide.catImage
         : slide.image
+    const isDailyStep = slide.step === 'daily'
 
     return (
       <OnboardingLayout
@@ -411,15 +411,36 @@ function Onboarding() {
                 alt={slide.alt}
               />
             ) : (
-              <img
-                className={featureImageClassName}
-                src={slideImage}
-                alt={slide.alt}
-                aria-hidden="true"
-                loading="eager"
-                fetchPriority="high"
-                decoding="async"
-              />
+              <div
+                className={
+                  isDailyStep
+                    ? 'onboarding_daily_note_motion'
+                    : undefined
+                }
+              >
+                {isDailyStep ? (
+                  <>
+                    <OnboardingDailyRecordCat className={featureImageClassName} />
+                    <span className="onboarding_daily_thought" aria-hidden="true">
+                      <span className="onboarding_daily_thought_bubble">
+                        <img src={foodBowlImage} alt="" />
+                      </span>
+                      <span className="onboarding_daily_thought_dot onboarding_daily_thought_dot_1" />
+                      <span className="onboarding_daily_thought_dot onboarding_daily_thought_dot_2" />
+                    </span>
+                  </>
+                ) : (
+                  <img
+                    className={featureImageClassName}
+                    src={slideImage}
+                    alt={slide.alt}
+                    aria-hidden="true"
+                    loading="eager"
+                    fetchPriority="high"
+                    decoding="async"
+                  />
+                )}
+              </div>
             )}
           </div>
         }
@@ -448,14 +469,17 @@ function Onboarding() {
                   className={`onboarding_guardian_card${isSelected ? ' is_selected' : ''}`}
                   onClick={() => setGuardianType(option.type)}
                 >
-                  <img
-                    src={option.image}
-                    alt={option.label}
-                    aria-hidden="true"
-                    loading="eager"
-                    fetchPriority="high"
-                    decoding="async"
-                  />
+                  <span className={`onboarding_guardian_card_figure onboarding_guardian_card_figure_${option.type}`} aria-hidden="true">
+                    <img
+                      src={option.image}
+                      alt={option.label}
+                      aria-hidden="true"
+                      loading="eager"
+                      fetchPriority="high"
+                      decoding="async"
+                    />
+                    <span className={`onboarding_guardian_card_tail onboarding_guardian_card_tail_${option.type}`} />
+                  </span>
                   <strong className="title_h4_semibold">{option.label}</strong>
                   <span className="onboarding_guardian_card_check" aria-hidden="true">
                     <i className="bx bx-check" />
@@ -490,15 +514,22 @@ function Onboarding() {
       subtitle="아이의 이름을 입력해주세요."
       bodyGap={32}
       visual={
-        <img
-          className="onboarding_visual_image onboarding_visual_image_pet"
+        <div className="onboarding_petname_visual">
+          <img
+            className="onboarding_visual_image onboarding_visual_image_pet"
           src={selectedType === 'dog' ? onboardingDogNameImage : onboardingCatNameImage}
           alt="반려동물 이름 입력 안내 일러스트"
           aria-hidden="true"
           loading="eager"
           fetchPriority="high"
           decoding="async"
-        />
+          />
+          <span className="onboarding_petname_thought" aria-hidden="true">
+            <span className="onboarding_petname_thought_bubble">?</span>
+            <span className="onboarding_petname_thought_dot onboarding_petname_thought_dot_1" />
+            <span className="onboarding_petname_thought_dot onboarding_petname_thought_dot_2" />
+          </span>
+        </div>
       }
       actionLabel="다음"
       actionClassName="purple_btn onboarding_action_primary"
@@ -548,14 +579,14 @@ function Onboarding() {
   }
 
   return (
-    <main ref={pageRef} className="onboarding_page">
+    <EntryShell as="main" ref={pageRef} className="onboarding_page">
       {false ? (
         <button type="button" className="onboarding_skip_button caption_medium" onClick={goToLogin}>
           건너뛰기
         </button>
       ) : null}
       {renderStep()}
-    </main>
+    </EntryShell>
   )
 }
 

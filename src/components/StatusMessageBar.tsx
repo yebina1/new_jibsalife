@@ -4,9 +4,8 @@ import {
   STATE_BAR_MESSAGE_EVENT,
   type StateBarMessageDetail,
   type StateBarMessagePlacement,
+  type StateBarMessageVariant,
 } from '../utils/stateBarMessage'
-
-type ToastVariant = 'success' | 'warning' | 'error' | 'info'
 
 type ToastItem = {
   id: number
@@ -14,12 +13,12 @@ type ToastItem = {
   placement: StateBarMessagePlacement
   closeButton: boolean
   duration: number
-  variant: ToastVariant
+  variant: StateBarMessageVariant
   actionLabel?: string
   onAction?: () => void
 }
 
-function getToastVariant(message: string): ToastVariant {
+function getToastVariant(message: string): StateBarMessageVariant {
   if (/(오류|에러|실패|문제가)/.test(message)) {
     return 'error'
   }
@@ -35,7 +34,7 @@ function getToastVariant(message: string): ToastVariant {
   return 'info'
 }
 
-function getToastIconName(variant: ToastVariant) {
+function getToastIconName(variant: StateBarMessageVariant) {
   switch (variant) {
     case 'success':
       return 'check'
@@ -96,7 +95,7 @@ function StatusMessageBar() {
           placement,
           closeButton: detail.closeButton ?? true,
           duration,
-          variant: getToastVariant(detail.message),
+          variant: detail.variant ?? getToastVariant(detail.message),
           actionLabel: detail.actionLabel,
           onAction: detail.onAction,
         },

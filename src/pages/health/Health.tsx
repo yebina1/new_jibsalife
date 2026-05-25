@@ -281,7 +281,6 @@ function Health() {
   const [showCalendarPetSwitch, setShowCalendarPetSwitch] = useState(false)
   const [pets, setPets] = useState<PetProfileSummary[]>(readPetProfiles)
   const [selectedPetId, setSelectedPetId] = useState<number | null>(() => readSelectedPetProfileId())
-  const [hasExplicitPetSelection, setHasExplicitPetSelection] = useState(false)
 
   // 메모 바텀시트 state
   const [showMemoSheet, setShowMemoSheet] = useState(false)
@@ -468,7 +467,6 @@ function Health() {
     const shouldShowChangeToast = pet.id !== selectedPetId
     writeSelectedPetProfileId(pet.id)
     setSelectedPetId(pet.id)
-    setHasExplicitPetSelection(true)
     setShowPetModal(false)
     setShowCalendarPetSwitch(false)
     if (shouldShowChangeToast) {
@@ -946,14 +944,12 @@ function Health() {
       <div className="health_cam_ctrl">
         <button
           type="button"
-          className={`health_cam_pet_link${hasExplicitPetSelection ? ' has_selected_pet' : ''}`}
+          className={`health_cam_pet_link${effectiveSelectedPetId !== null ? ' has_selected_pet' : ''}`}
           onClick={() => setShowCalendarPetSwitch(true)}
         >
           <span className="health_cam_pet_default_label">반려동물 선택하기</span>
           {selectedPetName ? (
-            <span>
-              현재 반려동물 · <span className="health_cam_pet_name">{selectedPetName}</span>
-            </span>
+            <span><span className="health_cam_pet_name">반려동물 선택하기</span> {'>'}</span>
           ) : (
             <>
             <span>반려동물 선택하기</span>
@@ -1051,6 +1047,7 @@ function Health() {
           isCameraTabActive={isCameraTutorialCameraTabActive}
           isRecordTabActive={isCameraTutorialRecordTabActive}
           onAdvance={advanceCameraTutorial}
+          onSkip={closeCameraTutorial}
         />
       ) : null}
 
@@ -1065,7 +1062,7 @@ function Health() {
                 <button
                   key={pet.id}
                   type="button"
-                  className={`mission_pet_switch_option${hasExplicitPetSelection && pet.id === selectedPetId ? ' is_selected' : ''}`}
+                  className={`mission_pet_switch_option${pet.id === effectiveSelectedPetId ? ' is_selected' : ''}`}
                   onClick={() => handleSelectPet(pet)}
                 >
                   {pet.image ? (

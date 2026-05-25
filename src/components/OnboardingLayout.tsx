@@ -71,7 +71,7 @@ function OnboardingLayout({
       <>
         <span className="title_h4_semibold">{step}</span>
         <span className="onboarding_layout_progress_divider">/</span>
-        <span className="onboarding_layout_progress_total title_h4_semibold">{totalSteps}</span>
+        <span className="onboarding_layout_progress_total">{totalSteps}</span>
       </>
     ) : topCenterLabel ? (
       <span className="title_h4_semibold">{topCenterLabel}</span>

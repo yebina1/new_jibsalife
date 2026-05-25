@@ -23,6 +23,32 @@
   display: none;
 }
 
+.health_cam_tutorial_topbar {
+  position: absolute;
+  top: max(14px, calc(env(safe-area-inset-top) + 8px));
+  left: 16px;
+  z-index: 14;
+  display: flex;
+  align-items: center;
+}
+
+.health_cam_tutorial_skip {
+  padding: 6px 0;
+  border: 0;
+  background: transparent;
+  color: #f4f4f6;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.health_cam_tutorial_skip:hover,
+.health_cam_tutorial_skip:focus-visible {
+  color: #ffffff;
+  outline: none;
+}
+
 .health_cam_tutorial_focus_box {
   position: absolute;
   height: 300px;
@@ -312,6 +338,10 @@
 }
 
 @media (min-width: 768px) {
+  .health_cam_tutorial_topbar {
+    left: calc(var(--health-cam-layout-gutter) + 24px);
+  }
+
   .health_cam_tutorial_callout_close {
     top: max(84px, calc(env(safe-area-inset-top) + 44px));
     right: calc(

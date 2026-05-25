@@ -1,0 +1,23 @@
+.entry_shell {
+  --entry-shell-status-bar-height: calc(41px + env(safe-area-inset-top, 0px));
+  --entry-shell-header-top: calc(var(--entry-shell-status-bar-height) + 36px);
+  --entry-shell-progress-top: calc(var(--entry-shell-header-top) - 28px);
+  --entry-shell-header-width: min(340px, calc(100vw - 48px));
+  --entry-shell-form-width: min(360px, calc(100vw - 32px));
+  --entry-shell-hero-width: min(322px, calc(100vw - 32px));
+  --entry-shell-action-width: min(calc(100vw - 32px), 358px);
+  position: relative;
+  min-height: 100%;
+  background: #ffffff;
+}
+
+@media (min-width: 768px) {
+  .entry_shell {
+    --entry-shell-header-top: calc(var(--entry-shell-status-bar-height) + 76px);
+    --entry-shell-progress-top: calc(var(--entry-shell-status-bar-height) + 16px);
+    --entry-shell-header-width: min(520px, calc(100vw - 64px));
+    --entry-shell-form-width: min(520px, calc(100vw - 64px));
+    --entry-shell-hero-width: min(520px, calc(100vw - 64px));
+    --entry-shell-action-width: min(520px, calc(100vw - 64px));
+  }
+}
