@@ -12,7 +12,14 @@ import eyeOnIcon from '../svg/eye.svg'
 import eyeOffIcon from '../svg/eye_off.svg'
 import grayCheckIcon from '../img/gray-check.png'
 import blueCheckIcon from '../img/blue-check.png'
-import { findAuthAccount, hasAuthAccount, markLoggedIn, saveAuthAccount, shouldShowProfileSetupForAccount } from '../utils/authAccounts'
+import {
+  SIGNUP_ACCOUNT_LOGIN_TOAST_KEY,
+  findAuthAccount,
+  hasAuthAccount,
+  markLoggedIn,
+  saveAuthAccount,
+  shouldShowProfileSetupForAccount,
+} from '../utils/authAccounts'
 import { markSignupWelcomeRewardPending } from '../utils/profilePoints'
 import { clearSignupProfileDraft, hydrateCurrentUserProfileFromAccount, readSignupProfileDraft } from '../utils/signupProfileDraft'
 import { seedSignupNotificationsForUser } from '../utils/userNotifications'
@@ -191,6 +198,7 @@ function Signup() {
     if (account) {
       markLoggedIn(account)
       hydrateCurrentUserProfileFromAccount(account)
+      sessionStorage.setItem(SIGNUP_ACCOUNT_LOGIN_TOAST_KEY, 'true')
       navigate(shouldShowProfileSetupForAccount(account) ? '/onboarding?setup=profile' : '/home')
     }
   }

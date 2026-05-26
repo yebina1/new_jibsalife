@@ -9,7 +9,13 @@ import helloIcon from '../svg/hello_icon.svg'
 import xIcon from '../img/x-icon.png'
 import eyeOnIcon from '../svg/eye.svg'
 import eyeOffIcon from '../svg/eye_off.svg'
-import { findAuthAccount, markLoggedIn, shouldShowProfileSetupForAccount } from '../utils/authAccounts'
+import {
+  SIGNUP_ACCOUNT_LOGIN_TOAST_KEY,
+  findAuthAccount,
+  isDemoAccount,
+  markLoggedIn,
+  shouldShowProfileSetupForAccount,
+} from '../utils/authAccounts'
 import { hydrateCurrentUserProfileFromAccount } from '../utils/signupProfileDraft'
 import './Login.css'
 
@@ -32,6 +38,9 @@ function Login() {
       setError('')
       markLoggedIn(account)
       hydrateCurrentUserProfileFromAccount(account)
+      if (!isDemoAccount(account)) {
+        sessionStorage.setItem(SIGNUP_ACCOUNT_LOGIN_TOAST_KEY, 'true')
+      }
       navigate(shouldShowProfileSetupForAccount(account) ? '/onboarding?setup=profile' : '/home')
     } else {
       setError('아이디 또는 비밀번호가 잘못 입력되었습니다.')

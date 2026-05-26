@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router'
 import './StatusMessageBar.css'
 import {
   STATE_BAR_MESSAGE_EVENT,
@@ -6,6 +7,13 @@ import {
   type StateBarMessagePlacement,
   type StateBarMessageVariant,
 } from '../utils/stateBarMessage'
+import {
+  AUTH_LOGGED_IN_STORAGE_KEY,
+  SIGNUP_ACCOUNT_LOGIN_TOAST_KEY,
+  getCurrentAuthAccount,
+  isDemoAccount,
+  markLoggedOut,
+} from '../utils/authAccounts'
 
 type ToastItem = {
   id: number
@@ -48,9 +56,17 @@ function getToastIconName(variant: StateBarMessageVariant) {
 }
 
 function StatusMessageBar() {
+  const navigate = useNavigate()
+  const { pathname } = useLocation()
   const [toasts, setToasts] = useState<ToastItem[]>([])
   const nextIdRef = useRef(0)
   const processedEventIdsRef = useRef(new Set<number>())
+  const hideSignupAccountToast =
+    pathname === '/onboarding' ||
+    pathname === '/login' ||
+    pathname === '/signup' ||
+    pathname === '/splash' ||
+    pathname.startsWith('/signup/')
 
   useEffect(() => {
     const removeToast = (id: number) => {
@@ -101,12 +117,48 @@ function StatusMessageBar() {
         },
       ])
 
-      window.setTimeout(() => removeToast(id), duration)
+      if (duration > 0) {
+        window.setTimeout(() => removeToast(id), duration)
+      }
     }
 
     window.addEventListener(STATE_BAR_MESSAGE_EVENT, handleMessage)
     return () => window.removeEventListener(STATE_BAR_MESSAGE_EVENT, handleMessage)
   }, [])
+
+  useEffect(() => {
+    if (hideSignupAccountToast) {
+      setToasts((prev) => prev.filter((toast) => toast.id !== -1))
+      return
+    }
+
+    if (sessionStorage.getItem(SIGNUP_ACCOUNT_LOGIN_TOAST_KEY) !== 'true') return
+    if (localStorage.getItem(AUTH_LOGGED_IN_STORAGE_KEY) !== 'true') return
+
+    const currentAccount = getCurrentAuthAccount()
+    if (!currentAccount || isDemoAccount(currentAccount)) return
+
+    setToasts((prev) => {
+      if (prev.some((toast) => toast.id === -1)) return prev
+
+      return [
+        ...prev,
+        {
+          id: -1,
+          message: '앱의 주요 기능을 체험하고 싶다면\n로그아웃 후 체험용 계정을 이용하세요.',
+          placement: 'footer',
+          closeButton: false,
+          duration: 0,
+          variant: 'info',
+          actionLabel: '로그아웃',
+          onAction: () => {
+            markLoggedOut()
+            navigate('/login', { replace: true })
+          },
+        },
+      ]
+    })
+  }, [hideSignupAccountToast, navigate])
 
   const remove = (id: number) => setToasts((prev) => prev.filter((toast) => toast.id !== id))
 

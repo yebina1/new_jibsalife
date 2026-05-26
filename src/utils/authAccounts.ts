@@ -12,6 +12,7 @@ const AUTH_ACCOUNTS_STORAGE_KEY = 'jibsalife.auth.accounts'
 export const AUTH_LOGGED_IN_STORAGE_KEY = 'jibsalife.auth.loggedIn'
 export const AUTH_CURRENT_USER_STORAGE_KEY = 'jibsalife.auth.currentUser'
 export const PROFILE_SETUP_DONE_STORAGE_KEY = 'jibsalife.onboarding.profile.done'
+export const SIGNUP_ACCOUNT_LOGIN_TOAST_KEY = 'jibsalife.signupAccountLoginToastPending'
 
 const demoAccount: AuthAccount = {
   id: 'hello@jipsa.app',
@@ -148,6 +149,7 @@ export function markLoggedOut() {
 
   window.localStorage.removeItem(AUTH_LOGGED_IN_STORAGE_KEY)
   window.localStorage.removeItem(AUTH_CURRENT_USER_STORAGE_KEY)
+  window.sessionStorage.removeItem(SIGNUP_ACCOUNT_LOGIN_TOAST_KEY)
 }
 
 export function markCurrentUserProfileSetupDone() {
