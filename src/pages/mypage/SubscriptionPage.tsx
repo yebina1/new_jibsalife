@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import './SubscriptionPage.css'
 import subscriptionPetImage from '../../img/illust_login_pet.jpg'
@@ -6,6 +6,7 @@ import managePetImage from '../../img/megaphone_dog.png'
 import Title from '../../components/Title'
 import Button from '../../components/html/Button'
 import { isCurrentDemoUser } from '../../utils/userScopedStorage'
+import { readProfilePoints } from '../../utils/profilePoints'
 
 const manageBenefitItems = [
   { key: 'ai', icon: '🤖', img: null, label: 'AI 심화 분석', amount: '10,000원' },
@@ -25,8 +26,24 @@ function SubscriptionPage() {
   const navigate = useNavigate()
   const isDemoUser = isCurrentDemoUser()
   const [selectedPlan, setSelectedPlan] = useState<'yearly' | 'monthly'>('yearly')
-
   const [showBenefits, setShowBenefits] = useState(false)
+
+  // 3. 아래 포인트를 관리하는 State와 useEffect를 그대로 붙여넣으세요!
+  const [profilePoints, setProfilePoints] = useState(() => readProfilePoints())
+
+  useEffect(() => {
+    const handleProfilePointsChange = () => {
+      setProfilePoints(readProfilePoints())
+    }
+
+    window.addEventListener('profile-points-change', handleProfilePointsChange)
+    window.addEventListener('storage', handleProfilePointsChange)
+
+    return () => {
+      window.removeEventListener('profile-points-change', handleProfilePointsChange)
+      window.removeEventListener('storage', handleProfilePointsChange)
+    }
+  }, [])
 
   if (isDemoUser) {
     return (
@@ -51,7 +68,9 @@ function SubscriptionPage() {
             <img src={managePetImage} alt="" aria-hidden="true" className="sub_manage_hero_img" />
             <div className="sub_manage_hero_text">
               <p className="sub_manage_hero_label">지금까지 받은 혜택</p>
-              <strong className="sub_manage_hero_amount">12,500P</strong>
+              <strong className="sub_manage_hero_amount">
+                {profilePoints.toLocaleString()}P
+              </strong>
             </div>
           </div>
           <ul className="sub_manage_benefit_list">
