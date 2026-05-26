@@ -6,6 +6,7 @@
   transform-box: fill-box;
   transform-origin: 50% 52%;
   animation: onboarding-daily-record-pencil-write 0.9s ease-in-out infinite;
+  filter: drop-shadow(-1.8px -1.2px 0 #111111);
 }
 
 .onboarding_daily_record_pencil_body,

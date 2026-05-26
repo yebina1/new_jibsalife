@@ -949,7 +949,7 @@ function Health() {
         >
           <span className="health_cam_pet_default_label">반려동물 선택하기</span>
           {selectedPetName ? (
-            <span><span className="health_cam_pet_name">반려동물 선택하기</span> {'>'}</span>
+            <span><span className="health_cam_pet_name">반려동물 선택하기</span></span>
           ) : (
             <>
             <span>반려동물 선택하기</span>

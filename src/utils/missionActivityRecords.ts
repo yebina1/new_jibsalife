@@ -96,6 +96,47 @@ function getCurrentTime() {
   return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
 }
 
+function normalizeTimeLabel(time: string) {
+  const trimmedTime = time.trim()
+  const colonMatch = trimmedTime.match(/^(\d{1,2}):(\d{1,2})$/)
+  if (colonMatch) {
+    const hour = Number(colonMatch[1])
+    const minute = Number(colonMatch[2])
+
+    if (
+      Number.isFinite(hour) &&
+      Number.isFinite(minute) &&
+      hour >= 0 &&
+      hour < 24 &&
+      minute >= 0 &&
+      minute < 60
+    ) {
+      return `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`
+    }
+  }
+
+  const koreanMatch = trimmedTime.match(/^(오전|오후)?\s*(\d{1,2})\s*시\s*(\d{1,2})?\s*분?$/)
+  if (!koreanMatch) return trimmedTime
+
+  const meridiem = koreanMatch[1]
+  const hourValue = Number(koreanMatch[2])
+  const minuteValue = Number(koreanMatch[3] ?? '0')
+  if (!Number.isFinite(hourValue) || !Number.isFinite(minuteValue)) return trimmedTime
+
+  let normalizedHour = hourValue
+  if (meridiem === '오전') {
+    normalizedHour = hourValue === 12 ? 0 : hourValue
+  } else if (meridiem === '오후') {
+    normalizedHour = hourValue === 12 ? 12 : hourValue + 12
+  }
+
+  if (normalizedHour < 0 || normalizedHour >= 24 || minuteValue < 0 || minuteValue >= 60) {
+    return trimmedTime
+  }
+
+  return `${String(normalizedHour).padStart(2, '0')}:${String(minuteValue).padStart(2, '0')}`
+}
+
 export function readMissionActivityRecords(petId = readSelectedPetProfileId()): MissionActivityRecord[] {
   if (typeof window === 'undefined') return []
 
@@ -114,7 +155,10 @@ export function readMissionActivityRecords(petId = readSelectedPetProfileId()): 
       typeof record.color === 'string' &&
       typeof record.date === 'string' &&
       record.source === 'chat'
-    ))
+    )).map((record) => ({
+      ...record,
+      time: normalizeTimeLabel(record.time),
+    }))
   } catch {
     return []
   }

@@ -55,6 +55,7 @@ import homeRank2Icon from '../img/home/2nd-icon.png'
 import homeRank3Icon from '../img/home/3rd-icon.png'
 import lankingIconImg from '../img/home/lanking-icon.png'
 import careIconImg from '../img/home/care-icon.png'
+import { HEALTH_REPORT_OBSERVATION_LABEL, LEGACY_KOREAN_SHORTHAIR_BREED_LABEL } from '../constants/healthLabels'
 
 type PetIdCardForm = {
   name: string
@@ -332,6 +333,10 @@ function createProfileDetails(profile: ProfileSummarySlide) {
   const weightLabel = profile.weight ? `${profile.weight} kg` : '-'
 
   return `나이: ${age || '-'} · 몸무게: ${weightLabel} · 성별: ${sexLabel || '-'}`
+}
+
+function getSummaryBreedLabel(breed: string) {
+  return breed === LEGACY_KOREAN_SHORTHAIR_BREED_LABEL ? HEALTH_REPORT_OBSERVATION_LABEL : breed
 }
 
 const rankingCardsData = [
@@ -933,7 +938,7 @@ function Home() {
                     key={slide.id}
                     image={slide.image}
                     name={slide.name}
-                    breed={slide.breed || '-'}
+                    breed={getSummaryBreedLabel(slide.breed || '-')}
                     details={createProfileDetails(slide)}
                     stats={summaryStatsByProfileId.get(slide.id) ?? createSummaryStats(readCalendarRecords(slide.id))}
                     onEdit={() => openPetIdModal(slide)}

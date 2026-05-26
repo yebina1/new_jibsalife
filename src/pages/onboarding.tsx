@@ -5,8 +5,8 @@ import OnboardingDailyRecordCat from '../components/OnboardingDailyRecordCat'
 import OnboardingLayout from '../components/OnboardingLayout'
 import Input from '../components/html/Input'
 import onboardingWelcomeImage from '../img/onboarding/onboarding1.png'
-import onboardingDogLoverImage from '../img/onboarding/onboarding2_doglover.png'
-import onboardingCatLoverImage from '../img/onboarding/onboarding2_catlover.png'
+import onboardingDogLoverSvg from '../svg/onboarding/onboarding2_doglover.svg?raw'
+import onboardingCatLoverSvg from '../svg/onboarding/onboarding2_catlover.svg?raw'
 import onboardingDogNameImage from '../img/onboarding/onboarding3_dog.png'
 import onboardingCatNameImage from '../img/onboarding/onboarding3_cat.png'
 import onboardingShareImage from '../img/onboarding/onboarding5.png'
@@ -50,12 +50,12 @@ const guardianOptions = [
   {
     type: 'dog' as const,
     label: '멍멍 집사',
-    image: onboardingDogLoverImage,
+    figureSvg: onboardingDogLoverSvg,
   },
   {
     type: 'cat' as const,
     label: '냥냥 집사',
-    image: onboardingCatLoverImage,
+    figureSvg: onboardingCatLoverSvg,
   },
 ] as const
 
@@ -136,8 +136,6 @@ const bestPoseVoteImages =
 
 const onboardingCriticalImageSources = [
   onboardingWelcomeImage,
-  onboardingDogLoverImage,
-  onboardingCatLoverImage,
   onboardingDogNameImage,
   onboardingCatNameImage,
   onboardingCompleteImage,
@@ -214,6 +212,16 @@ function preloadImages(srcs: readonly string[], highPriority = false) {
       // Preload still warms the cache even if decoding is skipped.
     })
   })
+}
+
+function InlineGuardianFigure({ svg, type }: { svg: string; type: GuardianType }) {
+  return (
+    <span
+      className={`onboarding_guardian_card_svg onboarding_guardian_card_svg_${type}`}
+      aria-hidden="true"
+      dangerouslySetInnerHTML={{ __html: svg }}
+    />
+  )
 }
 
 function DecoratedOnboardingImage({
@@ -470,15 +478,7 @@ function Onboarding() {
                   onClick={() => setGuardianType(option.type)}
                 >
                   <span className={`onboarding_guardian_card_figure onboarding_guardian_card_figure_${option.type}`} aria-hidden="true">
-                    <img
-                      src={option.image}
-                      alt={option.label}
-                      aria-hidden="true"
-                      loading="eager"
-                      fetchPriority="high"
-                      decoding="async"
-                    />
-                    <span className={`onboarding_guardian_card_tail onboarding_guardian_card_tail_${option.type}`} />
+                    <InlineGuardianFigure svg={option.figureSvg} type={option.type} />
                   </span>
                   <strong className="title_h4_semibold">{option.label}</strong>
                   <span className="onboarding_guardian_card_check" aria-hidden="true">

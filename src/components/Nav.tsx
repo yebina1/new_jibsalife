@@ -34,7 +34,8 @@ function isNavItemActive(pathname: string, item: (typeof navItems)[number]) {
   return (
     pathname === item.path ||
     (item.icon === 'community' && pathname.startsWith('/community')) ||
-    (item.icon === 'health' && pathname.startsWith('/health'))
+    (item.icon === 'health' && pathname.startsWith('/health')) ||
+    (item.icon === 'place' && pathname.startsWith('/place'))
   )
 }
 

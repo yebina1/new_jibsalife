@@ -61,6 +61,47 @@ function formatTime(hour: number, minute: number) {
   return `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`
 }
 
+function normalizeTimeLabel(time: string) {
+  const trimmedTime = time.trim()
+  const colonMatch = trimmedTime.match(/^(\d{1,2}):(\d{1,2})$/)
+  if (colonMatch) {
+    const hour = Number(colonMatch[1])
+    const minute = Number(colonMatch[2])
+
+    if (
+      Number.isFinite(hour) &&
+      Number.isFinite(minute) &&
+      hour >= 0 &&
+      hour < 24 &&
+      minute >= 0 &&
+      minute < 60
+    ) {
+      return formatTime(hour, minute)
+    }
+  }
+
+  const koreanMatch = trimmedTime.match(/^(오전|오후)?\s*(\d{1,2})\s*시\s*(\d{1,2})?\s*분?$/)
+  if (!koreanMatch) return trimmedTime
+
+  const meridiem = koreanMatch[1]
+  const hourValue = Number(koreanMatch[2])
+  const minuteValue = Number(koreanMatch[3] ?? '0')
+  if (!Number.isFinite(hourValue) || !Number.isFinite(minuteValue)) return trimmedTime
+
+  let normalizedHour = hourValue
+  if (meridiem === '오전') {
+    normalizedHour = hourValue === 12 ? 0 : hourValue
+  } else if (meridiem === '오후') {
+    normalizedHour = hourValue === 12 ? 12 : hourValue + 12
+  }
+
+  if (normalizedHour < 0 || normalizedHour >= 24 || minuteValue < 0 || minuteValue >= 60) {
+    return trimmedTime
+  }
+
+  return formatTime(normalizedHour, minuteValue)
+}
+
 function createRecord(
   id: number,
   title: string,
@@ -250,11 +291,15 @@ function normalizeMissionHistoryRecord(record: MissionHistoryRecord): MissionHis
       ...recordWithoutMedia,
       title: HEALTH_CHECK_TITLE,
       detail: 'AI 건강 기록',
+      time: normalizeTimeLabel(record.time),
       source: 'health',
     }
   }
 
-  return record
+  return {
+    ...record,
+    time: normalizeTimeLabel(record.time),
+  }
 }
 
 export function readStoredMissionHistoryRecords(petId = readSelectedPetProfileId()) {

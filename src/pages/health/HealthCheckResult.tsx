@@ -12,6 +12,7 @@ import poopIcon from '../../img/icon_poop.png'
 import healthShieldIcon from '../../img/health_shield.png'
 import hospital3dImage from '../../img/hospital_3d.png'
 import consult3dImage from '../../img/consult_3d.png'
+import { HEALTH_REPORT_COLLECTING_LABEL, HEALTH_REPORT_OBSERVATION_LABEL } from '../../constants/healthLabels'
 import { readPetProfiles, readSelectedPetProfileId } from '../../utils/petProfiles'
 import { calculateHealthResult, readStoredHealthResultInput } from '../../utils/healthResultPolicy'
 import {
@@ -179,7 +180,7 @@ function HealthCheckResult() {
               {!isCollectingReport ? <p className="hcr_chart_subtitle">평균보다 15% 감소</p> : null}
             </div>
             <span className={`hcr_badge${isCollectingReport ? '' : ' hcr_badge_observation'}`}>
-              {isCollectingReport ? '기록중' : '관찰 필요'}
+              {isCollectingReport ? HEALTH_REPORT_COLLECTING_LABEL : HEALTH_REPORT_OBSERVATION_LABEL}
             </span>
           </div>
           <div className="hcr_chart" aria-hidden="true">
@@ -201,7 +202,12 @@ function HealthCheckResult() {
                   <div key={item.label} className="hcr_chart_bar_col">
                     <div
                       className={`hcr_chart_bar${item.isToday ? ' is_today' : ''}${isCollectingReport && !item.isToday ? ' is_hidden' : ''}`}
-                      style={{ height: `${(item.minutes / CHART_MAX) * 100}%` }}
+                      style={
+                        {
+                          '--bar-height': `${(item.minutes / CHART_MAX) * 100}%`,
+                          '--bar-delay': `${item.isToday ? 220 : activityData.indexOf(item) * 70}ms`,
+                        } as React.CSSProperties
+                      }
                     />
                   </div>
                 ))}

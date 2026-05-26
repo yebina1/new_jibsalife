@@ -217,17 +217,50 @@
   color: #A10803;
   line-height: 1;
   cursor: pointer;
+  animation: summary_profile_card_guide_breathe 1.8s ease-in-out infinite;
 }
 
 .summary_profile_card_guide .chevron_icon {
   width: 20px;
   height: 20px;
   color: #A10803;
+  animation: summary_profile_card_guide_chevron_nudge 1.8s ease-in-out infinite;
 }
 
 .summary_profile_card_guide .chevron_icon_svg {
   width: 20px;
   height: 20px;
+}
+
+@keyframes summary_profile_card_guide_breathe {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.92;
+  }
+
+  50% {
+    transform: translateY(-1px);
+    opacity: 1;
+  }
+}
+
+@keyframes summary_profile_card_guide_chevron_nudge {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  50% {
+    transform: translateX(3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .summary_profile_card_guide,
+  .summary_profile_card_guide .chevron_icon {
+    animation: none;
+  }
 }
 
 .summary_profile_card_stats {

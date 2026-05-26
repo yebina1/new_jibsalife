@@ -81,6 +81,14 @@ const placeSubTabsByCategory: Record<string, { label: string; value: string }[]>
   ],
 }
 
+const placeDefaultSubByCategory: Record<string, string> = {
+  all: 'all',
+  care: 'hospital',
+  outing: 'cafe',
+  travel: 'pension',
+  shopping: 'supplies',
+}
+
 const placeSortOptions = [
   { label: '인기순', value: 'popular' },
   { label: '최신순', value: 'latest' },
@@ -131,6 +139,7 @@ function Layout({
   const isSearchPage = pathname === '/community/search'
   const isHomePage = pathname === '/home'
   const isPlacePath = pathname === '/place'
+  const isPlaceFlowPath = pathname.startsWith('/place')
   const showCommunityChrome =
     isCommunityPath && !isPetStoryDetailPage && !isPetStoryWritePage && !isKnowledgeDetailPage && !isVoteDetailPage && !isVoteResultPage && !isVoteWritePage && !isRewardPage && !isSearchPage
   const showPlaceChrome = isPlacePath
@@ -177,7 +186,7 @@ function Layout({
     '/signup/terms/privacy',
     '/notification',
   ]
-  const hideFloatingAiButton = hideFloatingAiButtonPaths.includes(pathname) || isCommunityPath
+  const hideFloatingAiButton = hideFloatingAiButtonPaths.includes(pathname) || isCommunityPath || isPlaceFlowPath
   const floatingAiButtonClassName = [
     isFloatingAiHiddenByScroll ? 'is_scroll_hidden' : null,
     isHomePage ? 'floating_button_ai_chat_home' : null,
@@ -217,7 +226,7 @@ function Layout({
   const buildPlaceTabTo = (categoryValue: string) => {
     const nextParams = new URLSearchParams(search)
     nextParams.set('category', categoryValue)
-    nextParams.set('sub', 'all')
+    nextParams.set('sub', placeDefaultSubByCategory[categoryValue] ?? 'all')
     if (!nextParams.get('sort')) nextParams.set('sort', 'popular')
     return `/place?${nextParams.toString()}`
   }
@@ -485,10 +494,13 @@ function Layout({
 
                   <div className="layout_community_subtab_scroll">
                     {placeSubTabs.map((tab) => {
+                      const effectiveSub = placeSubTabs.some((t) => t.value === placeSubParam)
+                        ? placeSubParam
+                        : (placeDefaultSubByCategory[placeCategoryParam] ?? 'all')
                       const isActive =
                         placeCategoryParam === 'all'
                           ? tab.value === 'all'
-                          : placeSubParam === tab.value
+                          : effectiveSub === tab.value
 
                       return (
                         <Button

@@ -1,5 +1,6 @@
 import leeyoriImage from '../img/leeyori.png'
 import pungpungiImage from '../img/pungpungi.png'
+import { HEALTH_REPORT_OBSERVATION_LABEL, LEGACY_KOREAN_SHORTHAIR_BREED_LABEL } from '../constants/healthLabels'
 import { getUserScopedStorageKey, isCurrentDemoUser } from './userScopedStorage'
 
 export type PetProfileSummary = {
@@ -101,9 +102,16 @@ export function readPetProfiles() {
       return []
     }
 
-    return parsedValue.map((profile, index) =>
-      normalizePetProfile(profile, defaultPetProfiles[index] ?? defaultPetProfiles[0]),
-    )
+    return parsedValue.map((profile, index) => {
+      const normalizedProfile = normalizePetProfile(profile, defaultPetProfiles[index] ?? defaultPetProfiles[0])
+
+      return normalizedProfile.breed === LEGACY_KOREAN_SHORTHAIR_BREED_LABEL
+        ? {
+            ...normalizedProfile,
+            breed: HEALTH_REPORT_OBSERVATION_LABEL,
+          }
+        : normalizedProfile
+    })
   } catch {
     return []
   }

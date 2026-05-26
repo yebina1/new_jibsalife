@@ -1,0 +1,3 @@
+export const HEALTH_REPORT_OBSERVATION_LABEL = '관찰 필요'
+export const HEALTH_REPORT_COLLECTING_LABEL = '기록중'
+export const LEGACY_KOREAN_SHORTHAIR_BREED_LABEL = '코리안 쇼트 헤어'

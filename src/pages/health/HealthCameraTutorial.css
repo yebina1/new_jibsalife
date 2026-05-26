@@ -15,12 +15,15 @@
   z-index: 12;
   padding: 0;
   border: 0;
-  background: rgba(14, 14, 14, 0.9);
+  background: transparent;
   cursor: pointer;
 }
 
 .health_cam_tutorial_backdrop {
-  display: none;
+  position: absolute;
+  inset: 0;
+  display: block;
+  background: rgb(0 0 0 / 22%);
 }
 
 .health_cam_tutorial_topbar {

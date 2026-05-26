@@ -448,7 +448,7 @@ function MyPage() {
                     <span>보유 뱃지</span>
                     <img src={dogBadgeImage} alt="" aria-hidden="true" />
                   </span>
-                ) : undefined
+                ) : '보유 뱃지'
               }
               stats={myProfileStats}
               clickableStatLabels={clickableMyProfileStatLabels}

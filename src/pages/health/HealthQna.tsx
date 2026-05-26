@@ -60,6 +60,7 @@ const DUMMY_RESPONSES = [
 ]
 
 let dummyResponseIndex = 0
+const RECORD_CHIPS = ['식사', '배변·배뇨', '증상', '활동'] as const
 const DEFAULT_CHIPS = ['식사', '배변·배뇨', '증상', '활동', '캘린더', '커뮤니티', '투표', '주변병원'] as const
 const WALK_TIME_OPTIONS = ['10분 미만', '10~30분', '30~60분', '60분 이상'] as const
 
@@ -112,6 +113,8 @@ function createIntroMessages(profileName: string): ChatMessage[] {
   ]
 }
 
+void createIntroMessages
+
 function buildMessageId() {
   return Date.now() + Math.floor(Math.random() * 1000)
 }
@@ -122,6 +125,63 @@ function buildContinueMessage(): ChatMessage {
     sender: 'bot',
     text: '좋아요 🐾 오늘 상태를 더 기록해볼까요?',
     chips: [...DEFAULT_CHIPS],
+  }
+}
+
+function buildRecordCategoryMessage(): ChatMessage {
+  return {
+    id: buildMessageId(),
+    sender: 'bot',
+    text: '좋아요! 오늘 상태를 어떤 항목으로 기록해볼까요?',
+    chips: [...RECORD_CHIPS],
+  }
+}
+
+void buildContinueMessage
+void buildRecordCategoryMessage
+
+function buildGeneralRecordNudgeMessage(): ChatMessage {
+  const nudges: ChatMessage[] = [
+    {
+      id: buildMessageId(),
+      sender: 'bot',
+      text:
+        '오늘 기록 완료! 🐾 우리 아이 건강 습관, 챌린지로 이어가볼까요?\n\n' +
+        '꾸준한 기록이 건강의 시작이에요. 7일 건강 챌린지에 도전해보세요!',
+      chips: ['챌린지'],
+    },
+    {
+      id: buildMessageId(),
+      sender: 'bot',
+      text:
+        '오늘 기록 수고하셨어요! 집사님들은 어떻게 생각하실까요? 투표에 참여해보세요\n\n' +
+        '우리 아이만 이런 걸까요? 다른 집사님들 의견이 궁금하다면 👇',
+      chips: ['투표'],
+    },
+  ]
+
+  return nudges[Math.floor(Math.random() * nudges.length)]
+}
+
+function buildWalkRecordNudgeMessage(): ChatMessage {
+  return {
+    id: buildMessageId(),
+    sender: 'bot',
+    text:
+      '산책 기록 보니까, 새로운 코스 찾고 계신가요? 근처 추천 장소 확인해보세요!\n\n' +
+      '우리 아이가 좋아할 만한 장소, 여기서 찾아보세요',
+    chips: ['장소'],
+  }
+}
+
+function buildDismissNudgeMessage(): ChatMessage {
+  return {
+    id: buildMessageId(),
+    sender: 'bot',
+    text:
+      '오늘은 패스! 🐾\n' +
+      '지금 커뮤니티에서 핫한 소식 구경해볼까요?',
+    chips: ['커뮤니티', '챌린지', '투표', '장소'],
   }
 }
 
@@ -227,7 +287,17 @@ function HealthQna() {
   const [feedbackSelections, setFeedbackSelections] = useState(buildFeedbackSelections)
   const [pendingOtherRecord, setPendingOtherRecord] = useState<PendingOtherRecord | null>(null)
   const [chatCount, setChatCount] = useState(0)
-  const introMessages = useMemo(() => createIntroMessages(profileName), [profileName])
+  const introMessages = useMemo<ChatMessage[]>(() => [
+    {
+      id: 1,
+      sender: 'bot',
+      text:
+        `${profileName}님 안녕하세요, 집사님 🐾\n` +
+        `오늘 우리 아이 상태를 함께 확인해볼까요?\n\n` +
+        `식사·산책·배변 기록을 기반으로\n` +
+        `변화를 정리해드릴게요.`,
+    },
+  ], [profileName])
 
   useEffect(() => {
     const syncProfileName = () => {
@@ -266,6 +336,73 @@ function HealthQna() {
     }
 
     if (chip === '주변병원') {
+      navigate('/place')
+    }
+  }
+
+  void handleChipSelect
+
+  const handleHealthChipSelect = (chip: string) => {
+    setPendingOtherRecord(null)
+
+    if (chip === '식사' || chip === '배변·배뇨' || chip === '증상' || chip === '활동') {
+      const chipMap = {
+        식사: '?앹궗',
+        '배변·배뇨': '諛곕?쨌諛곕눊',
+        증상: '利앹긽',
+        활동: '?쒕룞',
+      } as const
+
+      // @ts-expect-error legacy localized chip map kept for compatibility
+      return buildChipOptionMessage(chipMap[chip as keyof typeof chipMap])
+    }
+
+    if (chip === '커뮤니티') {
+      navigate('/community')
+      return
+    }
+
+    if (chip === '챌린지') {
+      navigate('/community/challenge')
+      return
+    }
+
+    if (chip === '투표') {
+      navigate('/community/vote')
+      return
+    }
+
+    if (chip === '장소') {
+      navigate('/place')
+    }
+  }
+
+  void handleHealthChipSelect
+
+  const handleChatChipSelect = (chip: string) => {
+    setPendingOtherRecord(null)
+
+    if (chip === '\uC2DD\uC0AC') return buildChipOptionMessage('?앹궗' as keyof typeof chipResponses)
+    if (chip === '\uBC30\uBCC0\u00B7\uBC30\uB1E8') return buildChipOptionMessage('諛곕?쨌諛곕눊' as keyof typeof chipResponses)
+    if (chip === '\uC99D\uC0C1') return buildChipOptionMessage('利앹긽' as keyof typeof chipResponses)
+    if (chip === '\uD65C\uB3D9') return buildChipOptionMessage('?쒕룞' as keyof typeof chipResponses)
+
+    if (chip === '\uCEE4\uBBA4\uB2C8\uD2F0') {
+      navigate('/community')
+      return
+    }
+
+    if (chip === '\uCC4C\uB9B0\uC9C0') {
+      navigate('/community/challenge')
+      return
+    }
+
+    if (chip === '\uD22C\uD45C') {
+      navigate('/community/vote')
+      return
+    }
+
+    if (chip === '\uC7A5\uC18C') {
       navigate('/place')
     }
   }
@@ -412,7 +549,7 @@ function HealthQna() {
   const handleActionSelect = (action: ChatAction) => {
     if (action.value === 'dismiss') {
       setPendingOtherRecord(null)
-      return buildContinueMessage()
+      return buildDismissNudgeMessage()
     }
 
     if (action.value === 'register') {
@@ -435,7 +572,9 @@ function HealthQna() {
           sender: 'bot' as const,
           text: `등록 완료했어요.\n캘린더에서 ${calendarDetail} 기록을 확인해보세요.`,
         },
-        buildContinueMessage(),
+        kind === 'activity' && calendarDetail.includes('?곗콉')
+          ? buildWalkRecordNudgeMessage()
+          : buildGeneralRecordNudgeMessage(),
       ]
     }
 
@@ -538,7 +677,7 @@ function HealthQna() {
           botName="AI 챗봇"
           botAvatarSrc={mascotImage}
           feedbackSelections={feedbackSelections}
-          onChipSelect={handleChipSelect}
+          onChipSelect={handleChatChipSelect}
           onMessageSubmit={handleMessageSubmit}
           onActionSelect={handleActionSelect}
           onFeedbackSelect={handleFeedbackSelect}

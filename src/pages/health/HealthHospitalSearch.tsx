@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router'
+import { Link, useLocation, useNavigate } from 'react-router'
 import './Health.css'
 import './HealthHospitalSearch.css'
 import PageHeader from '../../components/PageHeader'
@@ -38,7 +38,11 @@ const serviceCards: ServiceCard[] = [
 
 function HealthHospitalSearch() {
   const navigate = useNavigate()
+  const { pathname } = useLocation()
   const [favoriteNames, setFavoriteNames] = useState<string[]>([])
+  const isPlaceFlow = pathname.startsWith('/place/')
+  const hospitalListPath = isPlaceFlow ? '/place/hospitals/list' : '/health/hospitals/list'
+  const hospitalDetailBasePath = isPlaceFlow ? '/place/hospitals' : '/health/hospitals'
   const sortedHospitalItems = sortHospitalsByStatusAndDistance(hospitalSearchItems, (item) => ({
     open: item.open,
     close: item.close,
@@ -74,7 +78,11 @@ function HealthHospitalSearch() {
         <ContentSection className="health_hospital_search_services" title="어떤 서비스를 원하시나요?">
           <div className="health_hospital_search_service_grid">
             {serviceCards.map((item) => (
-              <Link key={item.title} className="health_hospital_search_service_card" to={item.to}>
+              <Link
+                key={item.title}
+                className="health_hospital_search_service_card"
+                to={item.to === '/health/hospitals/list' ? hospitalListPath : item.to}
+              >
                 <img src={item.image} alt={`${item.title} 이미지`} aria-hidden="true" />
                 <strong>{item.title}</strong>
                 <p>{item.description}</p>
@@ -87,7 +95,7 @@ function HealthHospitalSearch() {
           className="health_hospital_search_nearby"
           title="내 주변 병원 목록"
           action={
-            <Link className="content_section_text_action" to="/health/hospitals/list">
+            <Link className="content_section_text_action" to={hospitalListPath}>
               더보기
               <ChevronIcon direction="right" size="md" />
             </Link>
@@ -103,7 +111,7 @@ function HealthHospitalSearch() {
                   <button
                     type="button"
                     className="health_hospital_search_item"
-                    onClick={() => navigate(`/health/hospitals/${item.id}`)}
+                    onClick={() => navigate(`${hospitalDetailBasePath}/${item.id}`)}
                   >
                     <img src={item.image} alt={`${item.name} 이미지`} aria-hidden="true" />
                     <div className="health_hospital_search_item_body">

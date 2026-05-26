@@ -346,11 +346,11 @@
 
 @keyframes onboarding_guardian_tail_wag {
   0%, 100% {
-    transform: rotate(14deg);
+    transform: translate(var(--tail-offset-x, 0), var(--tail-offset-y, 0)) rotate(8deg);
   }
 
   50% {
-    transform: rotate(32deg);
+    transform: translate(var(--tail-offset-x, 0), var(--tail-offset-y, 0)) rotate(18deg);
   }
 }
 
@@ -527,13 +527,6 @@
   box-shadow: 0 0 0 2px rgb(109 89 248 / 12%);
 }
 
-.onboarding_guardian_card img {
-  display: block;
-  width: 80.1px;
-  height: 184px;
-  object-fit: contain;
-}
-
 .onboarding_guardian_card_figure {
   position: relative;
   display: grid;
@@ -542,32 +535,28 @@
   height: 184px;
 }
 
-.onboarding_guardian_card_figure img {
+.onboarding_guardian_card_svg,
+.onboarding_guardian_card_svg svg {
+  display: block;
   width: 100%;
   height: 100%;
 }
 
-.onboarding_guardian_card_tail {
-  position: absolute;
-  right: -7px;
-  bottom: 28px;
-  width: 28px;
-  height: 20px;
-  border: 3px solid #111111;
-  border-top: 0;
-  border-left: 0;
-  border-radius: 0 0 18px 0;
-  background: transparent;
-  transform-origin: 5px 6px;
-  animation: onboarding_guardian_tail_wag 1.15s ease-in-out infinite;
-  pointer-events: none;
+.onboarding_guardian_card_svg svg {
+  overflow: visible;
 }
 
-.onboarding_guardian_card_tail_cat {
-  right: -6px;
-  bottom: 29px;
-  width: 26px;
-  height: 18px;
+.onboarding_guardian_card_svg .onboarding_guardian_tail_path {
+  --tail-offset-x: 0px;
+  --tail-offset-y: 0px;
+  transform-box: fill-box;
+  transform-origin: 2px center;
+  animation: onboarding_guardian_tail_wag 1.15s ease-in-out infinite;
+}
+
+.onboarding_guardian_card_svg .onboarding_guardian_tail_path_back {
+  --tail-offset-x: -1.2px;
+  --tail-offset-y: 0.8px;
 }
 
 .onboarding_guardian_card strong {
