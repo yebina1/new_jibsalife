@@ -1,5 +1,6 @@
 import leeyoriImage from '../img/leeyori.png'
 import pungpungiImage from '../img/pungpungi.png'
+import defaultPetThumbnail from '../img/petstory/daily/daily_thumbnail.jpg'
 import { HEALTH_REPORT_OBSERVATION_LABEL, LEGACY_KOREAN_SHORTHAIR_BREED_LABEL } from '../constants/healthLabels'
 import { getUserScopedStorageKey, isCurrentDemoUser } from './userScopedStorage'
 
@@ -57,6 +58,13 @@ function normalizeProfileImage(image: unknown, fallbackImage: string) {
 
   const trimmedImage = image.trim()
   if (!trimmedImage) return fallbackImage
+  if (
+    trimmedImage === 'daily_thumbnail.jpg' ||
+    trimmedImage.endsWith('/daily_thumbnail.jpg') ||
+    trimmedImage.startsWith('/src/img/')
+  ) {
+    return defaultPetThumbnail
+  }
 
   const isUploadedImage = trimmedImage.startsWith('data:image/')
   const isExternalImage = /^https?:\/\//.test(trimmedImage)

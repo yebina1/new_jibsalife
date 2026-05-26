@@ -1,10 +1,10 @@
 import type { AuthAccount } from './authAccounts'
+import defaultPetThumbnail from '../img/petstory/daily/daily_thumbnail.jpg'
 import { readMyProfile, writeMyProfile } from './myProfile'
 import { writePetProfile } from './petProfile'
 import { readPetProfiles, writePetProfiles, writeSelectedPetProfileId } from './petProfiles'
 
 const SIGNUP_PROFILE_DRAFT_KEY = 'jibsalife.signup.profile-draft'
-const DEFAULT_SIGNUP_PET_IMAGE = '/src/img/petstory/daily/daily_thumbnail.jpg'
 
 export type SignupProfileDraft = {
   guardianType: 'dog' | 'cat'
@@ -78,7 +78,7 @@ export function hydrateCurrentUserProfileFromAccount(account: AuthAccount) {
       type: 'profile',
       name: account.petName.trim(),
       breed: '',
-      image: DEFAULT_SIGNUP_PET_IMAGE,
+      image: defaultPetThumbnail,
       birthDate: '',
       weight: '',
       sex: '',
