@@ -85,10 +85,22 @@
 }
 
 html,
+body {
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+}
+
+html,
 body{
   min-width: 320px;
   min-height: 100%;
+  height: 100%;
   overflow-x: hidden;
+  overflow-y: hidden;
   font-family: var(--app-font-family);
   line-height: var(--app-line-height);
   letter-spacing: var(--app-letter-spacing);
@@ -125,7 +137,9 @@ button:active::before {
 }
 
 #root {
-  min-height: 100vh;
+  min-height: 100dvh;
+  height: 100dvh;
+  overflow: hidden;
 }
 
 html.onboarding-active,

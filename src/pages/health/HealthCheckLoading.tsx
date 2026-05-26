@@ -48,6 +48,27 @@ const statusLabelMap: Record<LoadingCardStatus, string> = {
   done: '완료',
 }
 
+const stageAngles = [-135, -45, 45, 135] as const
+const ringCenter = 50
+const ringOrbitRadius = 31.5
+
+function clamp(value: number, min: number, max: number) {
+  return Math.min(Math.max(value, min), max)
+}
+
+function lerp(start: number, end: number, ratio: number) {
+  return start + (end - start) * ratio
+}
+
+function getStageAnchor(angle: number) {
+  const radian = (angle * Math.PI) / 180
+
+  return {
+    x: ringCenter + Math.cos(radian) * ringOrbitRadius,
+    y: ringCenter + Math.sin(radian) * ringOrbitRadius,
+  }
+}
+
 function getStageStatus(index: number, progress: number): LoadingCardStatus {
   const stage = loadingStages[index]
   if (!stage) return 'waiting'
@@ -123,6 +144,23 @@ function HealthCheckLoading() {
     () => loadingStages.map((_, index) => getStageStatus(index, progress)),
     [progress],
   )
+  const transitionStartIndex = activeStageIndex > 0 ? activeStageIndex - 1 : 0
+  const transitionEndIndex = activeStageIndex
+  const transitionStartThreshold =
+    activeStageIndex > 0 ? loadingStages[activeStageIndex - 1]?.threshold ?? 0 : 0
+  const transitionEndThreshold = loadingStages[activeStageIndex]?.threshold ?? 100
+  const transitionProgress =
+    activeStageIndex === 0
+      ? 0
+      : clamp(
+          (progress - transitionStartThreshold) / Math.max(transitionEndThreshold - transitionStartThreshold, 1),
+          0,
+          1,
+        )
+  const transitionStartAngle = stageAngles[transitionStartIndex] ?? stageAngles[0]
+  const transitionEndAngle = stageAngles[transitionEndIndex] ?? stageAngles[0]
+  const transitionAngle = lerp(transitionStartAngle, transitionEndAngle, transitionProgress)
+  const transitionAnchor = getStageAnchor(transitionAngle)
 
   return (
     <>
@@ -137,19 +175,99 @@ function HealthCheckLoading() {
           <section className="health_check_loading_progress" aria-label="검사 진행 상황">
             <div
               className={`health_check_loading_ring${roundedProgress >= 100 ? ' is_complete' : ''}`}
-              style={{ '--health-progress-value': progress } as CSSProperties}
+              style={
+                {
+                  '--health-progress-value': progress,
+                  '--health-active-angle': `${stageAngles[activeStageIndex] ?? stageAngles[0]}deg`,
+                } as CSSProperties
+              }
               aria-hidden="true"
             >
               <div className="health_check_loading_ring_visual">
+                <div className="health_check_loading_ring_backdrop" />
                 <div className="health_check_loading_ring_glow" />
+                <div className="health_check_loading_ring_focus" />
+                <div className="health_check_loading_ring_ripple" />
                 <div className="health_check_loading_ring_sweep" />
+                <div className="health_check_loading_ring_orbit" />
+                <div className="health_check_loading_ring_particles">
+                  <span className="health_check_loading_ring_particle particle_1" />
+                  <span className="health_check_loading_ring_particle particle_2" />
+                  <span className="health_check_loading_ring_particle particle_3" />
+                </div>
 
-                <img className="health_check_loading_ring_icon is_top_left" src={healthImage} alt="" />
-                <img className="health_check_loading_ring_icon is_top_right" src={moveImage} alt="" />
-                <img className="health_check_loading_ring_icon is_bottom_right" src={eatImage} alt="" />
-                <img className="health_check_loading_ring_icon is_bottom_left" src={reportImage} alt="" />
+                {activeStageIndex > 0 && roundedProgress < 100 ? (
+                  <div
+                    className="health_check_loading_transition"
+                    style={
+                      {
+                        '--health-transition-x': `${transitionAnchor.x}%`,
+                        '--health-transition-y': `${transitionAnchor.y}%`,
+                        '--health-transition-progress': transitionProgress,
+                      } as CSSProperties
+                    }
+                  >
+                    <div className="health_check_loading_transition_badge">
+                      <img
+                        className="health_check_loading_transition_icon is_prev"
+                        src={loadingStages[transitionStartIndex]?.image ?? loadingStages[0].image}
+                        alt=""
+                      />
+                      <img
+                        className="health_check_loading_transition_icon is_next"
+                        src={loadingStages[transitionEndIndex]?.image ?? loadingStages[0].image}
+                        alt=""
+                      />
+                    </div>
+                  </div>
+                ) : null}
 
-<div className="health_check_loading_center">
+                {loadingStages.map((stage, index) => {
+                  const anchor = getStageAnchor(stageAngles[index] ?? stageAngles[0])
+                  const isCurrentStage = activeStageIndex === 0 && index === 0
+                  const isTransitionFrom = activeStageIndex > 0 && index === transitionStartIndex
+                  const isTransitionTo = activeStageIndex > 0 && index === transitionEndIndex
+
+                  let opacity = 0
+                  let scale = 0.82
+
+                  if (roundedProgress >= 100 && index === loadingStages.length - 1) {
+                    opacity = 1
+                    scale = 1
+                  } else if (isCurrentStage) {
+                    opacity = 1
+                    scale = 1
+                  } else if (isTransitionFrom) {
+                    opacity = 0
+                    scale = lerp(0.98, 0.82, transitionProgress)
+                  } else if (isTransitionTo) {
+                    opacity = 0
+                    scale = lerp(0.82, 0.96, transitionProgress)
+                  }
+
+                  return (
+                    <div
+                      key={stage.label}
+                      className="health_check_loading_ring_stage"
+                      style={
+                        {
+                          left: `${anchor.x}%`,
+                          top: `${anchor.y}%`,
+                          '--health-stage-opacity': opacity,
+                          '--health-stage-scale': scale,
+                        } as CSSProperties
+                      }
+                    >
+                      <img
+                        className="health_check_loading_ring_icon"
+                        src={stage.image}
+                        alt=""
+                      />
+                    </div>
+                  )
+                })}
+
+                <div className="health_check_loading_center">
                   <strong>{roundedProgress}%</strong>
                   <span>{activeStage.centerTitle}</span>
                   <span>{roundedProgress >= 100 ? '완료' : activeStage.centerSubtitle}</span>

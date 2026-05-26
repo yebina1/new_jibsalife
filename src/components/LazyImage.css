@@ -41,7 +41,7 @@
 
 /* 이미지 로드 전 투명, 로드 후 fade-in */
 .lazy_img {
-  opacity: 0;
+  opacity: 1;
   transition: opacity 0.15s ease;
 }
 

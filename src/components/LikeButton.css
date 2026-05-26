@@ -25,21 +25,22 @@
 .heart_effect_area {
   position: absolute;
   left: 50%;
-  bottom: 68%;
-  z-index: 5;
-  width: 1px;
-  height: 1px;
+  bottom: 32%;
+  z-index: 12;
+  width: 24px;
+  height: 24px;
   pointer-events: none;
 }
 
 .floating_heart {
   position: absolute;
-  left: calc(var(--x) - (var(--size) / 2));
-  bottom: 0;
+  left: calc(50% + var(--x) - (var(--size) / 2));
+  bottom: -6px;
   width: var(--size);
   height: var(--size);
   object-fit: contain;
-  animation: floating-heart-rise 1.2s ease-out var(--delay) forwards;
+  filter: drop-shadow(0 8px 14px rgba(214, 48, 49, 0.2));
+  animation: floating-heart-rise 1.55s cubic-bezier(0.22, 0.7, 0.24, 1) var(--delay) forwards;
   opacity: 0;
   pointer-events: none;
 }
@@ -47,20 +48,25 @@
 @keyframes floating-heart-rise {
   0% {
     opacity: 0;
-    transform: translate3d(0, 0, 0) scale(0.62) rotate(-10deg);
+    transform: translate3d(0, 0, 0) scale(0.68) rotate(-10deg);
   }
 
-  12% {
+  10% {
     opacity: 1;
   }
 
-  55% {
-    opacity: 0.95;
-    transform: translate3d(calc(var(--x) * 0.45), -56px, 0) scale(1.08) rotate(8deg);
+  35% {
+    opacity: 1;
+    transform: translate3d(calc(var(--x) * 0.2), -34px, 0) scale(1.04) rotate(-4deg);
+  }
+
+  72% {
+    opacity: 0.96;
+    transform: translate3d(calc(var(--x) * 0.7), -92px, 0) scale(1.14) rotate(8deg);
   }
 
   100% {
     opacity: 0;
-    transform: translate3d(calc(var(--x) * 0.75), -112px, 0) scale(0.92) rotate(18deg);
+    transform: translate3d(calc(var(--x) * 1.05), -142px, 0) scale(1.02) rotate(14deg);
   }
 }

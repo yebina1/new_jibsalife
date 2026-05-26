@@ -14,8 +14,7 @@ function resolveProfileImageSrc(src: string, fallbackSrc: string) {
   if (
     !trimmedSrc ||
     trimmedSrc === 'daily_thumbnail.jpg' ||
-    trimmedSrc.endsWith('/daily_thumbnail.jpg') ||
-    trimmedSrc.startsWith('/src/img/')
+    trimmedSrc.endsWith('/daily_thumbnail.jpg')
   ) {
     return fallbackSrc
   }

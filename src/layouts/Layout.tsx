@@ -273,6 +273,12 @@ function Layout({
   }, [pathname])
 
   useEffect(() => {
+    document.body.style.position = ''
+    document.body.style.top = ''
+    document.body.style.width = ''
+  }, [pathname])
+
+  useEffect(() => {
     setIsPlaceSortOpen(false)
   }, [pathname, search])
 

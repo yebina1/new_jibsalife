@@ -69,12 +69,15 @@
   background:
     conic-gradient(
       from -90deg,
-      #6d59f8 0deg calc(var(--health-progress-value) * 3.6deg),
-      #d9d9e3 calc(var(--health-progress-value) * 3.6deg) 360deg
+      rgba(124, 107, 255, 0.96) 0deg calc(var(--health-progress-value) * 3.6deg),
+      rgba(202, 196, 255, 0.92) calc(var(--health-progress-value) * 3.6deg),
+      rgba(241, 239, 255, 0.94) calc(var(--health-progress-value) * 3.6deg + 1deg) 360deg
     );
   box-shadow:
-    0 24px 48px rgba(109, 89, 248, 0.14),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    0 30px 64px rgba(109, 89, 248, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.62),
+    inset 0 -20px 36px rgba(124, 107, 255, 0.08);
+  isolation: isolate;
 }
 
 .health_check_loading_ring_visual::before {
@@ -83,8 +86,22 @@
   inset: 0;
   z-index: 1;
   background:
-    linear-gradient(#ffffff, #ffffff) center / 4px 100% no-repeat,
-    linear-gradient(#ffffff, #ffffff) center / 100% 4px no-repeat;
+    radial-gradient(circle at 24% 20%, rgba(255, 255, 255, 0.34), transparent 24%),
+    radial-gradient(circle at 72% 76%, rgba(255, 255, 255, 0.22), transparent 26%),
+    linear-gradient(140deg, rgba(255, 255, 255, 0.2), transparent 46%);
+}
+
+.health_check_loading_ring_backdrop {
+  position: absolute;
+  inset: 6%;
+  z-index: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 28% 24%, rgba(255, 255, 255, 0.26), transparent 30%),
+    radial-gradient(circle at 72% 70%, rgba(255, 255, 255, 0.18), transparent 34%),
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.08), transparent 58%);
+  filter: blur(6px);
+  opacity: 0.95;
 }
 
 .health_check_loading_ring_visual::after {
@@ -93,20 +110,51 @@
   inset: 64px;
   z-index: 3;
   border-radius: 50%;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(247, 247, 252, 0.96) 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.94),
-    0 8px 24px rgba(17, 17, 17, 0.06);
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 .health_check_loading_ring_glow {
   position: absolute;
-  inset: 12px;
+  inset: 10px;
   z-index: 0;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(109, 89, 248, 0.12) 0%, transparent 68%);
+  background:
+    radial-gradient(circle, rgba(124, 107, 255, 0.2) 0%, rgba(124, 107, 255, 0.08) 36%, transparent 68%);
+  filter: blur(14px);
+  animation: health_check_loading_glow 2.4s ease-in-out infinite;
+}
+
+.health_check_loading_ring_focus {
+  position: absolute;
+  inset: 16px;
+  z-index: 1;
+  border-radius: 50%;
+  background:
+    conic-gradient(
+      from calc(var(--health-active-angle, 0deg) - 44deg),
+      rgba(124, 107, 255, 0) 0deg,
+      rgba(124, 107, 255, 0.08) 18deg,
+      rgba(124, 107, 255, 0.42) 42deg,
+      rgba(124, 107, 255, 0.08) 68deg,
+      rgba(124, 107, 255, 0) 88deg
+    );
   filter: blur(10px);
+  animation: health_check_loading_focus 1.8s ease-in-out infinite;
+}
+
+.health_check_loading_ring_ripple {
+  position: absolute;
+  inset: 12%;
+  z-index: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0) 52%, rgba(255, 255, 255, 0.14) 66%, rgba(255, 255, 255, 0) 74%);
+  opacity: 0.48;
+  filter: blur(8px);
+  animation: health_check_loading_ripple 2.6s ease-out infinite;
 }
 
 .health_check_loading_ring_sweep {
@@ -119,41 +167,152 @@
       from -90deg,
       transparent 0deg,
       rgba(255, 255, 255, 0.04) 230deg,
-      rgba(255, 255, 255, 0.45) 286deg,
-      rgba(255, 255, 255, 0.1) 318deg,
+      rgba(255, 255, 255, 0.62) 286deg,
+      rgba(255, 255, 255, 0.14) 318deg,
       transparent 360deg
     );
   mix-blend-mode: screen;
   animation: health_check_loading_sweep 2.3s linear infinite;
 }
 
-.health_check_loading_ring_icon {
+.health_check_loading_ring_orbit {
+  position: absolute;
+  inset: 22px;
+  z-index: 2;
+  border-radius: 50%;
+  background:
+    conic-gradient(
+      from 0deg,
+      rgba(255, 255, 255, 0.08),
+      rgba(255, 255, 255, 0) 24%,
+      rgba(255, 255, 255, 0.14) 48%,
+      rgba(255, 255, 255, 0) 72%,
+      rgba(255, 255, 255, 0.08)
+    );
+  opacity: 0.55;
+  filter: blur(10px);
+}
+
+.health_check_loading_ring_particles {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  animation: health_check_loading_particles 12s linear infinite;
+}
+
+.health_check_loading_ring_particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.32);
+}
+
+.health_check_loading_ring_particle.particle_1 {
+  top: 18%;
+  right: 24%;
+}
+
+.health_check_loading_ring_particle.particle_2 {
+  right: 18%;
+  bottom: 30%;
+  width: 6px;
+  height: 6px;
+  opacity: 0.82;
+}
+
+.health_check_loading_ring_particle.particle_3 {
+  bottom: 22%;
+  left: 26%;
+  width: 8px;
+  height: 8px;
+  opacity: 0.56;
+}
+
+.health_check_loading_ring_stage {
   position: absolute;
   z-index: 4;
+  transform: translate(-50%, -50%) scale(var(--health-stage-scale, 1));
+  opacity: var(--health-stage-opacity, 1);
+  transition:
+    transform 240ms ease,
+    opacity 240ms ease,
+    filter 240ms ease;
+}
+
+.health_check_loading_ring_icon {
   display: block;
   width: 48px;
   height: 48px;
   object-fit: contain;
+  transform-origin: center;
+  filter: drop-shadow(0 10px 18px rgba(17, 17, 17, 0.12));
 }
 
-.health_check_loading_ring_icon.is_top_left {
-  top: 34px;
-  left: 38px;
+.health_check_loading_transition {
+  position: absolute;
+  left: var(--health-transition-x);
+  top: var(--health-transition-y);
+  z-index: 6;
+  width: 0;
+  height: 0;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
 }
 
-.health_check_loading_ring_icon.is_top_right {
-  top: 34px;
-  right: 38px;
+.health_check_loading_transition_link {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  width: var(--health-transition-length);
+  height: 24px;
+  border-radius: 999px;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(124, 107, 255, 0.02) 0%,
+      rgba(124, 107, 255, 0.12) 28%,
+      rgba(175, 165, 255, 0.34) 70%,
+      rgba(255, 255, 255, 0.72) 100%
+    );
+  box-shadow: 0 0 18px rgba(124, 107, 255, 0.14);
+  transform: translateY(-50%) rotate(var(--health-transition-angle));
+  transform-origin: 100% 50%;
+  opacity: calc(0.18 + var(--health-transition-progress) * 0.72);
+  filter: blur(0.2px);
 }
 
-.health_check_loading_ring_icon.is_bottom_right {
-  right: 38px;
-  bottom: 34px;
+.health_check_loading_transition_badge {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  transform: translate(-50%, -50%);
 }
 
-.health_check_loading_ring_icon.is_bottom_left {
-  bottom: 34px;
-  left: 38px;
+.health_check_loading_transition_icon {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 16px rgba(17, 17, 17, 0.12));
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.health_check_loading_transition_icon.is_prev {
+  opacity: calc(1 - var(--health-transition-progress));
+  transform: scale(calc(1 - var(--health-transition-progress) * 0.12));
+}
+
+.health_check_loading_transition_icon.is_next {
+  opacity: var(--health-transition-progress);
+  transform: scale(calc(0.84 + var(--health-transition-progress) * 0.16));
 }
 
 .health_check_loading_center {
@@ -162,20 +321,29 @@
   left: 50%;
   z-index: 5;
   display: flex;
-  width: 128px;
-  height: 128px;
+  width: auto;
+  min-width: 112px;
+  min-height: 112px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 4px;
-  border-radius: 50%;
+  padding: 10px 14px;
+  border-radius: 999px;
   transform: translate(-50%, -50%);
   text-align: center;
+  isolation: isolate;
+  background: rgba(255, 255, 255, 0.28);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.24),
+    0 6px 16px rgba(17, 17, 17, 0.025);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .health_check_loading_center strong {
   color: #111111;
-  font-size: 24px;
+  font-size: 32px;
   font-weight: 700;
   line-height: 1.2;
   letter-spacing: var(--app-line-height);
@@ -187,6 +355,10 @@
   font-weight: 500;
   line-height: 1.4;
   letter-spacing: var(--app-line-height);
+}
+
+.health_check_loading_center span:last-child {
+  color: #111111;
 }
 
 .health_check_loading_cards {
@@ -324,13 +496,64 @@
   }
 }
 
-@keyframes health_check_loading_orbit {
+@keyframes health_check_loading_glow {
+  0%,
+  100% {
+    transform: scale(0.98);
+    opacity: 0.8;
+  }
+
+  50% {
+    transform: scale(1.03);
+    opacity: 1;
+  }
+}
+
+@keyframes health_check_loading_focus {
+  0%,
+  100% {
+    opacity: 0.82;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes health_check_loading_ripple {
+  0% {
+    transform: scale(0.94);
+    opacity: 0.06;
+  }
+
+  30% {
+    opacity: 0.22;
+  }
+
+  100% {
+    transform: scale(1.02);
+    opacity: 0;
+  }
+}
+
+@keyframes health_check_loading_particles {
   from {
-    transform: rotate(-90deg);
+    transform: rotate(0deg);
   }
 
   to {
-    transform: rotate(270deg);
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes health_check_loading_stage_bob {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateY(-6px) scale(1.06);
   }
 }
 
@@ -348,34 +571,32 @@
     inset: 26%;
   }
 
+  .health_check_loading_ring_backdrop {
+    inset: 7%;
+  }
+
+  .health_check_loading_ring_ripple {
+    inset: 15%;
+  }
+
   .health_check_loading_ring_icon {
     width: 19%;
     height: 19%;
   }
 
-  .health_check_loading_ring_icon.is_top_left {
-    top: 13%;
-    left: 15%;
+  .health_check_loading_transition_badge {
+    width: clamp(48px, 3.8vw, 58px);
+    height: clamp(48px, 3.8vw, 58px);
   }
 
-  .health_check_loading_ring_icon.is_top_right {
-    top: 13%;
-    right: 15%;
-  }
-
-  .health_check_loading_ring_icon.is_bottom_right {
-    right: 15%;
-    bottom: 13%;
-  }
-
-  .health_check_loading_ring_icon.is_bottom_left {
-    bottom: 13%;
-    left: 15%;
+  .health_check_loading_transition_icon {
+    width: clamp(48px, 3.8vw, 58px);
+    height: clamp(48px, 3.8vw, 58px);
   }
 
   .health_check_loading_center {
-    width: 51%;
-    height: 51%;
+    min-width: 44%;
+    min-height: 44%;
   }
 
   .health_check_loading_center strong {

@@ -225,6 +225,7 @@
 
 .cc_day_scroll {
   display: flex;
+  width: calc(100% + 32px);
   gap: 12px;
   overflow-x: auto;
   scrollbar-width: none;

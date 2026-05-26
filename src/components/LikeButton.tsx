@@ -45,9 +45,9 @@ function LikeButton({
 
     const newHearts = Array.from({ length: 6 }, (_, index) => ({
       id: Date.now() + index,
-      x: Math.random() * 48 - 24,
-      size: Math.random() * 14 + 28,
-      delay: index * 0.04,
+      x: Math.random() * 52 - 26,
+      size: Math.random() * 18 + 54,
+      delay: index * 0.06,
       src: floatingHeartImages[index % floatingHeartImages.length],
     }))
 
@@ -58,7 +58,7 @@ function LikeButton({
       setHearts((prev) =>
         prev.filter((heart) => !newHearts.some((newHeart) => newHeart.id === heart.id)),
       )
-    }, 1200)
+    }, 1650)
   }
 
   const resolvedClassName = ['like_button', liked ? 'is_liked active' : null, className]

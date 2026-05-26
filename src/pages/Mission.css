@@ -278,6 +278,58 @@
   -webkit-backdrop-filter: blur(24px) saturate(150%);
 }
 
+.mission_calendar_toggle {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 6px 0 0;
+  border: 0;
+  background: transparent;
+  color: #8f83ff;
+  cursor: pointer;
+}
+
+.mission_calendar_toggle_icon {
+  display: inline-flex;
+  position: relative;
+  width: 28px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+.mission_calendar_toggle_icon i {
+  position: absolute;
+  left: 50%;
+  color: currentColor;
+  font-size: 22px;
+  line-height: 1;
+  transform: translateX(-50%);
+  opacity: 0.92;
+}
+
+.mission_calendar_toggle_icon i:first-child {
+  top: -6px;
+}
+
+.mission_calendar_toggle_icon i:last-child {
+  top: 2px;
+}
+
+.mission_calendar_toggle_label {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.mission_calendar_toggle.is_weekly .mission_calendar_toggle_icon {
+  transform: rotate(180deg);
+}
+
 .mission_weekdays,
 .mission_calendar_grid {
   display: grid;
@@ -415,6 +467,7 @@
   flex: 1 1 auto;
   flex-direction: column;
   padding: 32px 0 0;
+  overflow: hidden;
 }
 
 .mission_history_section.is_condensed {
@@ -442,6 +495,12 @@
   padding-bottom: 24px;
   overflow-y: auto;
   overscroll-behavior: contain;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.mission_history_list::-webkit-scrollbar {
+  display: none;
 }
 
 .mission_history_section.is_condensed .mission_history_list {

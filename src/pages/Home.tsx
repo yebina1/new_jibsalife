@@ -38,7 +38,7 @@ import {
 import { voteDetails } from './community/CommunityVoteData'
 import { writeVotedCandidate, writeVotedMissionId } from '../utils/communityVoteStatus'
 import { isChallengeDayClaimed, markChallengeVoteCompleted, readCurrentDay } from '../utils/challengeStatus'
-import { consumeSignupWelcomeReward, readProfilePoints } from '../utils/profilePoints'
+import { consumeSignupWelcomeReward, formatProfilePoints, readProfilePoints, writeProfilePoints } from '../utils/profilePoints'
 import { showStateBarMessage } from '../utils/stateBarMessage'
 import { addUserNotification } from '../utils/userNotifications'
 import LazyImage from '../components/LazyImage'
@@ -81,6 +81,7 @@ const emptyPetIdForm: PetIdCardForm = {
 const bestPoseVoteItems = voteDetails.find((voteDetail) => voteDetail.id === 'best-pose')?.candidates ?? []
 const BEST_POSE_VOTE_ID = 'best-pose'
 const VOTE_REWARD_AMOUNT = 60
+const HOME_BEST_POSE_REWARD_KEY = 'jibsalife.home.best-pose-reward'
 const TARGET_CURSOR_EFFECT_DURATION_MS = 860
 
 
@@ -120,6 +121,7 @@ const contentItems = [
 ] as const
 
 export const homeCriticalImageSources = [
+  ...defaultPetProfiles.map((profile) => profile.image),
   homeRank1Photo,
   homeRank2Photo,
   homeRank3Photo,
@@ -218,6 +220,10 @@ function getTodayDateKey() {
   const day = String(today.getDate()).padStart(2, '0')
 
   return `${year}-${month}-${day}`
+}
+
+function getTodayHomeBestPoseRewardKey() {
+  return `${HOME_BEST_POSE_REWARD_KEY}.${getTodayDateKey()}`
 }
 
 function getInitialVoteState(): { votedCardId: number | null; hasModified: boolean } {
@@ -480,6 +486,10 @@ function Home() {
   }, [])
 
   useEffect(() => {
+    preloadHomeImages(profileSlides.map((profile) => profile.image).filter(Boolean), true)
+  }, [profileSlides])
+
+  useEffect(() => {
     const syncPetProfiles = () => {
       const nextProfiles = readPetProfiles()
       setProfileSlides((currentProfiles) => (
@@ -514,26 +524,15 @@ function Home() {
   useEffect(() => {
     if (!isPetIdModalOpen) return
 
-    const scrollY = window.scrollY
     const previousOverflow = document.body.style.overflow
     const previousHtmlOverflow = document.documentElement.style.overflow
-    const previousPosition = document.body.style.position
-    const previousTop = document.body.style.top
-    const previousWidth = document.body.style.width
 
     document.documentElement.style.overflow = 'hidden'
     document.body.style.overflow = 'hidden'
-    document.body.style.position = 'fixed'
-    document.body.style.top = `-${scrollY}px`
-    document.body.style.width = '100%'
 
     return () => {
       document.documentElement.style.overflow = previousHtmlOverflow
       document.body.style.overflow = previousOverflow
-      document.body.style.position = previousPosition
-      document.body.style.top = previousTop
-      document.body.style.width = previousWidth
-      window.scrollTo(0, scrollY)
     }
   }, [isPetIdModalOpen])
 
@@ -882,6 +881,7 @@ function Home() {
 
   const confirmBestPoseVote = () => {
     if (selectedCardId === null) return
+    const isNewVote = votedCardId === null
     writeVotedMissionId(BEST_POSE_VOTE_ID)
     writeVotedCandidate(BEST_POSE_VOTE_ID, selectedCardId)
     localStorage.setItem('weekly-vote-state', JSON.stringify({
@@ -891,6 +891,22 @@ function Home() {
     }))
     setVotedCardId(selectedCardId)
     setIsVoteRewardOpen(false)
+
+    if (isNewVote && window.localStorage.getItem(getTodayHomeBestPoseRewardKey()) !== 'true') {
+      const nextPoints = readProfilePoints() + VOTE_REWARD_AMOUNT
+      writeProfilePoints(nextPoints)
+      window.localStorage.setItem(getTodayHomeBestPoseRewardKey(), 'true')
+      setCurrentPoints(nextPoints)
+      addUserNotification({
+        title: '포인트',
+        content: `투표 참여되었습니다. ${formatProfilePoints(VOTE_REWARD_AMOUNT)} 지급되었습니다.`,
+        path: '/mypage',
+      })
+      showStateBarMessage(`투표 참여되었습니다.\n${formatProfilePoints(VOTE_REWARD_AMOUNT)} 지급되었습니다.`, 5000, {
+        actionLabel: '확인하기',
+        onAction: () => navigate('/mypage'),
+      })
+    }
 
     const currentDay = readCurrentDay()
     if (markChallengeVoteCompleted() && currentDay === 2 && !isChallengeDayClaimed(currentDay)) {

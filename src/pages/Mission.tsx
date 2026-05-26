@@ -12,6 +12,7 @@ import Button from '../components/html/Button'
 import AddSheet from '../components/AddSheet'
 import MissionRecordSheet from '../components/MissionRecordSheet'
 import PostMoreSheet from '../components/PostMoreSheet'
+import ConfirmDialog from '../components/ConfirmDialog'
 import {
   PET_PROFILES_CHANGE_EVENT,
   readPetProfiles,
@@ -474,7 +475,7 @@ function Mission() {
   const [selectedDayId, setSelectedDayId] = useState(`c-${CALENDAR_DAY}`)
   const [monthSlideDirection, setMonthSlideDirection] = useState<'prev' | 'next'>('next')
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
-  const [isCalendarCondensed, setIsCalendarCondensed] = useState(false)
+  const [isCalendarExpanded, setIsCalendarExpanded] = useState(false)
   const [isFabOpen, setIsFabOpen] = useState(false)
   const [isFabClosing, setIsFabClosing] = useState(false)
   const [isCategoryPickerOpen, setIsCategoryPickerOpen] = useState(false)
@@ -490,6 +491,7 @@ function Mission() {
   const [feedAmount, setFeedAmount] = useState(readDefaultFeedAmount)
   const [editingHistoryId, setEditingHistoryId] = useState<number | null>(null)
   const [historyMoreTarget, setHistoryMoreTarget] = useState<MissionHistoryRecord | null>(null)
+  const [pendingDeleteHistoryId, setPendingDeleteHistoryId] = useState<number | null>(null)
   const [historyItems, setHistoryItems] = useState<MissionHistoryRecord[]>(() => [
     ...readMissionActivityRecords().map(toMissionHistoryRecord),
     ...readMissionHistoryRecordsWithDefaults(),
@@ -628,8 +630,6 @@ function Mission() {
     () => historyItems.filter((item) => item.date === selectedDateKey),
     [historyItems, selectedDateKey]
   )
-  const canCondenseCalendar = selectedHistoryItems.length >= 3
-  const isWeeklyCalendar = canCondenseCalendar && isCalendarCondensed
   const selectedWeekIndex = useMemo(() => {
     const selectedIndex = calendarDays.findIndex(
       (day) =>
@@ -640,7 +640,39 @@ function Mission() {
 
     return Math.floor(Math.max(selectedIndex, 0) / 7)
   }, [calendarDays, selectedDay])
-  const calendarTranslateY = isWeeklyCalendar ? selectedWeekIndex * 49 : 0
+  const defaultCalendarWeekCount = useMemo(() => {
+    const recordCount = selectedHistoryItems.length
+
+    if (recordCount >= 4) return 1
+    if (recordCount === 3) return 2
+    if (recordCount >= 1) return 3
+
+    return 6
+  }, [selectedHistoryItems.length])
+  const canCondenseCalendar = defaultCalendarWeekCount < 6
+  const calendarVisibleWeekCount = isCalendarExpanded ? 6 : defaultCalendarWeekCount
+  const calendarStartWeekIndex = useMemo(() => {
+    const maxStartWeekIndex = Math.max(0, 6 - calendarVisibleWeekCount)
+    const centeredStartWeekIndex = selectedWeekIndex - Math.floor((calendarVisibleWeekCount - 1) / 2)
+
+    return Math.min(Math.max(centeredStartWeekIndex, 0), maxStartWeekIndex)
+  }, [calendarVisibleWeekCount, selectedWeekIndex])
+  const calendarTranslateY = calendarStartWeekIndex * 49
+  const isWeeklyCalendar = calendarVisibleWeekCount === 1
+  const toggleCalendarView = () => {
+    if (!canCondenseCalendar) return
+    setIsCalendarExpanded((prev) => !prev)
+    historyListRef.current?.scrollTo({ top: 0, behavior: 'auto' })
+  }
+  const calendarToggleLabel = isCalendarExpanded
+    ? (
+        defaultCalendarWeekCount === 1
+          ? '주간 보기'
+          : defaultCalendarWeekCount === 2
+            ? '2주 보기'
+            : '3주 보기'
+      )
+    : '월간 보기'
   const firstAvailableCategoryColor = categoryColorOptions[0] ?? ''
   const selectedCategory =
     categories.find((category) => category.id === selectedCategoryId) ?? categories[0]
@@ -811,77 +843,6 @@ function Mission() {
   }
 
   useEffect(() => {
-    const historyList = historyListRef.current
-    const resetScrollTop = () => {
-      if (historyList) historyList.scrollTop = 0
-    }
-    const getScrollTop = () => historyList?.scrollTop ?? 0
-    const hasScrollableHistory = () =>
-      (historyList?.scrollHeight ?? 0) > (historyList?.clientHeight ?? 0) + 12
-    const showWeeklyCalendar = () => {
-      if (!canCondenseCalendar || !hasScrollableHistory()) return
-      setIsCalendarCondensed(true)
-    }
-    const showMonthlyCalendar = () => {
-      setIsCalendarCondensed(false)
-      resetScrollTop()
-    }
-    const isHistoryListAtTop = () => getScrollTop() <= 4
-    const syncCalendarMode = () => {
-      if (!canCondenseCalendar || !hasScrollableHistory()) {
-        setIsCalendarCondensed(false)
-        resetScrollTop()
-        return
-      }
-
-      const shouldShowWeeklyCalendar = getScrollTop() > 4
-      setIsCalendarCondensed((prev) => (
-        prev === shouldShowWeeklyCalendar ? prev : shouldShowWeeklyCalendar
-      ))
-    }
-    const handleWheel = (event: WheelEvent) => {
-      if (event.deltaY > 0) {
-        showWeeklyCalendar()
-        return
-      }
-
-      if (event.deltaY < 0 && isHistoryListAtTop()) {
-        showMonthlyCalendar()
-      }
-    }
-    let touchStartY = 0
-    const handleTouchStart = (event: TouchEvent) => {
-      touchStartY = event.touches[0]?.clientY ?? 0
-    }
-    const handleTouchMove = (event: TouchEvent) => {
-      const nextY = event.touches[0]?.clientY ?? touchStartY
-      if (touchStartY - nextY > 0) {
-        showWeeklyCalendar()
-        return
-      }
-
-      if (touchStartY - nextY < 0 && isHistoryListAtTop()) {
-        showMonthlyCalendar()
-      }
-    }
-
-    syncCalendarMode()
-    historyList?.addEventListener('scroll', syncCalendarMode, { passive: true })
-    historyList?.addEventListener('wheel', handleWheel, { passive: true })
-    historyList?.addEventListener('touchstart', handleTouchStart, { passive: true })
-    historyList?.addEventListener('touchmove', handleTouchMove, { passive: true })
-    window.addEventListener('resize', syncCalendarMode, { passive: true })
-
-    return () => {
-      historyList?.removeEventListener('scroll', syncCalendarMode)
-      historyList?.removeEventListener('wheel', handleWheel)
-      historyList?.removeEventListener('touchstart', handleTouchStart)
-      historyList?.removeEventListener('touchmove', handleTouchMove)
-      window.removeEventListener('resize', syncCalendarMode)
-    }
-  }, [canCondenseCalendar, selectedHistoryItems.length])
-
-  useEffect(() => {
     if (!isDatePickerOpen && !isPeriodDatePickerOpen) return
 
     const closePickerOnPageMove = (event: Event) => {
@@ -1016,6 +977,7 @@ function Mission() {
   const deleteHistoryItem = (historyId: number) => {
     setHistoryItems((prev) => prev.filter((item) => item.id !== historyId))
     setHistoryMoreTarget(null)
+    setPendingDeleteHistoryId(null)
   }
 
   const openHistoryEdit = (item: MissionHistoryRecord) => {
@@ -1115,47 +1077,6 @@ function Mission() {
     setSelectedDayId(`c-${CALENDAR_DAY}`)
   }
 
-  const moveMonth = (direction: 'prev' | 'next') => {
-    setMonthSlideDirection(direction)
-    setCalendarMonth((prev) => {
-      if (direction === 'prev') {
-        if (prev === 1) { setCalendarYear((y) => y - 1); return 12 }
-        return prev - 1
-      }
-      if (prev === 12) { setCalendarYear((y) => y + 1); return 1 }
-      return prev + 1
-    })
-  }
-
-  useEffect(() => {
-    const section = calendarRef.current
-    if (!section) return
-
-    let startX = 0
-    let startY = 0
-
-    const handleSectionTouchStart = (e: TouchEvent) => {
-      startX = e.touches[0].clientX
-      startY = e.touches[0].clientY
-    }
-
-    const handleSectionTouchEnd = (e: TouchEvent) => {
-      const dx = e.changedTouches[0].clientX - startX
-      const dy = e.changedTouches[0].clientY - startY
-      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) >= 40) {
-        moveMonth(dx < 0 ? 'next' : 'prev')
-      }
-    }
-
-    section.addEventListener('touchstart', handleSectionTouchStart, { passive: true })
-    section.addEventListener('touchend', handleSectionTouchEnd, { passive: true })
-
-    return () => {
-      section.removeEventListener('touchstart', handleSectionTouchStart)
-      section.removeEventListener('touchend', handleSectionTouchEnd)
-    }
-  }, [moveMonth])
-
   const getCenteredPeriodButton = (column: HTMLElement) => {
     const columnRect = column.getBoundingClientRect()
     const columnCenterY = columnRect.top + columnRect.height / 2
@@ -1173,12 +1094,36 @@ function Mission() {
     }, null)
   }
 
+  const centerPeriodWheelColumn = (
+    type: 'date' | 'period' | 'hour' | 'minute',
+    behavior: ScrollBehavior = 'auto',
+  ) => {
+    const column = periodWheelColumnRefs.current[type]
+    if (!column) return
+
+    const activeButton =
+      column.querySelector<HTMLButtonElement>('button.active[data-loop="1"]') ??
+      column.querySelector<HTMLButtonElement>('button.active')
+    if (!activeButton) return
+
+    const buttons = Array.from(column.querySelectorAll<HTMLButtonElement>('button'))
+    const activeIndex = buttons.findIndex((button) => button === activeButton)
+    if (activeIndex < 0) return
+
+    const nextScrollTop = activeIndex * periodWheelItemHeight
+    if (Math.abs(column.scrollTop - nextScrollTop) <= 1) return
+
+    column.scrollTo({ top: nextScrollTop, behavior })
+  }
+
   const handlePeriodWheelScroll = (
     event: UIEvent<HTMLDivElement>,
     type: 'date' | 'period' | 'hour' | 'minute',
   ) => {
     const column = event.currentTarget
     const frameKey = `${periodEditingField}-${type}`
+
+    applyCenteredPeriodValue(column, type)
 
     if (periodWheelSettleTimeouts.current[frameKey]) {
       window.clearTimeout(periodWheelSettleTimeouts.current[frameKey])
@@ -1187,7 +1132,7 @@ function Mission() {
     periodWheelSettleTimeouts.current[frameKey] = window.setTimeout(() => {
       settlePeriodWheelColumn(column, type)
       periodWheelSettleTimeouts.current[frameKey] = undefined
-    }, 110)
+    }, 16)
   }
 
   const applyCenteredPeriodValue = (
@@ -1249,11 +1194,33 @@ function Mission() {
     if (centeredIndex < 0) return
 
     const nextScrollTop = centeredIndex * periodWheelItemHeight
+    applyCenteredPeriodValue(column, type)
+
     if (Math.abs(column.scrollTop - nextScrollTop) <= 1) return
 
-    column.scrollTo({ top: nextScrollTop, behavior: 'smooth' })
-    applyCenteredPeriodValue(column, type)
+    column.scrollTo({ top: nextScrollTop, behavior: 'auto' })
   }
+
+  useEffect(() => {
+    if (!isPeriodDatePickerOpen || typeof window === 'undefined') return
+
+    const frameId = window.requestAnimationFrame(() => {
+      centerPeriodWheelColumn('date')
+      centerPeriodWheelColumn('period')
+      centerPeriodWheelColumn('hour')
+      centerPeriodWheelColumn('minute')
+    })
+
+    return () => window.cancelAnimationFrame(frameId)
+  }, [
+    activeDraftPeriod.day,
+    activeDraftPeriod.hour,
+    activeDraftPeriod.minute,
+    activeDraftPeriod.month,
+    activeDraftPeriod.period,
+    activeDraftPeriod.year,
+    isPeriodDatePickerOpen,
+  ])
 
   const renderPeriodWheel = () => (
     <div className="mission_period_wheel" aria-label="기간 날짜와 시간 선택">
@@ -1277,11 +1244,14 @@ function Mission() {
               data-year={option.year}
               data-month={option.month}
               data-day={option.day}
-              onClick={() => updateDraftPeriod({
-                year: option.year,
-                month: option.month,
-                day: option.day,
-              })}
+              onClick={() => {
+                updateDraftPeriod({
+                  year: option.year,
+                  month: option.month,
+                  day: option.day,
+                })
+                window.requestAnimationFrame(() => centerPeriodWheelColumn('date'))
+              }}
             >
               {option.label}
             </button>
@@ -1303,7 +1273,10 @@ function Mission() {
               className={activeDraftPeriod.period === option.value ? 'active' : ''}
               data-value={option.value}
               data-loop={loopIndex}
-              onClick={() => updateDraftPeriod({ period: option.value })}
+              onClick={() => {
+                updateDraftPeriod({ period: option.value })
+                window.requestAnimationFrame(() => centerPeriodWheelColumn('period'))
+              }}
             >
               {option.label}
             </button>
@@ -1325,7 +1298,10 @@ function Mission() {
               className={activeDraftPeriod.hour === hour ? 'active' : ''}
               data-value={hour}
               data-loop={loopIndex}
-              onClick={() => updateDraftPeriod({ hour })}
+              onClick={() => {
+                updateDraftPeriod({ hour })
+                window.requestAnimationFrame(() => centerPeriodWheelColumn('hour'))
+              }}
             >
               {hour}
             </button>
@@ -1347,7 +1323,10 @@ function Mission() {
               className={activeDraftPeriod.minute === minute ? 'active' : ''}
               data-value={minute}
               data-loop={loopIndex}
-              onClick={() => updateDraftPeriod({ minute })}
+              onClick={() => {
+                updateDraftPeriod({ minute })
+                window.requestAnimationFrame(() => centerPeriodWheelColumn('minute'))
+              }}
             >
               {String(minute).padStart(2, '0')}
             </button>
@@ -1373,7 +1352,7 @@ function Mission() {
           </>
         )}
       />
-      <main className={`page mission_page${isWeeklyCalendar ? ' is_condensed' : ''}`}>
+      <main className="page mission_page">
         <section className="mission_profile_header">
           <h2>{petName}의 히스토리</h2>
           <Button
@@ -1389,10 +1368,7 @@ function Mission() {
           </Button>
         </section>
 
-        <section
-          className={`mission_calendar_section${isWeeklyCalendar ? ' is_condensed' : ''}`}
-          ref={calendarRef}
-        >
+        <section className="mission_calendar_section" ref={calendarRef}>
           <div className="mission_calendar_card">
             <div className="mission_month_bar" ref={monthBarRef}>
               <button type="button" className="mission_month_title" onClick={openDatePicker}>
@@ -1414,7 +1390,10 @@ function Mission() {
               ))}
             </div>
 
-            <div className={`mission_calendar_viewport${isWeeklyCalendar ? ' is_weekly' : ''}`}>
+            <div
+              className="mission_calendar_viewport"
+              style={{ height: `calc(var(--mission-calendar-row-height) * ${calendarVisibleWeekCount})` }}
+            >
               <div
                 className="mission_calendar_track"
                 style={{ transform: `translateY(-${calendarTranslateY}px)` }}
@@ -1458,10 +1437,30 @@ function Mission() {
               </div>
               </div>
             </div>
+
+            
+              {canCondenseCalendar ? (
+                <button
+                  type="button"
+                  className={`mission_calendar_toggle${!isWeeklyCalendar ? ' is_weekly' : ''}`}
+                  onClick={toggleCalendarView}
+                  aria-label={isWeeklyCalendar ? '월간 캘린더로 보기' : '주간 캘린더로 보기'}
+                  aria-pressed={isWeeklyCalendar}
+                >
+                  <span className="mission_calendar_toggle_icon" aria-hidden="true">
+                    <i className="bx bx-chevron-up" />
+                    <i className="bx bx-chevron-up" />
+                  </span>
+                  <span className="mission_calendar_toggle_label">
+                    {calendarToggleLabel}
+                  </span>
+                </button>
+              ) : null}
+            
           </div>
         </section>
 
-        <section className={`mission_history_section${isWeeklyCalendar ? ' is_condensed' : ''}`}>
+        <section className="mission_history_section">
           <h2>{selectedDateLabel}</h2>
           <div className="mission_history_list" ref={historyListRef}>
             {selectedHistoryItems.map((item) => {
@@ -2339,8 +2338,21 @@ function Mission() {
         <PostMoreSheet
           type="own"
           onClose={closeHistoryMoreSheet}
-          onDelete={() => deleteHistoryItem(historyMoreTarget.id)}
+          onDelete={() => {
+            setHistoryMoreTarget(null)
+            setPendingDeleteHistoryId(historyMoreTarget.id)
+          }}
           onEdit={() => openHistoryEditFromList(historyMoreTarget)}
+        />
+      ) : null}
+
+      {pendingDeleteHistoryId !== null ? (
+        <ConfirmDialog
+          message="삭제하시겠습니까?"
+          cancelLabel="아니요"
+          confirmLabel="네"
+          onCancel={() => setPendingDeleteHistoryId(null)}
+          onConfirm={() => deleteHistoryItem(pendingDeleteHistoryId)}
         />
       ) : null}
 

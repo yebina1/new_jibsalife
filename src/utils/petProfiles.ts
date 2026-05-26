@@ -123,9 +123,13 @@ export function readPetProfiles() {
     return defaultPetProfiles
   }
 
+  if (isCurrentDemoUser()) {
+    return defaultPetProfiles
+  }
+
   const savedValue = window.localStorage.getItem(getUserScopedStorageKey(PET_PROFILES_STORAGE_KEY))
   if (!savedValue) {
-    return isCurrentDemoUser() ? defaultPetProfiles : []
+    return []
   }
 
   try {

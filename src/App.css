@@ -1,5 +1,7 @@
 .app {
-  min-height: 100vh;
+  min-height: 100dvh;
+  height: 100dvh;
+  overflow: hidden;
   background: #ffffff;
 }
 
@@ -11,18 +13,23 @@
   );
   --layout-header-bar-height: 56px;
   --layout-header-height: calc(var(--layout-status-bar-height) + var(--layout-header-bar-height));
-  --layout-footer-height: 90px;
+  --layout-nav-height: 64px;
+  --layout-indicator-height: 34px;
+  --layout-footer-height: calc(var(--layout-nav-height) + var(--layout-indicator-height));
   --layout-content-padding-block: 24px;
   --layout-content-padding-y: calc(var(--layout-content-padding-block) * 2);
   --layout-inline-padding: 16px;
+  display: flex;
+  flex-direction: column;
   position: relative;
   width: 100%;
   max-width: var(--layout-max-width);
-  min-height: 100vh;
+  min-height: 100dvh;
+  height: 100dvh;
   margin: 0 auto;
   padding-top: var(--layout-header-height);
   padding-bottom: var(--layout-footer-height);
-  overflow-x: hidden;
+  overflow: hidden;
   box-sizing: border-box;
 }
 
@@ -52,9 +59,22 @@
 }
 
 .layout_content{
-  min-height: calc(100dvh - var(--layout-header-height) - var(--layout-footer-height));
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto;
   padding: 0 var(--layout-inline-padding) var(--layout-content-padding-block);
   box-sizing: border-box;
+  min-width: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.layout_content::-webkit-scrollbar {
+  display: none;
 }
 
 .layout_content_no_padding {
@@ -413,6 +433,7 @@
 .layout_content > .page {
   width: 100%;
   max-width: var(--layout-max-width);
+  min-width: 0;
   min-height: calc(
     100dvh - var(--layout-header-height) - var(--layout-footer-height) - var(--layout-content-padding-y)
   );
@@ -619,7 +640,7 @@ button.layout_nav_link {
 @media (min-width: 768px) {
   /* layout_camera는 카메라 전용 레이아웃 — footer 여백 변경 제외 */
   .layout:not(.layout_camera) {
-    --layout-footer-height: 100px;
+    --layout-nav-height: 78px;
     padding-bottom: var(--layout-footer-height);
   }
 

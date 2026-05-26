@@ -10,7 +10,7 @@ import Button from '../../components/html/Button'
 import PointAlertContent from '../../components/PointAlertContent'
 import { hasVotedMission, readVotedCandidate, writeVotedCandidate, writeVotedMissionId } from '../../utils/communityVoteStatus'
 import { isChallengeDayClaimed, markChallengeVoteCompleted, readCurrentDay } from '../../utils/challengeStatus'
-import { readProfilePoints, writeProfilePoints } from '../../utils/profilePoints'
+import { formatProfilePoints, readProfilePoints, writeProfilePoints } from '../../utils/profilePoints'
 import { showStateBarMessage } from '../../utils/stateBarMessage'
 import { addUserNotification } from '../../utils/userNotifications'
 import { voteDetails, type CommunityVoteId } from './CommunityVoteData'
@@ -84,6 +84,15 @@ function CommunityVoteDetail() {
     window.localStorage.setItem(`${VOTE_REWARD_CLAIMED_KEY_PREFIX}.${voteId}`, 'true')
     setCurrentPoints(nextPoints)
     setIsVoteRewardClaimed(true)
+    addUserNotification({
+      title: '포인트',
+      content: `투표 참여되었습니다. ${formatProfilePoints(VOTE_REWARD_AMOUNT)} 지급되었습니다.`,
+      path: '/mypage',
+    })
+    showStateBarMessage(`투표 참여되었습니다.\n${formatProfilePoints(VOTE_REWARD_AMOUNT)} 지급되었습니다.`, 5000, {
+      actionLabel: '확인하기',
+      onAction: () => navigate('/mypage'),
+    })
   }
 
   const handleEditConfirm = () => {

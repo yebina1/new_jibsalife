@@ -22,7 +22,7 @@ import voteGoodImage from '../../img/vote-good.png'
 import voteBannerImage from '../../img/vote/vote_banner_img.png'
 import { readVotedMissionIds } from '../../utils/communityVoteStatus'
 import { isChallengeDayClaimed, markChallengeVoteCompleted, readCurrentDay } from '../../utils/challengeStatus'
-import { readProfilePoints, writeProfilePoints } from '../../utils/profilePoints'
+import { formatProfilePoints, readProfilePoints, writeProfilePoints } from '../../utils/profilePoints'
 import { showStateBarMessage } from '../../utils/stateBarMessage'
 import { addUserNotification } from '../../utils/userNotifications'
 import { missionVotes, regularVoteItems } from './CommunityVoteData'
@@ -251,6 +251,15 @@ function CommunityVote() {
     writeProfilePoints(nextPoints)
     window.localStorage.setItem(storageKey, 'true')
     setClaimedVoteRewardIds(prev => new Set([...prev, completedVoteId]))
+    addUserNotification({
+      title: '포인트',
+      content: `투표 참여되었습니다. ${formatProfilePoints(VOTE_REWARD_AMOUNT)} 지급되었습니다.`,
+      path: '/mypage',
+    })
+    showStateBarMessage(`투표 참여되었습니다.\n${formatProfilePoints(VOTE_REWARD_AMOUNT)} 지급되었습니다.`, 5000, {
+      actionLabel: '확인하기',
+      onAction: () => navigate('/mypage'),
+    })
     closeVoteCompleteDialog()
   }
 
