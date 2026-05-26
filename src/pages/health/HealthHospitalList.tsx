@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 import './Health.css'
 import './HealthHospitalList.css'
 import './HealthHospitalRecommend.css'
@@ -13,7 +13,9 @@ import { hospitalSearchItems, sortHospitalsByStatusAndDistance } from './HealthH
 
 function HealthHospitalList() {
   const navigate = useNavigate()
+  const { pathname } = useLocation()
   const [favoriteNames, setFavoriteNames] = useState<string[]>([])
+  const detailBasePath = pathname.startsWith('/place/') ? '/place/hospitals' : '/health/hospitals'
   const sortedHospitalItems = sortHospitalsByStatusAndDistance(hospitalSearchItems, (item) => ({
     open: item.open,
     close: item.close,
@@ -66,7 +68,7 @@ function HealthHospitalList() {
             items={hospitalCardItems}
             likedNames={favoriteNames}
             onToggleLike={handleFavoriteToggle}
-            onSelect={(hospitalId) => navigate(`/health/hospitals/${hospitalId}`)}
+            onSelect={(hospitalId) => navigate(`${detailBasePath}/${hospitalId}`)}
           />
         </ContentSection>
       </main>

@@ -190,9 +190,14 @@ letter-spacing: var(--app-line-height);
 
 .hcr_chart_bar {
   width: clamp(24px, 3vw, 36px);
+  height: var(--bar-height, 4px);
   border-radius: 4px 4px 0 0;
   background: #c7bffe;
   min-height: 4px;
+  transform-origin: center bottom;
+  animation: hcr_chart_bar_rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--bar-delay, 0ms);
+  will-change: transform, opacity;
 }
 
 .hcr_chart_bar.is_today {
@@ -201,6 +206,24 @@ letter-spacing: var(--app-line-height);
 
 .hcr_chart_bar.is_hidden {
   opacity: 0;
+}
+
+@keyframes hcr_chart_bar_rise {
+  0% {
+    opacity: 0;
+    transform: scaleY(0.08);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hcr_chart_bar {
+    animation: none;
+  }
 }
 
 .hcr_chart_xlabels {

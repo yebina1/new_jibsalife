@@ -462,7 +462,7 @@
   z-index: auto;
   width: 100%;
   max-height: none;
-  padding: 16px 0 24px;
+  padding: 0 0 24px;
   box-sizing: border-box;
   overflow: visible;
   background: transparent;
@@ -475,13 +475,14 @@
   grid-template-columns: 6px minmax(0, 1fr) auto;
   align-items: start;
   gap: 8px;
-  padding: 0;
+  padding: 0 36px 0 0;
   border: 0;
   background: transparent;
   color: inherit;
   font: inherit;
   text-align: left;
   cursor: pointer;
+  position: relative;
 }
 
 .mission_history_thumb {
@@ -495,6 +496,16 @@
 .mission_history_body {
   display: grid;
   gap: 2px;
+  min-width: 0;
+}
+
+.mission_history_item.has_media .mission_history_body {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.mission_history_item.has_media .mission_history_body .mission_history_media {
+  display: none;
 }
 
 .mission_history_body strong {
@@ -510,7 +521,7 @@
 }
 
 .mission_history_edit_icon {
-  display: inline-flex;
+  display: none;
   width: 20px;
   height: 20px;
   flex: 0 0 auto;
@@ -528,25 +539,61 @@
   white-space: pre-line;
 }
 
+.mission_history_meta {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  margin-top: 6px;
+}
+
 .mission_history_media {
   display: flex;
   gap: 6px;
-  margin-top: 8px;
+  margin-top: 0;
+}
+
+.mission_history_item.has_media .mission_history_media {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
 }
 
 .mission_history_media img,
 .mission_history_media video {
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   border-radius: 10px;
   object-fit: cover;
   background: #f2f2f6;
 }
 
-.mission_history_item time {
-  align-self: center;
-  padding-top: 0;
+.mission_history_meta time {
   color: #505050;
+}
+
+.mission_history_more {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #505050;
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.mission_history_more svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 2.3;
 }
 
 .mission_pet_switch_sheet {
@@ -986,6 +1033,8 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
   -ms-overflow-style: none;
   scrollbar-width: none;
 }

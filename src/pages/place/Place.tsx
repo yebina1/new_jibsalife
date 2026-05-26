@@ -49,7 +49,7 @@ const hospitalPlaceItems: PlaceListItem[] = hospitalProfiles.map((hospital, inde
   statusLabelType: 'hospital',
   createdAt: `2026-05-${String(18 - index).padStart(2, '0')}T10:00:00`,
   popularity: 98 - index * 4,
-  routePath: `/health/hospitals/${hospital.id}`,
+  routePath: `/place/hospitals/${hospital.id}`,
 }))
 
 const otherPlaceItems: PlaceListItem[] = [

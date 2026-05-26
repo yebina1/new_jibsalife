@@ -1,6 +1,7 @@
 import './Mission.css'
 import { useEffect, useMemo, useRef, useState, type UIEvent } from 'react'
 import { useNavigate } from 'react-router'
+import { MoreVertical } from 'lucide-react'
 import PageHeader from '../components/PageHeader'
 import ChevronIcon from '../components/ChevronIcon'
 import FloatingWriteButton from '../components/FloatingWriteButton'
@@ -10,6 +11,7 @@ import DatePicker from '../components/html/DatePicker'
 import Button from '../components/html/Button'
 import AddSheet from '../components/AddSheet'
 import MissionRecordSheet from '../components/MissionRecordSheet'
+import PostMoreSheet from '../components/PostMoreSheet'
 import {
   PET_PROFILES_CHANGE_EVENT,
   readPetProfiles,
@@ -76,6 +78,9 @@ const periodMinuteOptions = Array.from({ length: 60 }, (_, index) => index)
 const periodWheelLoops = [0, 1, 2]
 const periodWheelItemHeight = 44
 const PERIOD_DATE_RANGE_DAYS = 366
+const periodWheelColumnTypes = ['date', 'period', 'hour', 'minute'] as const
+
+type PeriodWheelColumnType = (typeof periodWheelColumnTypes)[number]
 
 function createCalendarDays(year: number, month: number): CalendarDay[] {
   const firstDayIndex = new Date(year, month - 1, 1).getDay()
@@ -196,6 +201,47 @@ function getHour24(dateTime: PeriodDateTime) {
 
 function getPeriodTimeLabel(dateTime: PeriodDateTime) {
   return `${String(getHour24(dateTime)).padStart(2, '0')}:${String(dateTime.minute).padStart(2, '0')}`
+}
+
+function formatHistoryTimeLabel(time: string) {
+  const trimmedTime = time.trim()
+  const colonMatch = trimmedTime.match(/^(\d{1,2}):(\d{1,2})$/)
+  if (colonMatch) {
+    const hour = Number(colonMatch[1])
+    const minute = Number(colonMatch[2])
+
+    if (
+      Number.isFinite(hour) &&
+      Number.isFinite(minute) &&
+      hour >= 0 &&
+      hour < 24 &&
+      minute >= 0 &&
+      minute < 60
+    ) {
+      return `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`
+    }
+  }
+
+  const koreanMatch = trimmedTime.match(/^(오전|오후)?\s*(\d{1,2})\s*시\s*(\d{1,2})?\s*분?$/)
+  if (!koreanMatch) return trimmedTime
+
+  const meridiem = koreanMatch[1]
+  const hourValue = Number(koreanMatch[2])
+  const minuteValue = Number(koreanMatch[3] ?? '0')
+  if (!Number.isFinite(hourValue) || !Number.isFinite(minuteValue)) return trimmedTime
+
+  let normalizedHour = hourValue
+  if (meridiem === '오전') {
+    normalizedHour = hourValue === 12 ? 0 : hourValue
+  } else if (meridiem === '오후') {
+    normalizedHour = hourValue === 12 ? 12 : hourValue + 12
+  }
+
+  if (normalizedHour < 0 || normalizedHour >= 24 || minuteValue < 0 || minuteValue >= 60) {
+    return trimmedTime
+  }
+
+  return `${String(normalizedHour).padStart(2, '0')}:${String(minuteValue).padStart(2, '0')}`
 }
 
 function getPeriodDateLabel(dateTime: PeriodDateTime) {
@@ -443,6 +489,7 @@ function Mission() {
   const [selectedQuickMessage, setSelectedQuickMessage] = useState('')
   const [feedAmount, setFeedAmount] = useState(readDefaultFeedAmount)
   const [editingHistoryId, setEditingHistoryId] = useState<number | null>(null)
+  const [historyMoreTarget, setHistoryMoreTarget] = useState<MissionHistoryRecord | null>(null)
   const [historyItems, setHistoryItems] = useState<MissionHistoryRecord[]>(() => [
     ...readMissionActivityRecords().map(toMissionHistoryRecord),
     ...readMissionHistoryRecordsWithDefaults(),
@@ -478,6 +525,13 @@ function Mission() {
   const weekdaysRef = useRef<HTMLDivElement>(null)
   const historyListRef = useRef<HTMLDivElement>(null)
   const periodWheelScrollFrames = useRef<Record<string, number | undefined>>({})
+  const periodWheelSettleTimeouts = useRef<Record<string, number | undefined>>({})
+  const periodWheelColumnRefs = useRef<Record<PeriodWheelColumnType, HTMLDivElement | null>>({
+    date: null,
+    period: null,
+    hour: null,
+    minute: null,
+  })
   const calendarDays = useMemo(
     () => createCalendarDays(calendarYear, calendarMonth),
     [calendarMonth, calendarYear]
@@ -657,11 +711,25 @@ function Mission() {
     if (!isPeriodDatePickerOpen || typeof window === 'undefined') return undefined
 
     const frameId = window.requestAnimationFrame(() => {
-      document.querySelectorAll<HTMLElement>('.mission_period_wheel_column').forEach((column) => {
+      periodWheelColumnTypes.forEach((type) => {
+        const column = periodWheelColumnRefs.current[type]
+        if (!column) return
+
+        const buttons = Array.from(column.querySelectorAll<HTMLButtonElement>('button'))
+        if (buttons.length === 0) return
+
         const activeOption =
           column.querySelector<HTMLElement>('button.active[data-loop="1"]') ??
           column.querySelector<HTMLElement>('button.active')
-        activeOption?.scrollIntoView({ block: 'center' })
+        if (!activeOption) return
+
+        const targetIndex = buttons.findIndex((button) => button === activeOption)
+        if (targetIndex < 0) return
+
+        const nextScrollTop = targetIndex * periodWheelItemHeight
+        if (Math.abs(column.scrollTop - nextScrollTop) <= 1) return
+
+        column.scrollTop = nextScrollTop
       })
     })
 
@@ -669,6 +737,10 @@ function Mission() {
   }, [
     isPeriodDatePickerOpen,
     periodEditingField,
+    periodDateOptions,
+    activeDraftPeriod.hour,
+    activeDraftPeriod.minute,
+    activeDraftPeriod.period,
   ])
 
   const updateDraftPeriod = (nextValue: Partial<PeriodDateTime>) => {
@@ -954,6 +1026,15 @@ function Mission() {
     requestCloseMissionSheet()
   }
 
+  const closeHistoryMoreSheet = () => {
+    setHistoryMoreTarget(null)
+  }
+
+  const deleteHistoryItem = (historyId: number) => {
+    setHistoryItems((prev) => prev.filter((item) => item.id !== historyId))
+    setHistoryMoreTarget(null)
+  }
+
   const openHistoryEdit = (item: MissionHistoryRecord) => {
     const [year, month, day] = item.date.split('-').map(Number)
     const nextDate = {
@@ -994,6 +1075,11 @@ function Mission() {
     setIsPeriodPickerOpen(false)
     setIsPeriodDatePickerOpen(false)
     setIsFabOpen(true)
+  }
+
+  const openHistoryEditFromList = (item: MissionHistoryRecord) => {
+    setHistoryMoreTarget(null)
+    openHistoryEdit(item)
   }
 
   const openCategoryEdit = () => {
@@ -1132,10 +1218,19 @@ function Mission() {
       window.cancelAnimationFrame(periodWheelScrollFrames.current[frameKey])
     }
 
+    if (periodWheelSettleTimeouts.current[frameKey]) {
+      window.clearTimeout(periodWheelSettleTimeouts.current[frameKey])
+    }
+
     periodWheelScrollFrames.current[frameKey] = window.requestAnimationFrame(() => {
       applyCenteredPeriodValue(column, type)
       periodWheelScrollFrames.current[frameKey] = undefined
     })
+
+    periodWheelSettleTimeouts.current[frameKey] = window.setTimeout(() => {
+      settlePeriodWheelColumn(column, type)
+      periodWheelSettleTimeouts.current[frameKey] = undefined
+    }, 90)
   }
 
   const applyCenteredPeriodValue = (
@@ -1185,11 +1280,32 @@ function Mission() {
     }
   }
 
+  const settlePeriodWheelColumn = (
+    column: HTMLElement,
+    type: 'date' | 'period' | 'hour' | 'minute',
+  ) => {
+    const centeredButton = getCenteredPeriodButton(column)
+    if (!centeredButton) return
+
+    const buttons = Array.from(column.querySelectorAll<HTMLButtonElement>('button'))
+    const centeredIndex = buttons.findIndex((button) => button === centeredButton)
+    if (centeredIndex < 0) return
+
+    const nextScrollTop = centeredIndex * periodWheelItemHeight
+    if (Math.abs(column.scrollTop - nextScrollTop) <= 1) return
+
+    column.scrollTo({ top: nextScrollTop, behavior: 'smooth' })
+    applyCenteredPeriodValue(column, type)
+  }
+
   const renderPeriodWheel = () => (
     <div className="mission_period_wheel" aria-label="기간 날짜와 시간 선택">
       <div className="mission_period_wheel_selector" aria-hidden="true" />
       <div
         className="mission_period_wheel_column date"
+        ref={(node) => {
+          periodWheelColumnRefs.current.date = node
+        }}
         onScroll={(event) => handlePeriodWheelScroll(event, 'date')}
       >
         {periodDateOptions.map((option) => {
@@ -1217,6 +1333,9 @@ function Mission() {
       </div>
       <div
         className="mission_period_wheel_column period"
+        ref={(node) => {
+          periodWheelColumnRefs.current.period = node
+        }}
         onScroll={(event) => handlePeriodWheelScroll(event, 'period')}
       >
         {periodWheelLoops.flatMap((loopIndex) =>
@@ -1236,6 +1355,9 @@ function Mission() {
       </div>
       <div
         className="mission_period_wheel_column"
+        ref={(node) => {
+          periodWheelColumnRefs.current.hour = node
+        }}
         onScroll={(event) => handlePeriodWheelScroll(event, 'hour')}
       >
         {periodWheelLoops.flatMap((loopIndex) =>
@@ -1255,6 +1377,9 @@ function Mission() {
       </div>
       <div
         className="mission_period_wheel_column"
+        ref={(node) => {
+          periodWheelColumnRefs.current.minute = node
+        }}
         onScroll={(event) => handlePeriodWheelScroll(event, 'minute')}
       >
         {periodWheelLoops.flatMap((loopIndex) =>
@@ -1386,7 +1511,7 @@ function Mission() {
               <button
                 key={item.id}
                 type="button"
-                className="mission_history_item"
+                className={`mission_history_item${item.media && item.media.length > 0 ? ' has_media' : ''}`}
                 onClick={() => openHistoryEdit(item)}
               >
                 <span
@@ -1395,11 +1520,22 @@ function Mission() {
                   aria-hidden="true"
                 />
                 <div className="mission_history_body">
-                  <strong className="title_h5">
-                    {item.title}
-                    <i className="bx bx-edit-alt mission_history_edit_icon" aria-hidden="true" />
-                  </strong>
+                  <strong className="title_h5">{item.title}</strong>
                   <p className="p_regular">{item.detail}</p>
+                  <div className="mission_history_meta">
+                    <time className="p_regular">{formatHistoryTimeLabel(item.time)}</time>
+                    <button
+                      type="button"
+                      className="mission_history_more"
+                      aria-label={`${item.title} 더보기`}
+                      onClick={(event) => {
+                        event.stopPropagation()
+                        setHistoryMoreTarget(item)
+                      }}
+                    >
+                      <MoreVertical aria-hidden="true" />
+                    </button>
+                  </div>
                   {item.media && item.media.length > 0 ? (
                     <div className="mission_history_media" aria-label="등록 이미지">
                       {item.media.slice(0, 3).map((media, index) => (
@@ -1424,7 +1560,29 @@ function Mission() {
                     </div>
                   ) : null}
                 </div>
-                <time className="p_regular">{item.time}</time>
+                {item.media && item.media.length > 0 ? (
+                  <div className="mission_history_media" aria-label="?깅줉 ?대?吏">
+                    {item.media.slice(0, 3).map((media, index) => (
+                      media.type === 'video' ? (
+                        <video
+                          key={`${media.src}-${index}`}
+                          src={media.src}
+                          aria-label={media.label || `${item.title} ?숈쁺??${index + 1}`}
+                          controls
+                          muted
+                          playsInline
+                          preload="metadata"
+                        />
+                      ) : (
+                        <img
+                          key={`${media.src}-${index}`}
+                          src={media.src}
+                          alt={media.label || `${item.title} ?대?吏 ${index + 1}`}
+                        />
+                      )
+                    ))}
+                  </div>
+                ) : null}
               </button>
             ))}
           </div>
@@ -2224,6 +2382,15 @@ function Mission() {
           </div>
         </AddSheet>
       )}
+
+      {historyMoreTarget ? (
+        <PostMoreSheet
+          type="own"
+          onClose={closeHistoryMoreSheet}
+          onDelete={() => deleteHistoryItem(historyMoreTarget.id)}
+          onEdit={() => openHistoryEditFromList(historyMoreTarget)}
+        />
+      ) : null}
 
     </>
   )

@@ -1,5 +1,5 @@
 import { MapPin, Phone, Star } from 'lucide-react'
-import { Navigate, useNavigate, useParams } from 'react-router'
+import { Navigate, useLocation, useNavigate, useParams } from 'react-router'
 import './Health.css'
 import './HealthHospitalDetail.css'
 import PageHeader from '../../components/PageHeader'
@@ -11,11 +11,14 @@ import { findHospitalById, getOperatingState } from './HealthHospitalData'
 
 function HealthHospitalDetail() {
   const navigate = useNavigate()
+  const { pathname } = useLocation()
   const { hospitalId } = useParams()
   const hospital = hospitalId ? findHospitalById(hospitalId) : null
+  const isPlaceFlow = pathname.startsWith('/place/')
+  const fallbackPath = isPlaceFlow ? '/place/hospitals/list' : '/health/hospitals/list'
 
   if (!hospital) {
-    return <Navigate to="/health/hospitals/list" replace />
+    return <Navigate to={fallbackPath} replace />
   }
 
   const operatingState = getOperatingState(hospital.open, hospital.close)
