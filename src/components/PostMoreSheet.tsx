@@ -23,8 +23,8 @@ function PostMoreSheet({ type, onClose, onDelete, onEdit, onReport, onBlock, onC
           </>
         ) : (
           <>
-            <li><button type="button" onClick={onReport}>신고하기</button></li>
-            <li><button type="button" onClick={onBlock}>차단하기</button></li>
+            <li><button type="button" className="post_more_sheet_disabled" disabled onClick={onReport}>신고하기</button></li>
+            <li><button type="button" className="post_more_sheet_disabled" disabled onClick={onBlock}>차단하기</button></li>
           </>
         )}
       </ul>

@@ -63,8 +63,19 @@
   align-items: start;
 }
 
+.cpsdetail_my_comment {
+  margin: -10px -12px 0;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: #f6f3ff;
+}
+
 .cpsdetail_reply {
   margin-left: 50px;
+}
+
+.cpsdetail_reply.cpsdetail_my_comment {
+  margin-left: 38px;
 }
 
 .cpsdetail_avatar_box {
@@ -193,6 +204,25 @@
 .cpsdetail_comment_actions button.active svg {
   fill: #A10803;
   stroke: #A10803;
+}
+
+.cpsdetail_comment_like_icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  align-items: center;
+  justify-content: center;
+}
+
+.cpsdetail_comment_like_icon .like_icon {
+  width: 14px;
+  height: 14px;
+}
+
+.cpsdetail_comment_like_text {
+  display: inline-flex;
+  align-items: center;
 }
 
 .cpscomments_footer {

@@ -188,9 +188,14 @@ function CommunityWrite() {
       writeCommunityCreatedPosts([newPost, ...existing])
     } catch { /* noop */ }
 
-    addUserNotification({ title: '커뮤니티', content: '게시글이 등록되었습니다.', path: '/community/petstory' })
+    addUserNotification({ title: '커뮤니티', content: '게시글이 등록되었습니다.', path: `/community/petstory/detail/${newPost.id}` })
     showStateBarMessage('게시글이 등록되었습니다.')
-    navigate(backTarget ?? '/community/petstory')
+    navigate(`/community/petstory/detail/${newPost.id}`, {
+      state: {
+        post: newPost,
+        returnTo: backTarget ?? '/community/petstory',
+      },
+    })
   }
 
   return (

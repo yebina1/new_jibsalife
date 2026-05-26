@@ -1,6 +1,6 @@
 import './CommunityPetStoryDetails.css'
 import { createPortal } from 'react-dom'
-import { type TouchEvent, useEffect, useRef, useState } from 'react'
+import { type TouchEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router'
 import PageHeader from '../../components/PageHeader'
 import HeaderIcon from '../../components/HeaderIcon'
@@ -20,7 +20,7 @@ import life6 from '../../img/petstory/daily/daily_6.jpg'
 import addIcon from '../../svg/add_icon.svg'
 import emojiIcon from '../../svg/emoji.svg'
 import commentIcon from '../../svg/nav_communicate.svg'
-import { MY_PROFILE_IMAGE, MY_PROFILE_NAME, readMyProfileName } from '../../utils/myProfile'
+import { readMyProfileImage, readMyProfileName } from '../../utils/myProfile'
 import { readCommunityCreatedPosts, writeCommunityCreatedPosts } from '../../utils/communityCreatedPosts'
 import { useActionRowSlot } from '../../contexts/ActionRowContext'
 import { petStoryDetailComments } from './CommunityPetStoryDetailData'
@@ -287,10 +287,10 @@ function CommentText({ text }: { text: string }) {
   )
 }
 
-function AvatarIcon() {
+function AvatarIcon({ image, name }: { image: string; name: string }) {
   return (
     <span className="cpsdetail_avatar_box" aria-hidden="true">
-      <img src={MY_PROFILE_IMAGE} alt={`${MY_PROFILE_NAME} 프로필 이미지`} />
+      <img src={image} alt={`${name} 프로필 이미지`} />
     </span>
   )
 }
@@ -328,7 +328,10 @@ function CommunityPetStoryDetails() {
         ? [post.image]
         : [post.image, fallbackSideImage]
       : []
-  const initialComments = detailState?.initialComments ?? petStoryDetailComments.slice(0, post.comments)
+  const initialComments = useMemo(
+    () => detailState?.initialComments ?? petStoryDetailComments.slice(0, post.comments),
+    [detailState?.initialComments, post.comments],
+  )
   const commentsStorageKey = detailState?.storageKey ?? `jibsalife.community.comments.${post.id}`
   const focusCommentId = detailState?.focusCommentId ?? null
   const [activeGalleryIndex, setActiveGalleryIndex] = useState(0)
@@ -358,6 +361,7 @@ function CommunityPetStoryDetails() {
   const lastScrollTopRef = useRef(0)
   const touchStartRef = useRef<{ x: number; y: number } | null>(null)
   const currentProfileName = readMyProfileName()
+  const currentProfileImage = readMyProfileImage()
   const content = post.content?.trim() || fallbackPost.content || '함께 나누고 싶은 반려 생활 이야기를 남겼어요.'
   const isLiked = likedPostIds.includes(post.id)
   const activeDailyIndex = dailyPosts.findIndex((dailyPost) => dailyPost.id === post.id)
@@ -611,7 +615,7 @@ function CommunityPetStoryDetails() {
       >
         <article className="cpsdetail_post">
           <header className="cpsdetail_author_row">
-            <AvatarIcon />
+            <AvatarIcon image={currentProfileImage} name={currentProfileName} />
             <div className="cpsdetail_author_text">
               <Title as="h5" title={post.author}>
                 <p>
@@ -741,7 +745,7 @@ function CommunityPetStoryDetails() {
               const replyCount = repliesMap[comment.id]?.length ?? 0
               return (
               <article key={comment.id} className={`cpsdetail_comment${isReply ? ' cpsdetail_reply' : ''}${comment.author === currentProfileName ? ' cpsdetail_my_comment' : ''}`}>
-                <AvatarIcon />
+                <AvatarIcon image={currentProfileImage} name={currentProfileName} />
                 <div className="cpsdetail_comment_body">
                   <div className="cpsdetail_comment_head">
                     <Title as="h5" title={

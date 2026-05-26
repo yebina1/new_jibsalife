@@ -3,15 +3,18 @@ import { useEffect, useRef, useState } from 'react'
 import { incrementChallengeCommentCount } from '../../utils/challengeStatus'
 import { useLocation } from 'react-router'
 import Header from '../../components/Header'
+import LikeButton from '../../components/LikeButton'
 import StateBar from '../../components/StateBar'
 import HomeIndicator from '../../components/HomeIndicator'
 import Title from '../../components/Title'
+import ConfirmDialog from '../../components/ConfirmDialog'
+import PostMoreSheet from '../../components/PostMoreSheet'
 import BackButton from '../../components/html/BackButton'
 import CommentInputForm from '../../components/html/CommentInputForm'
 import addIcon from '../../svg/add_icon.svg'
 import emojiIcon from '../../svg/emoji.svg'
 import commentIcon from '../../svg/nav_communicate.svg'
-import { MY_PROFILE_IMAGE, MY_PROFILE_NAME } from '../../utils/myProfile'
+import { readMyProfileImage, readMyProfileName } from '../../utils/myProfile'
 import { petStoryDetailComments } from './CommunityPetStoryDetailData'
 
 const defaultLikedCommentIdsStorageKey = 'jibsalife.community.likedCommentIds'
@@ -105,18 +108,10 @@ function MoreIcon() {
   )
 }
 
-function HeartIcon() {
-  return (
-    <svg viewBox="0 1.8 24 24" aria-hidden="true">
-      <path d="M12 20.2 5.2 13.8a4.55 4.55 0 0 1 6.43-6.43L12 7.74l.37-.37a4.55 4.55 0 1 1 6.43 6.43Z" />
-    </svg>
-  )
-}
-
-function AvatarIcon() {
+function AvatarIcon({ image, name }: { image: string; name: string }) {
   return (
     <span className="cpsdetail_avatar_box" aria-hidden="true">
-      <img src={MY_PROFILE_IMAGE} alt={`${MY_PROFILE_NAME} 프로필 이미지`} />
+      <img src={image} alt={`${name} 프로필 이미지`} />
     </span>
   )
 }
@@ -143,6 +138,9 @@ function CommunityPetStoryComments() {
   const location = useLocation()
   const footerRef = useRef<HTMLElement>(null)
   const pageRef = useRef<HTMLElement>(null)
+  const shouldScrollToBottomRef = useRef(false)
+  const currentProfileName = readMyProfileName()
+  const currentProfileImage = readMyProfileImage()
   const postId = location.pathname.match(/\/petstory\/detail\/([^/]+)\/comments/)?.[1]
   const knowledgeId = location.pathname.match(/\/petstory\/knowledge\/([^/]+)\/comments/)?.[1]
   const commentsPageState = location.state as CommentsPageState | null
@@ -161,6 +159,23 @@ function CommunityPetStoryComments() {
     readLikedCommentIds(likedCommentIdsStorageKey),
   )
   const [replyTo, setReplyTo] = useState<{ author: string; commentId: number } | null>(initialReplyTo)
+  const [moreSheetOpen, setMoreSheetOpen] = useState<'own' | 'other' | false>(false)
+  const [moreTarget, setMoreTarget] = useState<{ commentId: number } | null>(null)
+  const [deleteAlertOpen, setDeleteAlertOpen] = useState(false)
+  const [editAlertOpen, setEditAlertOpen] = useState(false)
+  const [pendingEditText, setPendingEditText] = useState('')
+  const [editCommentId, setEditCommentId] = useState<number | null>(null)
+  const [editMentionAuthor, setEditMentionAuthor] = useState<string | null>(null)
+  const [editCommentInitialText, setEditCommentInitialText] = useState<string | undefined>(undefined)
+  const editCommentText = editCommentId !== null ? editCommentInitialText : undefined
+
+  const persistComments = (comments: DetailComment[]) => {
+    const nextStorageKey = getCommentsStorageKey(postId, commentsStorageKey)
+
+    if (nextStorageKey) {
+      window.localStorage.setItem(nextStorageKey, JSON.stringify(comments))
+    }
+  }
 
   useEffect(() => {
     const footer = footerRef.current
@@ -175,6 +190,20 @@ function CommunityPetStoryComments() {
     return () => observer.disconnect()
   }, [])
 
+  useEffect(() => {
+    if (!shouldScrollToBottomRef.current) return
+    shouldScrollToBottomRef.current = false
+
+    const frameId = window.requestAnimationFrame(() => {
+      pageRef.current?.scrollTo({
+        top: pageRef.current.scrollHeight,
+        behavior: 'smooth',
+      })
+    })
+
+    return () => window.cancelAnimationFrame(frameId)
+  }, [visibleComments.length])
+
   const toggleCommentLike = (commentId: number) => {
     const willLike = !likedCommentIds.includes(commentId)
     const nextLikedIds = willLike
@@ -184,11 +213,15 @@ function CommunityPetStoryComments() {
     setLikedCommentIds(nextLikedIds)
     window.localStorage.setItem(likedCommentIdsStorageKey, JSON.stringify(nextLikedIds))
     setVisibleComments((current) =>
-      current.map((comment) =>
-        comment.id === commentId
-          ? { ...comment, likes: Math.max((comment.likes ?? 0) + (willLike ? 1 : -1), 0) }
-          : comment,
-      ),
+      {
+        const nextComments = current.map((comment) =>
+          comment.id === commentId
+            ? { ...comment, likes: Math.max((comment.likes ?? 0) + (willLike ? 1 : -1), 0) }
+            : comment,
+        )
+        persistComments(nextComments)
+        return nextComments
+      },
     )
   }
 
@@ -206,7 +239,7 @@ function CommunityPetStoryComments() {
       ...visibleComments,
       {
         id: Date.now(),
-        author: MY_PROFILE_NAME,
+        author: currentProfileName,
         text,
         createdAt: new Date().toISOString(),
         likes: 0,
@@ -217,31 +250,103 @@ function CommunityPetStoryComments() {
 
     setVisibleComments(nextComments)
     setReplyTo(null)
+    setEditCommentId(null)
+    shouldScrollToBottomRef.current = true
 
-    const nextStorageKey = getCommentsStorageKey(postId, commentsStorageKey)
-
-    if (nextStorageKey) {
-      window.localStorage.setItem(nextStorageKey, JSON.stringify(nextComments))
-    }
+    persistComments(nextComments)
     incrementChallengeCommentCount()
   }
 
   const startReply = (comment: DetailComment) => {
+    setEditCommentId(null)
+    setEditMentionAuthor(null)
+    setEditCommentInitialText(undefined)
     setReplyTo({ author: comment.author, commentId: comment.parentId ?? comment.id })
+  }
+
+  const handleEditConfirm = () => {
+    if (editCommentId !== null) {
+      setVisibleComments((current) => {
+        const nextComments = current.map((comment) =>
+          comment.id === editCommentId ? { ...comment, text: pendingEditText } : comment,
+        )
+        persistComments(nextComments)
+        return nextComments
+      })
+      setEditCommentId(null)
+      setPendingEditText('')
+      setEditMentionAuthor(null)
+      setEditCommentInitialText(undefined)
+    }
+    setEditAlertOpen(false)
+  }
+
+  const handleDelete = () => {
+    if (moreTarget) {
+      setVisibleComments((current) => {
+        const deletedComment = current.find((comment) => comment.id === moreTarget.commentId)
+        const deletedIds = new Set([moreTarget.commentId])
+
+        if (!deletedComment?.parentId) {
+          current.forEach((comment) => {
+            if (comment.parentId === moreTarget.commentId) {
+              deletedIds.add(comment.id)
+            }
+          })
+        }
+
+        const nextComments = current.filter((comment) => !deletedIds.has(comment.id))
+        persistComments(nextComments)
+        return nextComments
+      })
+    }
+
+    setDeleteAlertOpen(false)
+    setMoreTarget(null)
+  }
+
+  const openMoreSheet = (comment: DetailComment) => {
+    setMoreTarget({ commentId: comment.id })
+    setMoreSheetOpen(comment.author === currentProfileName ? 'own' : 'other')
+  }
+
+  const startEdit = () => {
+    setMoreSheetOpen(false)
+    if (!moreTarget) return
+
+    const editingComment = visibleComments.find((comment) => comment.id === moreTarget.commentId)
+    const mentionMatch = editingComment?.parentId ? editingComment.text.match(/^@(\S+)\s*/) : null
+    const mentionAuthor = mentionMatch ? mentionMatch[1] : null
+    const initialText = mentionAuthor
+      ? (editingComment?.text.replace(/^@\S+\s*/, '') ?? '')
+      : (editingComment?.text ?? '')
+
+    setEditMentionAuthor(mentionAuthor)
+    setEditCommentInitialText(initialText)
+    setReplyTo(null)
+    setEditCommentId(moreTarget.commentId)
   }
 
   const renderComment = (comment: DetailComment, isReply = false) => {
     const replyCount = repliesMap[comment.id]?.length ?? 0
 
     return (
-      <article key={comment.id} className={`cpsdetail_comment${isReply ? ' cpsdetail_reply' : ''}`}>
-        <AvatarIcon />
+      <article
+        key={comment.id}
+        className={`cpsdetail_comment${isReply ? ' cpsdetail_reply' : ''}${comment.author === currentProfileName ? ' cpsdetail_my_comment' : ''}`}
+      >
+        <AvatarIcon image={currentProfileImage} name={currentProfileName} />
         <div className="cpsdetail_comment_body">
           <div className="cpsdetail_comment_head">
             <Title as="h5" title={comment.author}>
               <p>{comment.createdAt ? formatRelativeTime(comment.createdAt) : (comment.time ?? '11시간 전')}</p>
             </Title>
-            <button type="button" className="cpsdetail_more" aria-label="댓글 더보기">
+            <button
+              type="button"
+              className="cpsdetail_more"
+              aria-label="댓글 더보기"
+              onClick={() => openMoreSheet(comment)}
+            >
               <MoreIcon />
             </button>
           </div>
@@ -249,14 +354,16 @@ function CommunityPetStoryComments() {
             <CommentText text={comment.text} />
           </p>
           <div className="cpsdetail_comment_actions">
-            <button
+            <LikeButton
               type="button"
-              className={likedCommentIds.includes(comment.id) ? 'active' : undefined}
+              liked={likedCommentIds.includes(comment.id)}
+              className="cpsdetail_comment_like"
+              iconClassName="cpsdetail_comment_like_icon"
+              countClassName="cpsdetail_comment_like_text"
               onClick={() => toggleCommentLike(comment.id)}
             >
-              <HeartIcon />
-              <span>좋아요 {comment.likes || ''}</span>
-            </button>
+              좋아요 {comment.likes || ''}
+            </LikeButton>
             <button type="button" onClick={() => startReply(comment)}>
               <img src={commentIcon} className="cpscomments_reply_icon" alt="" aria-hidden="true" />
               <span>답글쓰기{replyCount > 0 ? ` ${replyCount}` : ''}</span>
@@ -293,12 +400,62 @@ function CommunityPetStoryComments() {
           placeholder="메시지를 입력해 주세요."
           addIcon={addIcon}
           emojiIcon={emojiIcon}
-          replyTo={replyTo?.author ?? null}
-          onClearReply={() => setReplyTo(null)}
-          onSubmit={addComment}
+          replyTo={editCommentId !== null ? editMentionAuthor : (replyTo?.author ?? null)}
+          onClearReply={editCommentId !== null ? () => setEditMentionAuthor(null) : () => setReplyTo(null)}
+          prefilledText={editCommentText}
+          onSubmit={(text) => {
+            if (editCommentId !== null) {
+              setPendingEditText(text)
+              setEditAlertOpen(true)
+            } else {
+              addComment(text)
+            }
+          }}
         />
         <HomeIndicator />
       </footer>
+
+      {editAlertOpen && (
+        <ConfirmDialog
+          message="수정하시겠습니까?"
+          cancelLabel="취소"
+          confirmLabel="수정하기"
+          onCancel={() => {
+            setEditAlertOpen(false)
+            setEditCommentId(null)
+            setEditMentionAuthor(null)
+            setEditCommentInitialText(undefined)
+          }}
+          onConfirm={handleEditConfirm}
+        />
+      )}
+
+      {deleteAlertOpen && (
+        <ConfirmDialog
+          message="삭제하시겠습니까?"
+          onCancel={() => setDeleteAlertOpen(false)}
+          onConfirm={handleDelete}
+        />
+      )}
+
+      {moreSheetOpen === 'own' ? (
+        <PostMoreSheet
+          type="own"
+          onClose={() => setMoreSheetOpen(false)}
+          onDelete={() => {
+            setMoreSheetOpen(false)
+            setDeleteAlertOpen(true)
+          }}
+          onEdit={startEdit}
+        />
+      ) : moreSheetOpen === 'other' ? (
+        <PostMoreSheet
+          type="other"
+          onClose={() => setMoreSheetOpen(false)}
+          onReport={() => setMoreSheetOpen(false)}
+          onBlock={() => setMoreSheetOpen(false)}
+        />
+      ) : null}
     </>
   )
 }

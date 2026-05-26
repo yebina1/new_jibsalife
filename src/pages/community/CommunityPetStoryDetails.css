@@ -408,6 +408,7 @@
   display: grid;
   gap: 24px;
   padding-top: 24px;
+  padding-bottom: 8px;
 }
 
 .cpsdetail_comments_title {
@@ -439,8 +440,19 @@
   align-items: start;
 }
 
+.cpsdetail_my_comment {
+  margin: -10px -12px 0;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: #f6f3ff;
+}
+
 .cpsdetail_reply {
   margin-left: 50px;
+}
+
+.cpsdetail_reply.cpsdetail_my_comment {
+  margin-left: 38px;
 }
 
 .cpsdetail_comments_more_btn {

@@ -63,8 +63,7 @@ function VoteWrite() {
   const isVoteReady =
     voteType !== '' &&
     voteTitle.trim() !== '' &&
-    voteContent.trim() !== '' &&
-    (voteType === 'OX' || voteItems.every((it) => it.label.trim() !== '')) &&
+    (voteType === 'OX' || voteType === '사진 투표' || voteItems.every((it) => it.label.trim() !== '')) &&
     (voteType !== '사진 투표' || voteItems.every((it) => it.image !== null))
 
   const handleVoteItemImageChange = (idx: number) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -114,9 +113,9 @@ function VoteWrite() {
       createdAt: new Date().toISOString(),
     })
     setIsVoteConfirmOpen(false)
-    addUserNotification({ title: '커뮤니티', content: '투표글이 등록되었습니다.', path: '/community/vote' })
+    addUserNotification({ title: '커뮤니티', content: '투표글이 등록되었습니다.', path: '/community/vote?sub=regular' })
     showStateBarMessage('투표글이 등록되었습니다.')
-    navigate('/community/vote')
+    navigate('/community/vote?sub=regular')
   }
 
   return (

@@ -52,9 +52,13 @@ export function readMyProfile() {
     return defaultMyProfile
   }
 
+  if (isCurrentDemoUser()) {
+    return defaultMyProfile
+  }
+
   const savedValue = window.localStorage.getItem(getUserScopedStorageKey(MY_PROFILE_STORAGE_KEY))
   if (!savedValue) {
-    return isCurrentDemoUser() ? defaultMyProfile : emptyMyProfile
+    return emptyMyProfile
   }
 
   try {
@@ -64,12 +68,12 @@ export function readMyProfile() {
     return {
       name: typeof parsedValue.name === 'string' && parsedValue.name.trim()
         ? parsedValue.name
-        : (isCurrentDemoUser() ? MY_PROFILE_NAME : EMPTY_MY_PROFILE_NAME),
+        : EMPTY_MY_PROFILE_NAME,
       image: resolveMyProfileImage({ ...parsedValue, guardianType }),
       guardianType,
     }
   } catch {
-    return isCurrentDemoUser() ? defaultMyProfile : emptyMyProfile
+    return emptyMyProfile
   }
 }
 
@@ -83,6 +87,11 @@ export function readMyProfileImage() {
 
 export function writeMyProfile(nextProfile: MyProfileStore) {
   if (typeof window === 'undefined') {
+    return
+  }
+
+  if (isCurrentDemoUser()) {
+    window.dispatchEvent(new CustomEvent(MY_PROFILE_CHANGE_EVENT, { detail: defaultMyProfile }))
     return
   }
 

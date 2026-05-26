@@ -285,6 +285,11 @@
   padding: 0;
 }
 
+.vw_ox_items_section .ox_vote_option {
+  height: 100px;
+  aspect-ratio: auto;
+}
+
 .vw_items_list {
   display: flex;
   flex-direction: row;

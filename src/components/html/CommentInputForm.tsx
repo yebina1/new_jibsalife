@@ -112,7 +112,7 @@ function CommentInputForm({
         </button>
       </label>
 
-      <button type="button" aria-label="이모지" className="comment_input_form_emoji">
+      <button type="button" aria-label="이모지" className="comment_input_form_emoji" disabled>
         <img src={emojiIcon} alt="" />
       </button>
     </form>

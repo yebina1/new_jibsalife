@@ -145,3 +145,8 @@
   height: 28px;
   object-fit: contain;
 }
+
+.comment_input_form_emoji:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
