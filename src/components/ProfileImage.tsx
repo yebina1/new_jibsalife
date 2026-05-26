@@ -8,13 +8,28 @@ type ProfileImageProps = {
   fallbackSrc?: string
 }
 
+function resolveProfileImageSrc(src: string, fallbackSrc: string) {
+  const trimmedSrc = src.trim()
+
+  if (
+    !trimmedSrc ||
+    trimmedSrc === 'daily_thumbnail.jpg' ||
+    trimmedSrc.endsWith('/daily_thumbnail.jpg') ||
+    trimmedSrc.startsWith('/src/img/')
+  ) {
+    return fallbackSrc
+  }
+
+  return trimmedSrc
+}
+
 function ProfileImage({ src, alt, className, fallbackSrc = defaultPetThumbnail }: ProfileImageProps) {
-  const [currentSrc, setCurrentSrc] = useState(src)
+  const [currentSrc, setCurrentSrc] = useState(() => resolveProfileImageSrc(src, fallbackSrc))
   const classNames = className ? `profile_image ${className}` : 'profile_image'
 
   useEffect(() => {
-    setCurrentSrc(src)
-  }, [src])
+    setCurrentSrc(resolveProfileImageSrc(src, fallbackSrc))
+  }, [src, fallbackSrc])
 
   return (
     <span className={classNames}>

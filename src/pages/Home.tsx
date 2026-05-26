@@ -28,6 +28,7 @@ import {
   type MissionHistoryRecord,
 } from '../utils/missionHistoryRecords'
 import {
+  PET_PROFILES_CHANGE_EVENT,
   defaultPetProfiles,
   readPetProfiles,
   writePetProfiles,
@@ -339,6 +340,13 @@ function getSummaryBreedLabel(breed: string) {
   return breed === LEGACY_KOREAN_SHORTHAIR_BREED_LABEL ? HEALTH_REPORT_OBSERVATION_LABEL : breed
 }
 
+function arePetProfilesEqual(
+  currentProfiles: readonly PetProfileSummary[],
+  nextProfiles: readonly PetProfileSummary[],
+) {
+  return JSON.stringify(currentProfiles) === JSON.stringify(nextProfiles)
+}
+
 const rankingCardsData = [
   { rank: 1, photo: homeRank1Photo, icon: homeRank1Icon, photoAlt: '1위 반려동물', iconAlt: '1위', rankClass: 'rank_1' },
   { rank: 2, photo: homeRank2Photo, icon: homeRank2Icon, photoAlt: '2위 반려동물', iconAlt: '2위', rankClass: 'rank_2' },
@@ -404,6 +412,7 @@ function Home() {
   const [calendarRecords, setCalendarRecords] = useState<MissionHistoryRecord[]>(readCalendarRecords)
   const rankingPointerRef = useRef({ startX: 0, startY: 0, isActive: false })
   const rankingResumeTimeoutRef = useRef<number | null>(null)
+  const hasSyncedInitialProfilesRef = useRef(false)
   const summarySlides = [
     ...profileSlides,
     {
@@ -471,6 +480,29 @@ function Home() {
   }, [])
 
   useEffect(() => {
+    const syncPetProfiles = () => {
+      const nextProfiles = readPetProfiles()
+      setProfileSlides((currentProfiles) => (
+        arePetProfilesEqual(currentProfiles, nextProfiles) ? currentProfiles : nextProfiles
+      ))
+    }
+
+    syncPetProfiles()
+    window.addEventListener(PET_PROFILES_CHANGE_EVENT, syncPetProfiles)
+    window.addEventListener('storage', syncPetProfiles)
+
+    return () => {
+      window.removeEventListener(PET_PROFILES_CHANGE_EVENT, syncPetProfiles)
+      window.removeEventListener('storage', syncPetProfiles)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!hasSyncedInitialProfilesRef.current) {
+      hasSyncedInitialProfilesRef.current = true
+      return
+    }
+
     writePetProfiles(profileSlides)
 
     const selectedProfile = profileSlides[summarySlideIndex]
