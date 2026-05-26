@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { useSwipeNav } from '../../hooks/useSwipeNav'
 import { checkChallengeDayDone, readCurrentDay, saveCurrentDay, claimChallengeDay, isChallengeDayClaimed, CHALLENGE_STATUS_CHANGED_EVENT } from '../../utils/challengeStatus'
-import { challengeDays } from './CommunityChallenge'
+import { challengeDays, getChallengeMissionPath } from './CommunityChallenge'
 import CommunityPageHeader from '../../components/CommunityPageHeader'
 import Title from '../../components/Title'
 import WeeklyChallengeCard from '../../components/WeeklyChallengeCard'
@@ -64,6 +64,9 @@ function CommunityOverview() {
               saveCurrentDay(next)
               return next
             })
+          }}
+          onParticipate={() => {
+            navigate(getChallengeMissionPath(currentDay))
           }}
           onComplete={() => {
             claimChallengeDay(currentDay)

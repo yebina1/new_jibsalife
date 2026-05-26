@@ -25,6 +25,7 @@ type WeeklyChallengeCardProps = {
   showTimer?: boolean
   showImage?: boolean
   onComplete?: () => void
+  onParticipate?: () => void
   onDayEnd?: () => void
   day?: number
   imageSrc?: string
@@ -33,7 +34,7 @@ type WeeklyChallengeCardProps = {
   completed?: boolean
 }
 
-function WeeklyChallengeCard({ showTimer = true, showImage = true, onComplete, onDayEnd, day, imageSrc, description, missionDone = false, completed = false }: WeeklyChallengeCardProps) {
+function WeeklyChallengeCard({ showTimer = true, showImage = true, onComplete, onParticipate, onDayEnd, day, imageSrc, description, missionDone = false, completed = false }: WeeklyChallengeCardProps) {
   const [timeLeft, setTimeLeft] = useState(getTimeUntilMidnight)
 
   useEffect(() => {
@@ -105,8 +106,13 @@ function WeeklyChallengeCard({ showTimer = true, showImage = true, onComplete, o
           <span>오늘 24:00 마감</span>
         </p>
       </div>
-      <Button type="button" className="purple_btn" onClick={onComplete} disabled={!missionDone || completed}>
-        {completed ? '오늘 챌린지 완료!' : '참여하고 포인트 받기'}
+      <Button
+        type="button"
+        className="purple_btn"
+        onClick={missionDone ? onComplete : onParticipate}
+        disabled={completed}
+      >
+        {completed ? '오늘 챌린지 완료!' : missionDone ? '포인트 받기' : '참여하기'}
       </Button>
     </section>
   )

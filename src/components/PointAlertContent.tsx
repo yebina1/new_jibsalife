@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react'
 import './PointAlertContent.css'
 import ConfettiEffect from './effect/ConfettiEffect'
-import RewardHero from './RewardHero'
 import RewardPointCard from './RewardPointCard'
 import Button from './html/Button'
+import pointImage from '../img/point_img.jpg'
 
 type PointAlertContentProps = {
   currentPoints: number
@@ -30,7 +30,17 @@ function PointAlertContent({
     <>
       <ConfettiEffect contained />
       <div className="point_alert_content">
-        <RewardHero rewardAmount={rewardAmount} title={heroTitle} subtitle={heroSubtitle} />
+        <div className="point_alert_hero">
+          <strong className="point_alert_title">{heroTitle ?? '챌린지 참여 완료!'}</strong>
+          <p className="point_alert_reward_text">
+            {heroSubtitle ?? (
+              <>
+                <span>{rewardAmount.toLocaleString()}포인트</span>를 받았어요.
+              </>
+            )}
+          </p>
+          <img src={pointImage} alt="" className="point_alert_img" />
+        </div>
         <RewardPointCard
           currentPoints={currentPoints}
           rewardAmount={rewardAmount}

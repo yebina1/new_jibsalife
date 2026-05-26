@@ -100,6 +100,27 @@ export const challengeDays = [
   { day: 7, image: day7Img, description: <>커뮤니티에<br />게시글을 작성해주세요</> },
 ]
 
+// eslint-disable-next-line react-refresh/only-export-components
+export function getChallengeMissionPath(dayIndex: number) {
+  switch (dayIndex) {
+    case 0:
+    case 5:
+      return '/mission'
+    case 1:
+      return '/community/petstory'
+    case 2:
+      return '/community/vote'
+    case 3:
+      return '/health/result'
+    case 4:
+      return '/community/petstory/knowledge'
+    case 6:
+      return '/community/petstory/write'
+    default:
+      return '/community/challenge'
+  }
+}
+
 function CommunityChallenge() {
   useSwipeNav('/community/vote', '/community/petstory')
   const navigate = useNavigate()
@@ -269,6 +290,10 @@ function CommunityChallenge() {
     navigate(`/community/challenge/reward?amount=${points}`)
   }
 
+  const handleParticipate = () => {
+    navigate(getChallengeMissionPath(currentDay))
+  }
+
   const handleDayEnd = () => {
     setCurrentDay((prev) => {
       const next = Math.min(prev + 1, TOTAL_DAYS)
@@ -304,6 +329,7 @@ function CommunityChallenge() {
         </section>
         <WeeklyChallengeCard
           onComplete={handleComplete}
+          onParticipate={handleParticipate}
           onDayEnd={handleDayEnd}
           day={challengeDays[Math.min(currentDay, TOTAL_DAYS - 1)].day}
           imageSrc={challengeDays[Math.min(currentDay, TOTAL_DAYS - 1)].image}
