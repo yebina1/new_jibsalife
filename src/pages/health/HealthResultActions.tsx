@@ -8,14 +8,23 @@ import BackButton from '../../components/html/BackButton'
 import Button from '../../components/html/Button'
 import { Link } from 'react-router'
 import calendarIcon from '../../svg/calendar.svg'
-import petImage from '../../img/pungpungi.png'
 import aiChatImage from '../../img/aichat.svg'
 import consultImage from '../../img/clipboard_3d.png'
 import { calculateHealthResult, readStoredHealthResultInput } from '../../utils/healthResultPolicy'
+import { readPetProfiles, readSelectedPetProfileId } from '../../utils/petProfiles'
+
+const HEALTHY_RESULT_INPUT = {
+  stoolStatus: 'stable',
+  activityStatus: 'stable',
+  mealStatus: 'stable',
+  weightStatus: 'stable',
+  symptomStatus: 'stable',
+  photoStatus: 'stable',
+} as const
 
 function getSummaryMessage(score: number) {
   if (score >= 75) {
-    return '지켜보면 괜찮을 것 같아요.'
+    return '건강 양호 상태예요.'
   }
 
   if (score >= 60) {
@@ -31,7 +40,7 @@ function getSummaryMessage(score: number) {
 
 function getGuideMessage(score: number) {
   if (score >= 75) {
-    return '지금 당장 병원 방문이 필요해 보이지는 않으나, 필요 시 전문가와 상담 또는 병원을 방문해 주세요.'
+    return '식사, 배변, 활동 기록이 전반적으로 안정적이에요. 지금처럼 꾸준히 기록하면서 컨디션만 가볍게 확인해 주세요.'
   }
 
   if (score >= 60) {
@@ -46,7 +55,12 @@ function getGuideMessage(score: number) {
 }
 
 function HealthResultActions() {
-  const result = calculateHealthResult(readStoredHealthResultInput())
+  const pets = readPetProfiles()
+  const selectedPetId = readSelectedPetProfileId()
+  const selectedPet = pets.find((pet) => pet.id === selectedPetId) ?? pets[0] ?? null
+  const petName = selectedPet?.name ?? '반려동물'
+  const petImage = selectedPet?.image ?? aiChatImage
+  const result = calculateHealthResult(selectedPet?.id === 2 ? HEALTHY_RESULT_INPUT : readStoredHealthResultInput())
 
   return (
     <>
@@ -70,7 +84,7 @@ function HealthResultActions() {
           <div className="health_result_actions_summary_top">
             <img src={petImage} alt="" aria-hidden="true" />
             <div className="health_result_actions_summary_copy">
-              <strong>뽕뽕이의 상태는</strong>
+              <strong>{petName}의 상태는</strong>
               <strong>{getSummaryMessage(result.score)}</strong>
             </div>
             <span className="health_result_actions_check" aria-hidden="true">

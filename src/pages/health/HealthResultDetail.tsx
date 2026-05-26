@@ -11,10 +11,23 @@ import {
   createHealthResultDetailItems,
   readStoredHealthResultInput,
 } from '../../utils/healthResultPolicy'
+import { readPetProfiles, readSelectedPetProfileId } from '../../utils/petProfiles'
+
+const HEALTHY_RESULT_INPUT = {
+  stoolStatus: 'stable',
+  activityStatus: 'stable',
+  mealStatus: 'stable',
+  weightStatus: 'stable',
+  symptomStatus: 'stable',
+  photoStatus: 'stable',
+} as const
 
 function HealthResultDetail() {
   const navigate = useNavigate()
-  const result = calculateHealthResult(readStoredHealthResultInput())
+  const pets = readPetProfiles()
+  const selectedPetId = readSelectedPetProfileId()
+  const selectedPet = pets.find((pet) => pet.id === selectedPetId) ?? pets[0] ?? null
+  const result = calculateHealthResult(selectedPet?.id === 2 ? HEALTHY_RESULT_INPUT : readStoredHealthResultInput())
   const detailItems = createHealthResultDetailItems(result)
 
   return (

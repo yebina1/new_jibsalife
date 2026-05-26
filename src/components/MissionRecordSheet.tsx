@@ -69,12 +69,14 @@ function MissionRecordSheet({
   secondaryActionLabel,
 }: Props) {
   const [confirmAction, setConfirmAction] = useState<'edit' | 'delete' | null>(null)
+
   const handleRepeatInfoClick = () => {
     showStateBarMessage('설정한 주기에 맞춰 기록이 자동 등록돼요.\n(ex. 매일, 매주)', 3000, {
       placement: 'sheet',
       variant: 'warning',
     })
   }
+
   const isAmountInputCategory =
     selectedCategory.id === 'meal' || selectedCategory.id === 'walk'
   const amountInputLabel = selectedCategory.id === 'walk' ? '산책 시간' : '사료량'
@@ -242,7 +244,8 @@ function MissionRecordSheet({
       {confirmAction && (
         <ConfirmDialog
           message={confirmAction === 'delete' ? '삭제하시겠습니까?' : '수정하시겠습니까?'}
-          confirmLabel={confirmAction === 'delete' ? '삭제하기' : '수정하기'}
+          cancelLabel="아니오"
+          confirmLabel="네"
           onCancel={() => setConfirmAction(null)}
           onConfirm={handleConfirm}
         />

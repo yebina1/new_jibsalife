@@ -1,5 +1,6 @@
 import type { AuthAccount } from './authAccounts'
 import defaultPetThumbnail from '../img/petstory/daily/daily_thumbnail.jpg'
+import { HEALTH_REPORT_COLLECTING_LABEL } from '../constants/healthLabels'
 import { readMyProfile, writeMyProfile } from './myProfile'
 import { writePetProfile } from './petProfile'
 import { readPetProfiles, writePetProfiles, writeSelectedPetProfileId } from './petProfiles'
@@ -78,6 +79,7 @@ export function hydrateCurrentUserProfileFromAccount(account: AuthAccount) {
       type: 'profile',
       name: account.petName.trim(),
       breed: '',
+      healthStatus: HEALTH_REPORT_COLLECTING_LABEL,
       image: defaultPetThumbnail,
       birthDate: '',
       weight: '',

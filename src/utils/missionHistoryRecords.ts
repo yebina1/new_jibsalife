@@ -228,6 +228,17 @@ const PUNGPUNGI_MISSION_HISTORY_RECORDS = generateMissionHistoryRecords({
   symptomDetails: ['산책 후 헐떡임', '가벼운 기침', '식사량 감소'],
 })
 
+void PUNGPUNGI_MISSION_HISTORY_RECORDS
+
+const PUNGPUNGI_HEALTHY_MISSION_HISTORY_RECORDS = generateMissionHistoryRecords({
+  idBase: 301,
+  mealDetails: ['사료 95g', '사료 100g', '사료 100g', '사료 105g'],
+  poopDetails: ['정상 배변', '정상 배변', '정상 배변', '정상 배변'],
+  walkDetails: ['산책 30분', '산책 35분', '산책 35분', '산책 40분'],
+  activityDetails: ['공놀이 20분', '노즈워크 15분', '실내 놀이 25분'],
+  symptomDetails: ['특이사항 없음', '편안하게 휴식', '컨디션 안정적'],
+})
+
 const DEFAULT_MISSION_HISTORY_RECORD_MAP = new Map(
   DEFAULT_MISSION_HISTORY_RECORDS.map((record) => [record.id, record]),
 )
@@ -254,7 +265,7 @@ function getMissionHistoryStorageKey(petId = readSelectedPetProfileId()) {
 
 function getDefaultMissionHistoryRecords(petId = readSelectedPetProfileId()) {
   if (petId === 1) return LEEYORI_MISSION_HISTORY_RECORDS
-  if (petId === 2) return PUNGPUNGI_MISSION_HISTORY_RECORDS
+  if (petId === 2) return PUNGPUNGI_HEALTHY_MISSION_HISTORY_RECORDS
 
   return DEFAULT_MISSION_HISTORY_RECORDS
 }

@@ -9,45 +9,59 @@ import moveImage from '../../img/health/move.png'
 import eatImage from '../../img/health/eat.png'
 import reportImage from '../../img/health/report.png'
 
-type LoadingCardStatus = 'waiting' | 'done'
+type LoadingCardStatus = 'waiting' | 'active' | 'done'
 
-type ProgressMarkerStep = 0 | 1 | 2 | 3
-
-const loadingCards = [
-  { image: healthImage, label: '건강 기록' },
-  { image: moveImage, label: '활동량 확인' },
-  { image: eatImage, label: '식사 변화' },
-  { image: reportImage, label: 'AI 리포트' },
+const loadingStages = [
+  {
+    image: healthImage,
+    label: '건강 기록',
+    centerTitle: '건강 기록',
+    centerSubtitle: '확인 중',
+    threshold: 25,
+  },
+  {
+    image: moveImage,
+    label: '활동량 확인',
+    centerTitle: '활동량',
+    centerSubtitle: '분석 중',
+    threshold: 50,
+  },
+  {
+    image: eatImage,
+    label: '식사 변화',
+    centerTitle: '식사/배변',
+    centerSubtitle: '확인 중',
+    threshold: 75,
+  },
+  {
+    image: reportImage,
+    label: 'AI 리포트',
+    centerTitle: 'AI 리포트',
+    centerSubtitle: '생성 중',
+    threshold: 100,
+  },
 ] as const
-
-const completedProgressCopy = {
-  title: 'AI 리포트',
-  subtitle: '작성 완료',
-} as const
 
 const statusLabelMap: Record<LoadingCardStatus, string> = {
   waiting: '대기',
+  active: '진행중',
   done: '완료',
 }
 
-const progressStepCopy = [
-  { title: '건강 기록', subtitle: '확인 중' },
-  { title: '활동량', subtitle: '확인 중' },
-  { title: '식사 변화', subtitle: '확인 중' },
-  { title: 'AI 리포트', subtitle: '확인 중' },
-] as const
+function getStageStatus(index: number, progress: number): LoadingCardStatus {
+  const stage = loadingStages[index]
+  if (!stage) return 'waiting'
 
-function getCardStatus(index: number, progress: number): LoadingCardStatus {
-  const start = index * 25
-  if (progress > start) return 'done'
+  const prevThreshold = index === 0 ? 0 : loadingStages[index - 1]?.threshold ?? 0
+
+  if (progress >= stage.threshold) return 'done'
+  if (progress >= prevThreshold) return 'active'
   return 'waiting'
 }
 
-function getActiveMarkerStep(progress: number): ProgressMarkerStep {
-  if (progress >= 75) return 3
-  if (progress >= 50) return 2
-  if (progress >= 25) return 1
-  return 0
+function getActiveStageIndex(progress: number) {
+  const activeIndex = loadingStages.findIndex((stage) => progress < stage.threshold)
+  return activeIndex === -1 ? loadingStages.length - 1 : activeIndex
 }
 
 function HealthCheckLoading() {
@@ -59,14 +73,15 @@ function HealthCheckLoading() {
 
   useEffect(() => {
     let frameId = 0
-    const startProgress = 0
-    const endProgress = 100
-    const duration = 3200
+    const duration = 4200
     const startTime = performance.now()
+
+    const easeInOut = (value: number) => 0.5 - Math.cos(value * Math.PI) / 2
 
     const animate = (now: number) => {
       const elapsed = Math.min(now - startTime, duration)
-      const nextProgress = startProgress + (elapsed / duration) * (endProgress - startProgress)
+      const ratio = elapsed / duration
+      const nextProgress = easeInOut(ratio) * 100
 
       setProgress(nextProgress)
 
@@ -75,7 +90,7 @@ function HealthCheckLoading() {
         return
       }
 
-      setProgress(endProgress)
+      setProgress(100)
       setIsComplete(true)
     }
 
@@ -94,7 +109,7 @@ function HealthCheckLoading() {
         replace: true,
         state: loadingState?.returnTo ? { returnTo: loadingState.returnTo } : undefined,
       })
-    }, 250)
+    }, 500)
 
     return () => {
       window.clearTimeout(timeoutId)
@@ -102,26 +117,21 @@ function HealthCheckLoading() {
   }, [isComplete, loadingState?.returnTo, navigate])
 
   const roundedProgress = Math.round(progress)
-  const activeMarkerStep = getActiveMarkerStep(progress)
-  const activeCopy =
-    roundedProgress >= 100 ? completedProgressCopy : progressStepCopy[activeMarkerStep]
-
+  const activeStageIndex = getActiveStageIndex(progress)
+  const activeStage = loadingStages[activeStageIndex] ?? loadingStages[0]
   const cardStatuses = useMemo(
-    () => loadingCards.map((_, index) => getCardStatus(index, progress)),
+    () => loadingStages.map((_, index) => getStageStatus(index, progress)),
     [progress],
   )
 
   return (
     <>
-      <PageHeader
-        title="AI 건강 체크"
-        leftContent={<BackButton />}
-      />
+      <PageHeader title="AI 건강 체크" leftContent={<BackButton />} />
       <main className="page health_page health_check_loading_page">
         <section className="health_check_loading" aria-label="AI 건강 체크 로딩">
           <header className="health_check_loading_intro">
             <h1>AI가 정보를 확인 중이에요</h1>
-            <p>잠시만 기다려 주세요...</p>
+            <p>잠시만 기다려 주세요.</p>
           </header>
 
           <section className="health_check_loading_progress" aria-label="검사 진행 상황">
@@ -131,47 +141,32 @@ function HealthCheckLoading() {
               aria-hidden="true"
             >
               <div className="health_check_loading_ring_visual">
-                <img
-                  className="health_check_loading_ring_icon is_top_left"
-                  src={healthImage}
-                  alt=""
-                />
-                <img
-                  className="health_check_loading_ring_icon is_top_right"
-                  src={moveImage}
-                  alt=""
-                />
-                <img
-                  className="health_check_loading_ring_icon is_bottom_right"
-                  src={eatImage}
-                  alt=""
-                />
-                <img
-                  className="health_check_loading_ring_icon is_bottom_left"
-                  src={reportImage}
-                  alt=""
-                />
+                <div className="health_check_loading_ring_glow" />
+                <div className="health_check_loading_ring_sweep" />
 
-                <div className="health_check_loading_marker_orbit" aria-hidden="true">
-                  <span className="health_check_loading_marker" />
-                </div>
+                <img className="health_check_loading_ring_icon is_top_left" src={healthImage} alt="" />
+                <img className="health_check_loading_ring_icon is_top_right" src={moveImage} alt="" />
+                <img className="health_check_loading_ring_icon is_bottom_right" src={eatImage} alt="" />
+                <img className="health_check_loading_ring_icon is_bottom_left" src={reportImage} alt="" />
 
-                <div className="health_check_loading_center">
+<div className="health_check_loading_center">
                   <strong>{roundedProgress}%</strong>
-                  <span>{activeCopy.title}</span>
-                  <span>{activeCopy.subtitle}</span>
+                  <span>{activeStage.centerTitle}</span>
+                  <span>{roundedProgress >= 100 ? '완료' : activeStage.centerSubtitle}</span>
                 </div>
               </div>
             </div>
           </section>
 
           <ul className="health_check_loading_cards" aria-label="AI 건강 체크 진행 단계">
-            {loadingCards.map((card, index) => (
+            {loadingStages.map((card, index) => (
               <li
                 key={card.label}
                 className={`health_check_loading_card health_check_loading_card_${cardStatuses[index]}`}
               >
-                <img src={card.image} alt="" aria-hidden="true" />
+                <div className="health_check_loading_card_icon_wrap">
+                  <img src={card.image} alt="" aria-hidden="true" />
+                </div>
                 <strong>{card.label}</strong>
                 <span className="health_check_loading_card_status">
                   {statusLabelMap[cardStatuses[index]]}
@@ -181,9 +176,9 @@ function HealthCheckLoading() {
           </ul>
 
           <p className="health_check_loading_notice">
-            ※ 이 결과는 참고용이며,
+            본 AI 결과는 참고용이며,
             <br />
-            정확한 진단은 수의사 상담을 통해 확인해주세요.
+            정확한 진단은 수의사 상담을 통해 확인해 주세요.
           </p>
         </section>
       </main>

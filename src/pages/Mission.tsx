@@ -524,7 +524,6 @@ function Mission() {
   const monthBarRef = useRef<HTMLDivElement>(null)
   const weekdaysRef = useRef<HTMLDivElement>(null)
   const historyListRef = useRef<HTMLDivElement>(null)
-  const periodWheelScrollFrames = useRef<Record<string, number | undefined>>({})
   const periodWheelSettleTimeouts = useRef<Record<string, number | undefined>>({})
   const periodWheelColumnRefs = useRef<Record<PeriodWheelColumnType, HTMLDivElement | null>>({
     date: null,
@@ -629,8 +628,8 @@ function Mission() {
     () => historyItems.filter((item) => item.date === selectedDateKey),
     [historyItems, selectedDateKey]
   )
-  const canCondenseCalendar = selectedHistoryItems.length > 1
-  const isWeeklyCalendar = isCalendarCondensed
+  const canCondenseCalendar = selectedHistoryItems.length >= 3
+  const isWeeklyCalendar = canCondenseCalendar && isCalendarCondensed
   const selectedWeekIndex = useMemo(() => {
     const selectedIndex = calendarDays.findIndex(
       (day) =>
@@ -734,14 +733,7 @@ function Mission() {
     })
 
     return () => window.cancelAnimationFrame(frameId)
-  }, [
-    isPeriodDatePickerOpen,
-    periodEditingField,
-    periodDateOptions,
-    activeDraftPeriod.hour,
-    activeDraftPeriod.minute,
-    activeDraftPeriod.period,
-  ])
+  }, [isPeriodDatePickerOpen, periodEditingField])
 
   const updateDraftPeriod = (nextValue: Partial<PeriodDateTime>) => {
     const updater = (prev: PeriodDateTime) => ({ ...prev, ...nextValue })
@@ -819,22 +811,15 @@ function Mission() {
   }
 
   useEffect(() => {
-    const scrollContainer = document.querySelector('.layout_content') as HTMLElement | null
-    const pageContainer = document.querySelector('.mission_page') as HTMLElement | null
+    const historyList = historyListRef.current
     const resetScrollTop = () => {
-      if (scrollContainer) scrollContainer.scrollTop = 0
-      if (pageContainer) pageContainer.scrollTop = 0
-      window.scrollTo({ top: 0 })
+      if (historyList) historyList.scrollTop = 0
     }
-    const getScrollTop = () =>
-      Math.max(
-        scrollContainer?.scrollTop ?? 0,
-        pageContainer?.scrollTop ?? 0,
-        window.scrollY,
-        document.documentElement.scrollTop,
-      )
+    const getScrollTop = () => historyList?.scrollTop ?? 0
+    const hasScrollableHistory = () =>
+      (historyList?.scrollHeight ?? 0) > (historyList?.clientHeight ?? 0) + 12
     const showWeeklyCalendar = () => {
-      if (!canCondenseCalendar) return
+      if (!canCondenseCalendar || !hasScrollableHistory()) return
       setIsCalendarCondensed(true)
     }
     const showMonthlyCalendar = () => {
@@ -843,7 +828,7 @@ function Mission() {
     }
     const isHistoryListAtTop = () => getScrollTop() <= 4
     const syncCalendarMode = () => {
-      if (!canCondenseCalendar) {
+      if (!canCondenseCalendar || !hasScrollableHistory()) {
         setIsCalendarCondensed(false)
         resetScrollTop()
         return
@@ -881,22 +866,20 @@ function Mission() {
     }
 
     syncCalendarMode()
-    scrollContainer?.addEventListener('scroll', syncCalendarMode, { passive: true })
-    pageContainer?.addEventListener('scroll', syncCalendarMode, { passive: true })
-    window.addEventListener('scroll', syncCalendarMode, { passive: true })
-    window.addEventListener('wheel', handleWheel, { passive: true })
-    window.addEventListener('touchstart', handleTouchStart, { passive: true })
-    window.addEventListener('touchmove', handleTouchMove, { passive: true })
+    historyList?.addEventListener('scroll', syncCalendarMode, { passive: true })
+    historyList?.addEventListener('wheel', handleWheel, { passive: true })
+    historyList?.addEventListener('touchstart', handleTouchStart, { passive: true })
+    historyList?.addEventListener('touchmove', handleTouchMove, { passive: true })
+    window.addEventListener('resize', syncCalendarMode, { passive: true })
 
     return () => {
-      scrollContainer?.removeEventListener('scroll', syncCalendarMode)
-      pageContainer?.removeEventListener('scroll', syncCalendarMode)
-      window.removeEventListener('scroll', syncCalendarMode)
-      window.removeEventListener('wheel', handleWheel)
-      window.removeEventListener('touchstart', handleTouchStart)
-      window.removeEventListener('touchmove', handleTouchMove)
+      historyList?.removeEventListener('scroll', syncCalendarMode)
+      historyList?.removeEventListener('wheel', handleWheel)
+      historyList?.removeEventListener('touchstart', handleTouchStart)
+      historyList?.removeEventListener('touchmove', handleTouchMove)
+      window.removeEventListener('resize', syncCalendarMode)
     }
-  }, [canCondenseCalendar])
+  }, [canCondenseCalendar, selectedHistoryItems.length])
 
   useEffect(() => {
     if (!isDatePickerOpen && !isPeriodDatePickerOpen) return
@@ -1196,41 +1179,15 @@ function Mission() {
   ) => {
     const column = event.currentTarget
     const frameKey = `${periodEditingField}-${type}`
-    const optionCount =
-      type === 'period'
-        ? periodOptions.length
-        : type === 'hour'
-          ? periodHourOptions.length
-          : type === 'minute'
-            ? periodMinuteOptions.length
-            : 0
-
-    if (optionCount > 0) {
-      const loopHeight = optionCount * periodWheelItemHeight
-      if (column.scrollTop < loopHeight * 0.5) {
-        column.scrollTop += loopHeight
-      } else if (column.scrollTop > loopHeight * 1.5) {
-        column.scrollTop -= loopHeight
-      }
-    }
-
-    if (periodWheelScrollFrames.current[frameKey]) {
-      window.cancelAnimationFrame(periodWheelScrollFrames.current[frameKey])
-    }
 
     if (periodWheelSettleTimeouts.current[frameKey]) {
       window.clearTimeout(periodWheelSettleTimeouts.current[frameKey])
     }
 
-    periodWheelScrollFrames.current[frameKey] = window.requestAnimationFrame(() => {
-      applyCenteredPeriodValue(column, type)
-      periodWheelScrollFrames.current[frameKey] = undefined
-    })
-
     periodWheelSettleTimeouts.current[frameKey] = window.setTimeout(() => {
       settlePeriodWheelColumn(column, type)
       periodWheelSettleTimeouts.current[frameKey] = undefined
-    }, 90)
+    }, 110)
   }
 
   const applyCenteredPeriodValue = (
@@ -1507,38 +1464,43 @@ function Mission() {
         <section className={`mission_history_section${isWeeklyCalendar ? ' is_condensed' : ''}`}>
           <h2>{selectedDateLabel}</h2>
           <div className="mission_history_list" ref={historyListRef}>
-            {selectedHistoryItems.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                className={`mission_history_item${item.media && item.media.length > 0 ? ' has_media' : ''}`}
-                onClick={() => openHistoryEdit(item)}
-              >
-                <span
-                  className="mission_history_thumb"
-                  style={{ backgroundColor: getHistoryColor(item.title, item.color) }}
-                  aria-hidden="true"
-                />
-                <div className="mission_history_body">
-                  <strong className="title_h5">{item.title}</strong>
-                  <p className="p_regular">{item.detail}</p>
-                  <div className="mission_history_meta">
-                    <time className="p_regular">{formatHistoryTimeLabel(item.time)}</time>
-                    <button
-                      type="button"
-                      className="mission_history_more"
-                      aria-label={`${item.title} 더보기`}
-                      onClick={(event) => {
-                        event.stopPropagation()
-                        setHistoryMoreTarget(item)
-                      }}
-                    >
-                      <MoreVertical aria-hidden="true" />
-                    </button>
+            {selectedHistoryItems.map((item) => {
+              const hasMedia = item.media != null && item.media.length > 0
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  className={`mission_history_item${hasMedia ? ' has_media' : ''}`}
+                  onClick={() => openHistoryEdit(item)}
+                >
+                  <span
+                    className="mission_history_thumb"
+                    style={{ backgroundColor: getHistoryColor(item.title, item.color) }}
+                    aria-hidden="true"
+                  />
+                  <div className="mission_history_body">
+                    <strong className="title_h5">{item.title}</strong>
+                    {!hasMedia && (
+                      <button
+                        type="button"
+                        className="mission_history_more"
+                        aria-label={`${item.title} 더보기`}
+                        onClick={(event) => {
+                          event.stopPropagation()
+                          setHistoryMoreTarget(item)
+                        }}
+                      >
+                        <MoreVertical aria-hidden="true" />
+                      </button>
+                    )}
+                    <p className="p_regular">{item.detail}</p>
+                    <div className="mission_history_meta">
+                      <time className="p_regular">{formatHistoryTimeLabel(item.time)}</time>
+                    </div>
                   </div>
-                  {item.media && item.media.length > 0 ? (
+                  {hasMedia && (
                     <div className="mission_history_media" aria-label="등록 이미지">
-                      {item.media.slice(0, 3).map((media, index) => (
+                      {(item.media ?? []).slice(0, 3).map((media, index) => (
                         media.type === 'video' ? (
                           <video
                             key={`${media.src}-${index}`}
@@ -1558,33 +1520,23 @@ function Mission() {
                         )
                       ))}
                     </div>
-                  ) : null}
-                </div>
-                {item.media && item.media.length > 0 ? (
-                  <div className="mission_history_media" aria-label="?깅줉 ?대?吏">
-                    {item.media.slice(0, 3).map((media, index) => (
-                      media.type === 'video' ? (
-                        <video
-                          key={`${media.src}-${index}`}
-                          src={media.src}
-                          aria-label={media.label || `${item.title} ?숈쁺??${index + 1}`}
-                          controls
-                          muted
-                          playsInline
-                          preload="metadata"
-                        />
-                      ) : (
-                        <img
-                          key={`${media.src}-${index}`}
-                          src={media.src}
-                          alt={media.label || `${item.title} ?대?吏 ${index + 1}`}
-                        />
-                      )
-                    ))}
-                  </div>
-                ) : null}
-              </button>
-            ))}
+                  )}
+                  {hasMedia && (
+                    <button
+                      type="button"
+                      className="mission_history_more"
+                      aria-label={`${item.title} 더보기`}
+                      onClick={(event) => {
+                        event.stopPropagation()
+                        setHistoryMoreTarget(item)
+                      }}
+                    >
+                      <MoreVertical aria-hidden="true" />
+                    </button>
+                  )}
+                </button>
+              )
+            })}
           </div>
         </section>
 

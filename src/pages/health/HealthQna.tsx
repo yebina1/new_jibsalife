@@ -202,8 +202,8 @@ function saveRecordDraft(draft: RecordDraft) {
 
 function buildConfirmMessage(draft: RecordDraft, profileName: string, preface?: string): ChatMessage {
   const confirmText = preface
-    ? `${preface}\n\n캘린더에\n${profileName}의 ${draft.calendarDetail}을 등록할까요?`
-    : `캘린더에\n${profileName}의 ${draft.calendarDetail}을 등록할까요?`
+    ? `${preface}\n캘린더에 ${profileName}의 ${draft.calendarDetail}을 등록할까요?`
+    : `캘린더에 ${profileName}의 ${draft.calendarDetail}을 등록할까요?`
 
   return {
     id: buildMessageId(),
@@ -298,6 +298,17 @@ function HealthQna() {
         `변화를 정리해드릴게요.`,
     },
   ], [profileName])
+  const introMessagesWithChips = useMemo<ChatMessage[]>(
+    () => introMessages.map((message, index) => (
+      index === 0
+        ? {
+            ...message,
+            chips: ['식사량', '배변배뇨', '산책', '활동'],
+          }
+        : message
+    )),
+    [introMessages],
+  )
 
   useEffect(() => {
     const syncProfileName = () => {
@@ -315,6 +326,10 @@ function HealthQna() {
 
   const handleChipSelect = (chip: string) => {
     setPendingOtherRecord(null)
+    if (chip === '식사량') return buildChipOptionMessage('??밴텢' as keyof typeof chipResponses)
+    if (chip === '배변배뇨') return buildChipOptionMessage('獄쏄퀡?夷뚩쳸怨뺣닁' as keyof typeof chipResponses)
+    if (chip === '산책') return buildWalkTimeMessage('산책')
+    if (chip === '활동') return buildChipOptionMessage('??뺣짗' as keyof typeof chipResponses)
 
     if (chip === '식사' || chip === '배변·배뇨' || chip === '증상' || chip === '활동') {
       return buildChipOptionMessage(chip)
@@ -381,30 +396,17 @@ function HealthQna() {
 
   const handleChatChipSelect = (chip: string) => {
     setPendingOtherRecord(null)
-
-    if (chip === '\uC2DD\uC0AC') return buildChipOptionMessage('?앹궗' as keyof typeof chipResponses)
-    if (chip === '\uBC30\uBCC0\u00B7\uBC30\uB1E8') return buildChipOptionMessage('諛곕?쨌諛곕눊' as keyof typeof chipResponses)
-    if (chip === '\uC99D\uC0C1') return buildChipOptionMessage('利앹긽' as keyof typeof chipResponses)
-    if (chip === '\uD65C\uB3D9') return buildChipOptionMessage('?쒕룞' as keyof typeof chipResponses)
-
-    if (chip === '\uCEE4\uBBA4\uB2C8\uD2F0') {
-      navigate('/community')
-      return
+    if (chip === '식사량') return buildChipOptionMessage('식사')
+    if (chip === '배변배뇨') return buildChipOptionMessage('배변·배뇨')
+    if (chip === '산책') return buildWalkTimeMessage('산책')
+    if (chip === '활동') return buildChipOptionMessage('활동')
+    if (chip === '식사' || chip === '배변·배뇨' || chip === '증상') {
+      return buildChipOptionMessage(chip)
     }
-
-    if (chip === '\uCC4C\uB9B0\uC9C0') {
-      navigate('/community/challenge')
-      return
-    }
-
-    if (chip === '\uD22C\uD45C') {
-      navigate('/community/vote')
-      return
-    }
-
-    if (chip === '\uC7A5\uC18C') {
-      navigate('/place')
-    }
+    if (chip === '커뮤니티') { navigate('/community'); return }
+    if (chip === '챌린지') { navigate('/community/challenge'); return }
+    if (chip === '투표') { navigate('/community/vote'); return }
+    if (chip === '장소') { navigate('/place') }
   }
 
   const handleMessageSubmit = async (
@@ -572,7 +574,7 @@ function HealthQna() {
           sender: 'bot' as const,
           text: `등록 완료했어요.\n캘린더에서 ${calendarDetail} 기록을 확인해보세요.`,
         },
-        kind === 'activity' && calendarDetail.includes('?곗콉')
+        kind === 'activity' && calendarDetail.includes('산책')
           ? buildWalkRecordNudgeMessage()
           : buildGeneralRecordNudgeMessage(),
       ]
@@ -627,7 +629,7 @@ function HealthQna() {
       return buildConfirmMessage(
         draft,
         profileName,
-        `활동은 ${value},\n산책 시간은 ${walkTime}으로\n저장했어요.`,
+        `활동은 ${value}, 산책 시간은 ${walkTime}으로 저장했어요.`,
       )
     }
   }
@@ -666,8 +668,8 @@ function HealthQna() {
       <main className="page health_page health_qna_page">
         <ChatRoom
           key={profileName}
-          initialMessages={introMessages}
-          bottomPromptMessage={introMessages[0]}
+          initialMessages={introMessagesWithChips}
+          bottomPromptMessage={introMessagesWithChips[0]}
           storageKey={HEALTH_QNA_STORAGE_KEY}
           placeholder="메시지를 입력해 주세요."
           submitLabel="보내기"

@@ -25,7 +25,7 @@
 .heart_effect_area {
   position: absolute;
   left: 50%;
-  bottom: 60%;
+  bottom: 68%;
   z-index: 5;
   width: 1px;
   height: 1px;
@@ -47,7 +47,7 @@
 @keyframes floating-heart-rise {
   0% {
     opacity: 0;
-    transform: translate3d(0, 0, 0) scale(0.45) rotate(-10deg);
+    transform: translate3d(0, 0, 0) scale(0.62) rotate(-10deg);
   }
 
   12% {
@@ -56,11 +56,11 @@
 
   55% {
     opacity: 0.95;
-    transform: translate3d(calc(var(--x) * 0.35), -42px, 0) scale(1) rotate(8deg);
+    transform: translate3d(calc(var(--x) * 0.45), -56px, 0) scale(1.08) rotate(8deg);
   }
 
   100% {
     opacity: 0;
-    transform: translate3d(calc(var(--x) * 0.6), -84px, 0) scale(0.72) rotate(18deg);
+    transform: translate3d(calc(var(--x) * 0.75), -112px, 0) scale(0.92) rotate(18deg);
   }
 }

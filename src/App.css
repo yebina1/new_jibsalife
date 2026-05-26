@@ -167,8 +167,11 @@
   position: relative;
   display: flex;
   height: 58px;
+  padding: 0;
+  border: 0;
   align-items: center;
   justify-content: center;
+  background: transparent;
   color: #4f4f55;
   font-family: var(--app-font-family);
   font-size: 16px;
@@ -177,6 +180,11 @@
   letter-spacing: -0.025em;
   text-decoration: none;
   white-space: nowrap;
+}
+
+.layout_community_tab.is_disabled {
+  color: #b5b5bf;
+  pointer-events: none;
 }
 
 .layout_community_tab.active {
@@ -214,6 +222,9 @@
   overflow-y: hidden;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
+  margin-right: calc(var(--layout-inline-padding) * -1);
+  padding-right: var(--layout-inline-padding);
+  scroll-padding-right: var(--layout-inline-padding);
 }
 
 .layout_community_vote_subtab_scroll {

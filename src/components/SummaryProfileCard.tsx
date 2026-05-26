@@ -122,6 +122,7 @@ function SummaryProfileCard({
                 type="button"
                 className="summary_profile_card_guide point_medium"
                 onClick={onCareGuideClick}
+                disabled={!onCareGuideClick}
               >
                 {careGuideLabel}
                 <ChevronIcon direction="right" size="md" />

@@ -130,10 +130,31 @@ function toMinutes(value: string) {
   return hour * 60 + minute
 }
 
+function getCurrentSeoulMinutes() {
+  const formatter = new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Asia/Seoul',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  })
+  const parts = formatter.formatToParts(new Date())
+  const hour = Number(parts.find((part) => part.type === 'hour')?.value ?? '0')
+  const minute = Number(parts.find((part) => part.type === 'minute')?.value ?? '0')
+  return hour * 60 + minute
+}
+
 export function getOperatingState(open: string, close: string) {
-  const now = new Date()
-  const currentMinutes = now.getHours() * 60 + now.getMinutes()
-  const isOpen = currentMinutes >= toMinutes(open) && currentMinutes < toMinutes(close)
+  const currentMinutes = getCurrentSeoulMinutes()
+  const openMinutes = toMinutes(open)
+  const closeMinutes = toMinutes(close)
+
+  const isTwentyFourHours = openMinutes === 0 && closeMinutes === 24 * 60
+  const isOvernight = closeMinutes <= openMinutes && !isTwentyFourHours
+  const isOpen = isTwentyFourHours
+    ? true
+    : isOvernight
+      ? currentMinutes >= openMinutes || currentMinutes < closeMinutes
+      : currentMinutes >= openMinutes && currentMinutes < closeMinutes
 
   return { isOpen }
 }

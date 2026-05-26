@@ -1,15 +1,17 @@
 .mission_page {
   --mission-fixed-profile-height: 56px;
   --mission-fixed-calendar-height: 174px;
-  --mission-fixed-title-height: 62px;
+  display: flex;
+  flex-direction: column;
   min-height: auto;
-  overflow: visible;
+  overflow: hidden;
   background: #ffffff;
   color: #171717;
 }
 
 .layout_content > .mission_page {
   min-height: calc(100dvh - var(--layout-header-height) - var(--layout-footer-height) - 24px);
+  height: calc(100dvh - var(--layout-header-height) - var(--layout-footer-height) - 24px);
   padding-top: 24px;
   box-sizing: border-box;
 }
@@ -20,7 +22,7 @@
 
 .mission_page.is_condensed {
   min-height: calc(100dvh - var(--layout-header-height) - var(--layout-footer-height) - 24px);
-  overflow: visible;
+  overflow: hidden;
 }
 
 .mission_profile_header {
@@ -111,6 +113,7 @@
 
 .mission_calendar_section {
   display: flex;
+  flex: 0 0 auto;
   width: 100%;
   justify-content: center;
   padding: 0;
@@ -407,15 +410,15 @@
 }
 
 .mission_history_section {
-  padding: 48px 0 0;
+  display: flex;
+  min-height: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  padding: 32px 0 0;
 }
 
 .mission_history_section.is_condensed {
-  padding-top: calc(
-    var(--mission-fixed-profile-height) +
-    var(--mission-fixed-calendar-height) +
-    var(--mission-fixed-title-height)
-  );
+  padding-top: calc(var(--mission-fixed-profile-height) + var(--mission-fixed-calendar-height) + 16px);
 }
 
 .mission_history_section h2 {
@@ -427,55 +430,36 @@
   letter-spacing: var(--app-letter-spacing);
 }
 
-.mission_history_section.is_condensed h2 {
-  position: fixed;
-  top: calc(
-    var(--layout-header-height) +
-    var(--mission-fixed-profile-height) +
-    var(--mission-fixed-calendar-height)
-  );
-  left: 50%;
-  z-index: 90;
-  width: min(100%, var(--layout-max-width));
-  min-height: var(--mission-fixed-title-height);
-  margin: 0;
-  padding: 16px var(--layout-inline-padding);
-  box-sizing: border-box;
-  background: #ffffff;
-  transform: translateX(-50%);
-}
-
 .mission_history_list {
   display: grid;
-  min-height: auto;
-  align-self: start;
+  min-height: 0;
+  flex: 1 1 auto;
+  width: 100%;
+  align-self: stretch;
   align-content: start;
   gap: 20px;
   grid-auto-rows: max-content;
   padding-bottom: 24px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .mission_history_section.is_condensed .mission_history_list {
-  position: relative;
-  top: auto;
-  left: auto;
-  z-index: auto;
   width: 100%;
-  max-height: none;
   padding: 0 0 24px;
   box-sizing: border-box;
-  overflow: visible;
+  overflow-y: auto;
   background: transparent;
-  transform: none;
 }
 
 .mission_history_item {
   display: grid;
   width: 100%;
-  grid-template-columns: 6px minmax(0, 1fr) auto;
+  grid-template-columns: 4px minmax(0, 1fr);
   align-items: start;
-  gap: 8px;
-  padding: 0 36px 0 0;
+  column-gap: 16px;
+  row-gap: 0;
+  padding: 0;
   border: 0;
   background: transparent;
   color: inherit;
@@ -485,17 +469,37 @@
   position: relative;
 }
 
+.mission_history_item.has_media {
+  grid-template-columns: 4px minmax(0, 1fr) auto auto;
+  column-gap: 8px;
+}
+
+.mission_history_item.has_media .mission_history_body {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.mission_history_item.has_media > .mission_history_more {
+  grid-column: 4;
+  grid-row: 1;
+  align-self: start;
+  margin-top: 2px;
+}
+
 .mission_history_thumb {
   width: 4px;
   height: 100%;
-  margin: 3px 0 0;
+  min-height: 0;
+  margin: 4px 0 0;
   align-self: stretch;
   border-radius: 0;
 }
 
 .mission_history_body {
   display: grid;
-  gap: 2px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  column-gap: 12px;
+  row-gap: 4px;
   min-width: 0;
 }
 
@@ -504,12 +508,14 @@
   grid-row: 1;
 }
 
-.mission_history_item.has_media .mission_history_body .mission_history_media {
+.mission_history_body .mission_history_media {
   display: none;
 }
 
 .mission_history_body strong {
   display: inline-flex;
+  grid-column: 1;
+  grid-row: 1;
   align-items: center;
   gap: 5px;
   margin-bottom: 0;
@@ -534,29 +540,38 @@
 }
 
 .mission_history_body p {
+  grid-column: 1 / -1;
+  grid-row: 2;
   margin: 0;
   color: #505050;
   white-space: pre-line;
 }
 
 .mission_history_meta {
+  grid-column: 1 / -1;
+  grid-row: 3;
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  width: 100%;
   gap: 12px;
-  margin-top: 6px;
+  margin-top: 0;
 }
 
 .mission_history_media {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 6px;
   margin-top: 0;
+  max-width: 132px;
 }
 
 .mission_history_item.has_media .mission_history_media {
   grid-column: 3;
   grid-row: 1;
   justify-self: end;
+  align-self: start;
 }
 
 .mission_history_media img,
@@ -574,6 +589,8 @@
 
 .mission_history_more {
   display: inline-flex;
+  grid-column: 2;
+  grid-row: 1;
   width: 20px;
   height: 20px;
   flex: 0 0 auto;
@@ -584,10 +601,10 @@
   background: transparent;
   color: #505050;
   cursor: pointer;
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  position: static;
+  margin-top: 0;
+  align-self: center;
+  transform: none;
 }
 
 .mission_history_more svg {
@@ -1033,7 +1050,6 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   scroll-snap-type: y mandatory;
-  scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
   -ms-overflow-style: none;
   scrollbar-width: none;

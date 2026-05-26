@@ -56,7 +56,7 @@ import homeRank2Icon from '../img/home/2nd-icon.png'
 import homeRank3Icon from '../img/home/3rd-icon.png'
 import lankingIconImg from '../img/home/lanking-icon.png'
 import careIconImg from '../img/home/care-icon.png'
-import { HEALTH_REPORT_OBSERVATION_LABEL, LEGACY_KOREAN_SHORTHAIR_BREED_LABEL } from '../constants/healthLabels'
+import { HEALTH_REPORT_COLLECTING_LABEL } from '../constants/healthLabels'
 
 type PetIdCardForm = {
   name: string
@@ -336,8 +336,8 @@ function createProfileDetails(profile: ProfileSummarySlide) {
   return `나이: ${age || '-'} · 몸무게: ${weightLabel} · 성별: ${sexLabel || '-'}`
 }
 
-function getSummaryBreedLabel(breed: string) {
-  return breed === LEGACY_KOREAN_SHORTHAIR_BREED_LABEL ? HEALTH_REPORT_OBSERVATION_LABEL : breed
+function getSummaryHealthLabel(healthStatus: string) {
+  return healthStatus.trim() || HEALTH_REPORT_COLLECTING_LABEL
 }
 
 function arePetProfilesEqual(
@@ -617,6 +617,13 @@ function Home() {
     return () => { emblaApi.off('select', onSelect) }
   }, [emblaApi])
 
+  useEffect(() => {
+    if (!emblaApi) return
+    if (emblaApi.selectedScrollSnap() !== summarySlideIndex) {
+      emblaApi.scrollTo(summarySlideIndex)
+    }
+  }, [emblaApi, summarySlideIndex])
+
   const scheduleRankingAutoPlayResume = () => {
     if (rankingResumeTimeoutRef.current !== null) {
       window.clearTimeout(rankingResumeTimeoutRef.current)
@@ -765,6 +772,7 @@ function Home() {
       const nextProfile: ProfileSummarySlide = {
         id: Date.now(),
         type: 'profile',
+        healthStatus: HEALTH_REPORT_COLLECTING_LABEL,
         name: petIdForm.name || '이름',
         breed: petIdForm.breed || '품종',
         image: petIdPhoto || defaultPetProfiles[1].image,
@@ -773,11 +781,8 @@ function Home() {
         sex: petIdForm.sex,
       }
 
-      setProfileSlides((current) => {
-        const nextProfiles = [...current, nextProfile]
-        setSummarySlideIndex(nextProfiles.length - 1)
-        return nextProfiles
-      })
+      setProfileSlides((current) => [...current, nextProfile])
+      setSummarySlideIndex(profileSlides.length)
     }
 
     closePetIdModal()
@@ -958,19 +963,20 @@ function Home() {
             className="summary_slider"
           >
             <div className="summary_slider_track">
-              {summarySlides.map((slide) =>
+              {summarySlides.map((slide, index) =>
                 slide.type === 'add' ? (
                   <SummaryProfileAddCard
                     key={slide.id}
-                    className="home_summary_profile_add_card"
+                    className={`home_summary_profile_add_card${index === summarySlideIndex ? ' is_active' : ''}`}
                     onClick={openPetIdModal}
                   />
                 ) : (
                   <SummaryProfileCard
                     key={slide.id}
+                    className={index === summarySlideIndex ? 'is_active' : undefined}
                     image={slide.image}
                     name={slide.name}
-                    breed={getSummaryBreedLabel(slide.breed || '-')}
+                    breed={getSummaryHealthLabel(slide.healthStatus)}
                     details={createProfileDetails(slide)}
                     stats={summaryStatsByProfileId.get(slide.id) ?? createSummaryStats(readCalendarRecords(slide.id))}
                     onEdit={() => openPetIdModal(slide)}

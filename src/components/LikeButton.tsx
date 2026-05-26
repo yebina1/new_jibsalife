@@ -46,7 +46,7 @@ function LikeButton({
     const newHearts = Array.from({ length: 6 }, (_, index) => ({
       id: Date.now() + index,
       x: Math.random() * 48 - 24,
-      size: Math.random() * 10 + 18,
+      size: Math.random() * 14 + 28,
       delay: index * 0.04,
       src: floatingHeartImages[index % floatingHeartImages.length],
     }))

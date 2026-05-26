@@ -6,7 +6,7 @@
   --health-cam-tutorial-tab-radius: 8px;
   --health-cam-close-button-size: 36px;
   --health-cam-close-button-offset: 12px;
-  --health-cam-tab-bottom-offset: calc(34px + env(safe-area-inset-bottom));
+  --health-cam-tab-bottom-offset: calc(20px + env(safe-area-inset-bottom));
   position: fixed;
   top: 0;
   left: 0;

@@ -8,9 +8,14 @@ import type { ActionOptionItem } from '../../components/ActionOptionList'
 import CloseButton from '../../components/html/CloseButton'
 import BackButton from '../../components/html/BackButton'
 import checkMarkIcon from '../../svg/Check_Mark.svg'
+import { readPetProfiles, readSelectedPetProfileId } from '../../utils/petProfiles'
 
 function HealthCheckSummary() {
   const navigate = useNavigate()
+  const pets = readPetProfiles()
+  const selectedPetId = readSelectedPetProfileId()
+  const selectedPet = pets.find((pet) => pet.id === selectedPetId) ?? pets[0] ?? null
+  const petName = selectedPet?.name ?? '반려동물'
   const actionOptions: ActionOptionItem[] = [
     {
       title: '간단히 물어보기(Q&A)',
@@ -44,13 +49,13 @@ function HealthCheckSummary() {
           }
             title={
               <>
-                뿡뿡이의 상태는
-                <br />지켜보면 괜찮을 것 같아요.
+                {petName}의 상태는
+                <br />건강 양호예요.
               </>
             }
           subtitle={
             <>
-              지금 당장 병원 방문이 필요해 보이지는 않으나, 필요 시 전문가와 상담 또는 병원을 방문해 주세요.
+              식사, 배변, 활동 기록이 안정적으로 유지되고 있어요. 지금처럼 꾸준히 관찰해 주세요.
             </>
           }
         />
@@ -61,7 +66,7 @@ function HealthCheckSummary() {
 
         <ContentSection className="health_check_summary_today" titleAs="h3" title="오늘의 요약">
           <div>
-            <p>요약 내용...</p>
+            <p>{petName}는 오늘도 평소와 비슷한 컨디션을 보여주고 있어요.</p>
           </div>
         </ContentSection>
       </main>

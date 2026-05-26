@@ -1,7 +1,11 @@
 import leeyoriImage from '../img/leeyori.png'
 import pungpungiImage from '../img/pungpungi.png'
 import defaultPetThumbnail from '../img/petstory/daily/daily_thumbnail.jpg'
-import { HEALTH_REPORT_OBSERVATION_LABEL, LEGACY_KOREAN_SHORTHAIR_BREED_LABEL } from '../constants/healthLabels'
+import {
+  HEALTH_REPORT_COLLECTING_LABEL,
+  HEALTH_REPORT_OBSERVATION_LABEL,
+  LEGACY_KOREAN_SHORTHAIR_BREED_LABEL,
+} from '../constants/healthLabels'
 import { getUserScopedStorageKey, isCurrentDemoUser } from './userScopedStorage'
 
 export type PetProfileSummary = {
@@ -9,6 +13,7 @@ export type PetProfileSummary = {
   type: 'profile'
   name: string
   breed: string
+  healthStatus: string
   image: string
   birthDate: string
   weight: string
@@ -25,16 +30,18 @@ export const defaultPetProfiles: PetProfileSummary[] = [
     type: 'profile',
     name: '이요리',
     breed: '코리안 쇼트 헤어',
+    healthStatus: HEALTH_REPORT_OBSERVATION_LABEL,
     image: leeyoriImage,
     birthDate: '2021.05.11',
     weight: '3',
-    sex: '남',
+    sex: '여',
   },
   {
     id: 2,
     type: 'profile',
     name: '뿡뿡이',
     breed: '포메라니안',
+    healthStatus: '건강 양호',
     image: pungpungiImage,
     birthDate: '2024.05.11',
     weight: '5',
@@ -47,6 +54,7 @@ const emptySelectedPetProfile: PetProfileSummary = {
   type: 'profile',
   name: '반려동물',
   breed: '',
+  healthStatus: '',
   image: defaultPetProfiles[0].image,
   birthDate: '',
   weight: '',
@@ -60,10 +68,13 @@ function normalizeProfileImage(image: unknown, fallbackImage: string) {
   if (!trimmedImage) return fallbackImage
   if (
     trimmedImage === 'daily_thumbnail.jpg' ||
-    trimmedImage.endsWith('/daily_thumbnail.jpg') ||
-    trimmedImage.startsWith('/src/img/')
+    trimmedImage.endsWith('/daily_thumbnail.jpg')
   ) {
     return defaultPetThumbnail
+  }
+
+  if (trimmedImage.startsWith('/src/img/')) {
+    return fallbackImage
   }
 
   const isUploadedImage = trimmedImage.startsWith('data:image/')
@@ -77,12 +88,29 @@ function normalizeProfileImage(image: unknown, fallbackImage: string) {
   return fallbackImage
 }
 
+function normalizeHealthStatus(value: Partial<PetProfileSummary>, fallback: PetProfileSummary) {
+  if (typeof value.healthStatus === 'string' && value.healthStatus.trim()) {
+    return value.healthStatus
+  }
+
+  if (typeof value.breed === 'string' && value.breed === LEGACY_KOREAN_SHORTHAIR_BREED_LABEL) {
+    return HEALTH_REPORT_OBSERVATION_LABEL
+  }
+
+  if (typeof value.breed === 'string' && value.breed.trim() && value.breed !== fallback.breed) {
+    return HEALTH_REPORT_COLLECTING_LABEL
+  }
+
+  return fallback.healthStatus
+}
+
 function normalizePetProfile(value: Partial<PetProfileSummary>, fallback: PetProfileSummary): PetProfileSummary {
   return {
     id: typeof value.id === 'number' ? value.id : fallback.id,
     type: 'profile',
     name: typeof value.name === 'string' && value.name.trim() ? value.name : fallback.name,
     breed: typeof value.breed === 'string' ? value.breed : fallback.breed,
+    healthStatus: normalizeHealthStatus(value, fallback),
     image: normalizeProfileImage(value.image, fallback.image),
     birthDate: typeof value.birthDate === 'string' ? value.birthDate : fallback.birthDate,
     weight: typeof value.weight === 'string' ? value.weight : fallback.weight,
@@ -95,13 +123,9 @@ export function readPetProfiles() {
     return defaultPetProfiles
   }
 
-  if (isCurrentDemoUser()) {
-    return defaultPetProfiles
-  }
-
   const savedValue = window.localStorage.getItem(getUserScopedStorageKey(PET_PROFILES_STORAGE_KEY))
   if (!savedValue) {
-    return []
+    return isCurrentDemoUser() ? defaultPetProfiles : []
   }
 
   try {
@@ -116,7 +140,7 @@ export function readPetProfiles() {
       return normalizedProfile.breed === LEGACY_KOREAN_SHORTHAIR_BREED_LABEL
         ? {
             ...normalizedProfile,
-            breed: HEALTH_REPORT_OBSERVATION_LABEL,
+            healthStatus: HEALTH_REPORT_OBSERVATION_LABEL,
           }
         : normalizedProfile
     })
@@ -127,11 +151,6 @@ export function readPetProfiles() {
 
 export function writePetProfiles(nextProfiles: PetProfileSummary[]) {
   if (typeof window === 'undefined') {
-    return
-  }
-
-  if (isCurrentDemoUser()) {
-    window.dispatchEvent(new CustomEvent(PET_PROFILES_CHANGE_EVENT, { detail: defaultPetProfiles }))
     return
   }
 

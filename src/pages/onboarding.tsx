@@ -39,6 +39,7 @@ import onboardingDecoration5 from '../svg/onboarding/paw5.svg'
 import onboardingDecoration6 from '../svg/onboarding/paw6.svg'
 import foodBowlImage from '../img/food_bowl.png'
 import defaultPetThumbnail from '../img/petstory/daily/daily_thumbnail.jpg'
+import { HEALTH_REPORT_COLLECTING_LABEL } from '../constants/healthLabels'
 import './onboarding.css'
 
 type GuardianType = 'dog' | 'cat'
@@ -367,6 +368,7 @@ function Onboarding() {
         type: 'profile',
         name: trimmedPetName,
         breed: '',
+        healthStatus: HEALTH_REPORT_COLLECTING_LABEL,
         image: defaultPetThumbnail,
         birthDate: '',
         weight: '',

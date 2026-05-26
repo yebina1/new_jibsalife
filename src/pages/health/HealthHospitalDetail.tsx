@@ -42,7 +42,9 @@ function HealthHospitalDetail() {
 
       <main className="page health_page health_hospital_detail_page">
         <section className="health_hospital_detail_hero">
-          <img src={hospital.image} alt={hospital.name} className="health_hospital_detail_image" />
+          <div className="health_hospital_detail_image_frame">
+            <img src={hospital.image} alt={hospital.name} className="health_hospital_detail_image" />
+          </div>
           <div className="health_hospital_detail_intro">
             <div className="health_hospital_detail_title_wrap">
               <h1>{hospital.name}</h1>

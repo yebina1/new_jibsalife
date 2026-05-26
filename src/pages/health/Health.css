@@ -335,6 +335,12 @@
   line-height: 20px;
 }
 
+.health_cam_pet_selected_label {
+  display: none;
+  align-items: center;
+  line-height: 20px;
+}
+
 /* 줌 버튼 — 각각 독립된 원형 버튼 */
 
 .health_cam_zoom {
@@ -1124,27 +1130,17 @@
   }
 }
 
-.health_cam_pet_link > span:not(.health_cam_pet_default_label),
-.health_cam_pet_legacy_label {
-  display: none;
-}
-
 .health_cam_pet_link.has_selected_pet .health_cam_pet_default_label {
   display: none;
 }
 
-.health_cam_pet_link.has_selected_pet > span:not(.health_cam_pet_default_label),
-.health_cam_pet_link.has_selected_pet .health_cam_pet_legacy_label {
+.health_cam_pet_link.has_selected_pet .health_cam_pet_selected_label {
   display: inline-flex;
   align-items: center;
   line-height: 20px;
 }
 
-.health_cam_pet_legacy_label {
-  display: none;
-}
-
-.health_cam_pet_name {
+.health_cam_pet_selected_label strong {
   color: #111111;
   font-weight: 700;
   line-height: 20px;

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type UIEvent } from 'react'
 import { useNavigate } from 'react-router'
-import { ChevronRight, Dog } from 'lucide-react'
+import { Dog } from 'lucide-react'
 import '../Mission.css'
 import './Health.css'
 import galleryIcon from '../../img/gallery-icon.svg'
@@ -279,6 +279,7 @@ function Health() {
   })
   const [showPetModal, setShowPetModal] = useState(false)
   const [showCalendarPetSwitch, setShowCalendarPetSwitch] = useState(false)
+  const [hasExplicitPetSelection, setHasExplicitPetSelection] = useState(false)
   const [pets, setPets] = useState<PetProfileSummary[]>(readPetProfiles)
   const [selectedPetId, setSelectedPetId] = useState<number | null>(() => readSelectedPetProfileId())
 
@@ -467,6 +468,7 @@ function Health() {
     const shouldShowChangeToast = pet.id !== selectedPetId
     writeSelectedPetProfileId(pet.id)
     setSelectedPetId(pet.id)
+    setHasExplicitPetSelection(true)
     setShowPetModal(false)
     setShowCalendarPetSwitch(false)
     if (shouldShowChangeToast) {
@@ -944,19 +946,14 @@ function Health() {
       <div className="health_cam_ctrl">
         <button
           type="button"
-          className={`health_cam_pet_link${effectiveSelectedPetId !== null ? ' has_selected_pet' : ''}`}
+          className={`health_cam_pet_link${hasExplicitPetSelection ? ' has_selected_pet' : ''}`}
           onClick={() => setShowCalendarPetSwitch(true)}
         >
           <span className="health_cam_pet_default_label">반려동물 선택하기</span>
-          {selectedPetName ? (
-            <span><span className="health_cam_pet_name">반려동물 선택하기</span></span>
-          ) : (
-            <>
-            <span>반려동물 선택하기</span>
-            <span>반려동물 변경하기</span>
-            </>
-          )}
-          <ChevronRight size={16} color="#505050" aria-hidden="true" />
+          <span className="health_cam_pet_selected_label">
+            현재 반려동물 · <strong>{selectedPetName || '반려동물 선택하기'}</strong>
+          </span>
+          <ChevronIcon direction="right" size="md" />
         </button>
 
         <div className="health_cam_zoom" aria-hidden="true">

@@ -95,6 +95,9 @@ const placeSortOptions = [
   { label: '거리순', value: 'distance' },
 ] as const
 
+const enabledPlaceCategories = new Set(['all', 'care'])
+const enabledPlaceCareSubTabs = new Set(['hospital'])
+
 function getSubParam(to: string) {
   return new URLSearchParams(to.split('?')[1]).get('sub')
 }
@@ -431,6 +434,20 @@ function Layout({
                 <nav className="layout_community_tabs layout_place_tabs" aria-label="장소 카테고리">
                   {placeTabs.map((tab) => {
                     const categoryValue = new URLSearchParams(tab.to.split('?')[1]).get('category') ?? 'all'
+                    const isDisabledTab = !enabledPlaceCategories.has(categoryValue)
+
+                    if (isDisabledTab) {
+                      return (
+                        <button
+                          key={tab.to}
+                          type="button"
+                          className="layout_community_tab is_disabled"
+                          disabled
+                        >
+                          {tab.label}
+                        </button>
+                      )
+                    }
 
                     return (
                       <NavLink
@@ -497,6 +514,8 @@ function Layout({
                       const effectiveSub = placeSubTabs.some((t) => t.value === placeSubParam)
                         ? placeSubParam
                         : (placeDefaultSubByCategory[placeCategoryParam] ?? 'all')
+                      const isDisabledTab =
+                        placeCategoryParam === 'care' && !enabledPlaceCareSubTabs.has(tab.value)
                       const isActive =
                         placeCategoryParam === 'all'
                           ? tab.value === 'all'
@@ -506,8 +525,9 @@ function Layout({
                         <Button
                           key={tab.value}
                           type="button"
-                          className={`s_white_radius_btn${isActive ? ' layout_community_subtab_active' : ''}`}
-                          onClick={() => {
+                          className={`s_white_radius_btn${isActive ? ' layout_community_subtab_active' : ''}${isDisabledTab ? ' is_disabled' : ''}`}
+                          disabled={isDisabledTab}
+                          onClick={isDisabledTab ? undefined : () => {
                             navigate(buildPlaceSubTabTo(tab.value))
                             setIsPlaceSortOpen(false)
                           }}

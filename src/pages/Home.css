@@ -270,7 +270,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 18px;
   margin-inline: 16px;
   padding: 16px 16px;
@@ -293,7 +293,7 @@
 .home_ranking_banner_copy {
   display: grid;
   min-width: 0;
-  flex: 0 1 auto;
+  flex: 1 1 auto;
   max-width: min(100%, 520px);
   gap: 2px;
   font-family: 'Pretendard', sans-serif;
@@ -306,6 +306,7 @@
 .home_ranking_banner_copy p {
   margin: 0;
   min-width: 0;
+  min-height: 22px;
   color: #111111;
   font-family: var(--app-font-family);
   font-size: 16px;
@@ -335,6 +336,7 @@
   height: auto;
   flex: 0 0 40px;
   object-fit: contain;
+  align-self: center;
 }
 
 .home_ranking_btn {

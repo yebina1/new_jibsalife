@@ -1,4 +1,5 @@
 import { Star } from 'lucide-react'
+import { getOperatingState } from '../pages/health/HealthHospitalData'
 import LikeButton from './LikeButton'
 
 export type HospitalCardItem = {
@@ -21,22 +22,20 @@ type HospitalCardListProps = {
   onSelect?: (hospitalId: string) => void
 }
 
-function toMinutes(time: string) {
-  const [hours, minutes] = time.split(':').map(Number)
-  return hours * 60 + minutes
-}
-
 function getClinicStatus(
   openTime: string,
   closeTime: string,
   statusLabelType: HospitalCardItem['statusLabelType'] = 'hospital',
 ) {
-  const now = new Date()
-  const currentMinutes = now.getHours() * 60 + now.getMinutes()
-  const openMinutes = toMinutes(openTime)
-  const closeMinutes = toMinutes(closeTime)
-  const isOpen = currentMinutes >= openMinutes && currentMinutes < closeMinutes
-  const label = statusLabelType === 'business' ? (isOpen ? '영업중' : '영업 마감') : isOpen ? '진료 중' : '진료 마감'
+  const { isOpen } = getOperatingState(openTime, closeTime)
+  const label =
+    statusLabelType === 'business'
+      ? isOpen
+        ? '영업중'
+        : '영업 마감'
+      : isOpen
+        ? '진료 중'
+        : '진료 마감'
 
   return {
     label,

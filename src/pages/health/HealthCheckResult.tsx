@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router'
 import './Health.css'
 import './HealthCheckResult.css'
@@ -6,6 +6,7 @@ import PageHeader from '../../components/PageHeader'
 import BackButton from '../../components/html/BackButton'
 import HeaderIcon from '../../components/HeaderIcon'
 import Button from '../../components/html/Button'
+import { TextType } from '../../components/effect/TextType'
 import dogSittingImage from '../../img/dog_sitting.png'
 import mealIcon from '../../img/icon_meal.png'
 import poopIcon from '../../img/icon_poop.png'
@@ -13,7 +14,7 @@ import healthShieldIcon from '../../img/health_shield.png'
 import hospital3dImage from '../../img/hospital_3d.png'
 import consult3dImage from '../../img/consult_3d.png'
 import { HEALTH_REPORT_COLLECTING_LABEL, HEALTH_REPORT_OBSERVATION_LABEL } from '../../constants/healthLabels'
-import { readPetProfiles, readSelectedPetProfileId } from '../../utils/petProfiles'
+import { readPetProfiles, readSelectedPetProfileId, writePetProfiles } from '../../utils/petProfiles'
 import { calculateHealthResult, readStoredHealthResultInput } from '../../utils/healthResultPolicy'
 import {
   readMissionHistoryRecordsWithDefaults,
@@ -23,13 +24,35 @@ import {
 import { readMissionActivityRecords } from '../../utils/missionActivityRecords'
 import { markHealthReportViewed } from '../../utils/challengeStatus'
 
-const activityMinutes = [48, 55, 46, 50, 44, 56, 38] as const
+const DEFAULT_ACTIVITY_MINUTES = [48, 55, 46, 50, 44, 56, 38] as const
+const HEALTHY_ACTIVITY_MINUTES = [33, 35, 34, 36, 35, 37, 35] as const
+const HEALTHY_RESULT_INPUT = {
+  stoolStatus: 'stable',
+  activityStatus: 'stable',
+  mealStatus: 'stable',
+  weightStatus: 'stable',
+  symptomStatus: 'stable',
+  photoStatus: 'stable',
+} as const
 const CHART_MAX = 60
-const hospitalGuideItems = ['2일 이상 지속', '활동량 급감', '식사량 급감', '구토, 설사 반복']
-const hospitalGuideColumns = [
-  [hospitalGuideItems[0], hospitalGuideItems[2]],
-  [hospitalGuideItems[1], hospitalGuideItems[3]],
+const HOSPITAL_GUIDE_ITEMS = [
+  '2일 이상 지속',
+  '활동량 급감',
+  '식사량 급감',
+  '구토, 설사 반복',
 ] as const
+
+function getBadgeClassName(label: string) {
+  if (label === '건강 양호' || label === '정상') {
+    return 'hcr_badge hcr_badge_positive'
+  }
+
+  if (label === HEALTH_REPORT_OBSERVATION_LABEL) {
+    return 'hcr_badge hcr_badge_caution'
+  }
+
+  return 'hcr_badge'
+}
 
 function getTodayDateKey() {
   const today = new Date()
@@ -65,6 +88,14 @@ function countRecordedDays(records: MissionHistoryRecord[]) {
 
 function HealthCheckResult() {
   const navigate = useNavigate()
+  const pets = useMemo(() => readPetProfiles(), [])
+  const selectedPetId = useMemo(() => readSelectedPetProfileId(), [])
+  const selectedPet = useMemo(
+    () => pets.find((pet) => pet.id === selectedPetId) ?? pets[0] ?? null,
+    [pets, selectedPetId],
+  )
+  const isPungpungi = selectedPet?.id === 2
+  const activityMinutes = isPungpungi ? HEALTHY_ACTIVITY_MINUTES : DEFAULT_ACTIVITY_MINUTES
 
   const activityData = useMemo(() => {
     const today = new Date()
@@ -80,18 +111,15 @@ function HealthCheckResult() {
         isToday: dayOffset === 0,
       }
     })
-  }, [])
+  }, [activityMinutes])
 
-  const pets = useMemo(() => readPetProfiles(), [])
-  const selectedPetId = useMemo(() => readSelectedPetProfileId(), [])
-  const selectedPet = useMemo(
-    () => pets.find((pet) => pet.id === selectedPetId) ?? pets[0] ?? null,
-    [pets, selectedPetId],
-  )
   const petName = selectedPet?.name ?? '반려동물'
   const petImage = selectedPet?.image || dogSittingImage
 
-  const result = useMemo(() => calculateHealthResult(readStoredHealthResultInput()), [])
+  const result = useMemo(
+    () => calculateHealthResult(isPungpungi ? HEALTHY_RESULT_INPUT : readStoredHealthResultInput()),
+    [isPungpungi],
+  )
   const isPositive =
     result.status.tone === 'excellent' ||
     result.status.tone === 'good' ||
@@ -118,17 +146,39 @@ function HealthCheckResult() {
     markHealthReportViewed()
   }, [])
 
-  const visibleStatusCards = [
-    hasMealRecordToday ? { key: 'meal', image: mealIcon, label: '식욕' } : null,
-    hasPoopRecordToday ? { key: 'poop', image: poopIcon, label: '배변·배뇨' } : null,
-  ].filter(Boolean) as Array<{ key: string; image: string; label: string }>
-
   const statusCards = isCollectingReport
-    ? visibleStatusCards
+    ? [
+        hasMealRecordToday ? { key: 'meal', image: mealIcon, label: '식욕' } : null,
+        hasPoopRecordToday ? { key: 'poop', image: poopIcon, label: '배변' } : null,
+      ].filter(Boolean) as Array<{ key: string; image: string; label: string }>
     : [
         { key: 'meal', image: mealIcon, label: '식욕' },
         { key: 'poop', image: poopIcon, label: '배변' },
       ]
+
+  const resultBadgeLabel =
+    isCollectingReport
+      ? HEALTH_REPORT_COLLECTING_LABEL
+      : (isPungpungi ? '건강 양호' : HEALTH_REPORT_OBSERVATION_LABEL)
+  const chartSubtitle =
+    isPungpungi
+      ? '평소 활동량이 안정적으로 유지되고 있어요'
+      : '평소보다 15% 감소'
+
+  useEffect(() => {
+    if (!selectedPet) return
+
+    writePetProfiles(
+      pets.map((pet) => (
+        pet.id === selectedPet.id
+          ? {
+              ...pet,
+              healthStatus: resultBadgeLabel,
+            }
+          : pet
+      )),
+    )
+  }, [pets, resultBadgeLabel, selectedPet])
 
   return (
     <>
@@ -154,15 +204,29 @@ function HealthCheckResult() {
               <>
                 <strong>{petName}</strong>의 기록이 쌓일수록
                 <br />
-                더 정확한 상태를 알 수 있어요.
+                더 정확한 상태를 볼 수 있어요
               </>
             ) : (
               <>
                 <strong>{petName}</strong>의 상태는
                 <br />
-                <span className="hcr_pet_msg_emphasis">활동량이 평소보다 줄었어요.</span>
-                <br />
-                조금 더 살펴봐 주세요.
+                {isPungpungi ? (
+                  <>
+                    <span className="hcr_pet_msg_emphasis">
+                      <TextType text="건강 상태가 양호해요." typingSpeed={90} pauseDuration={2200} />
+                    </span>
+                    <br />
+                    지금처럼 꾸준히 기록해 주세요
+                  </>
+                ) : (
+                  <>
+                    <span className="hcr_pet_msg_emphasis">
+                      <TextType text="활동량이 평소보다 줄었어요." typingSpeed={90} pauseDuration={2200} />
+                    </span>
+                    <br />
+                    조금 더 살펴봐 주세요.
+                  </>
+                )}
               </>
             )}
           </p>
@@ -177,10 +241,10 @@ function HealthCheckResult() {
           <div className="hcr_chart_header">
             <div>
               <h2 className="hcr_chart_title">최근 7일 활동량</h2>
-              {!isCollectingReport ? <p className="hcr_chart_subtitle">평균보다 15% 감소</p> : null}
+              {!isCollectingReport ? <p className="hcr_chart_subtitle">{chartSubtitle}</p> : null}
             </div>
-            <span className={`hcr_badge${isCollectingReport ? '' : ' hcr_badge_observation'}`}>
-              {isCollectingReport ? HEALTH_REPORT_COLLECTING_LABEL : HEALTH_REPORT_OBSERVATION_LABEL}
+            <span className={getBadgeClassName(resultBadgeLabel)}>
+              {resultBadgeLabel}
             </span>
           </div>
           <div className="hcr_chart" aria-hidden="true">
@@ -198,14 +262,14 @@ function HealthCheckResult() {
                 <span />
               </div>
               <div className="hcr_chart_bars">
-                {activityData.map((item) => (
+                {activityData.map((item, index) => (
                   <div key={item.label} className="hcr_chart_bar_col">
                     <div
                       className={`hcr_chart_bar${item.isToday ? ' is_today' : ''}${isCollectingReport && !item.isToday ? ' is_hidden' : ''}`}
                       style={
                         {
                           '--bar-height': `${(item.minutes / CHART_MAX) * 100}%`,
-                          '--bar-delay': `${item.isToday ? 220 : activityData.indexOf(item) * 70}ms`,
+                          '--bar-delay': `${item.isToday ? 220 : index * 70}ms`,
                         } as React.CSSProperties
                       }
                     />
@@ -224,46 +288,41 @@ function HealthCheckResult() {
               </div>
             </div>
           </div>
+
+          {statusCards.length > 0 ? (
+            <div
+              className={`hcr_status_pair_card${
+                isCollectingReport && statusCards.length === 1 ? ' is_single' : ''
+              }`}
+            >
+              {statusCards.map((item) => (
+                <div key={item.key} className="hcr_status_pair_group">
+                  <div className="hcr_status_pair_item">
+                    <img src={item.image} alt="" aria-hidden="true" className="hcr_status_pair_img" />
+                    <strong className="hcr_status_pair_label">{item.label}</strong>
+                    <span className={getBadgeClassName(isCollectingReport ? '기록중' : '정상')}>
+                      {isCollectingReport ? '기록중' : '정상'}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : null}
         </section>
 
-        {statusCards.length > 0 ? (
-          <section
-            className={`hcr_card hcr_status_pair_card${
-              isCollectingReport && statusCards.length === 1 ? ' is_single' : ''
-            }`}
-          >
-            {statusCards.map((item, index) => (
-              <>
-                <div key={item.key} className="hcr_status_pair_item">
-                  <img src={item.image} alt="" aria-hidden="true" className="hcr_status_pair_img" />
-                  <strong className="hcr_status_pair_label">{item.label}</strong>
-                  <span className="hcr_badge">{isCollectingReport ? '기록중' : '정상'}</span>
-                </div>
-                {index < statusCards.length - 1 ? (
-                  <div key={`${item.key}-divider`} className="hcr_status_pair_divider" aria-hidden="true" />
-                ) : null}
-              </>
-            ))}
-          </section>
-        ) : null}
-
-        {!isCollectingReport ? (
+        {!isCollectingReport && !isPungpungi ? (
           <section className="hcr_card hcr_guide_card">
             <div className="hcr_guide_header">
               <img src={healthShieldIcon} alt="" aria-hidden="true" className="hcr_guide_icon_img" />
               <h2 className="hcr_guide_title">병원 방문 권장 기준</h2>
             </div>
             <div className="hcr_guide_grid">
-              {hospitalGuideColumns.map((column, columnIndex) => (
-                <div key={`guide-column-${columnIndex}`} className="hcr_guide_column">
-                  {column.map((item) => (
-                    <div key={item} className="hcr_guide_item">
-                      <i className="bx bxs-check-circle hcr_guide_check" aria-hidden="true" />
-                      <span className={item === '활동량 급감' ? 'hcr_guide_warning_text' : undefined}>
-                        {item}
-                      </span>
-                    </div>
-                  ))}
+              {HOSPITAL_GUIDE_ITEMS.map((item) => (
+                <div key={item} className="hcr_guide_item">
+                  <i className="bx bxs-check-circle hcr_guide_check" aria-hidden="true" />
+                  <span className={item === '활동량 급감' ? 'hcr_guide_warning_text' : undefined}>
+                    {item}
+                  </span>
                 </div>
               ))}
             </div>
@@ -282,7 +341,11 @@ function HealthCheckResult() {
               <span className="hcr_action_desc">내 주변 병원 검색<br />및 정보 확인</span>
             </div>
           </button>
-          <button type="button" className="hcr_action hcr_action_vet" disabled>
+          <button
+            type="button"
+            className="hcr_action hcr_action_vet"
+            onClick={() => navigate('/health/vet-chat')}
+          >
             <img src={consult3dImage} alt="" aria-hidden="true" className="hcr_action_img" />
             <div className="hcr_action_content">
               <span className="hcr_action_title">수의사 상담 &gt;</span>
@@ -292,9 +355,9 @@ function HealthCheckResult() {
         </div>
 
         <p className="hcr_notice">
-          본 AI 결과는 참고용이며
+          본 AI 결과는 참고용이며,
           <br />
-          정확한 진단은 수의사 상담을 통해 확인해주세요.
+          정확한 진단은 수의사 상담을 통해 확인해 주세요.
         </p>
       </main>
     </>

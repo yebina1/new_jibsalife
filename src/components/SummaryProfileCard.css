@@ -19,6 +19,43 @@
   overflow: hidden;
 }
 
+.summary_profile_card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: 12px;
+  background: conic-gradient(
+    from var(--signup-border-angle, 0deg),
+    transparent 0%,
+    rgba(109, 89, 248, 0.24) 8%,
+    rgba(109, 89, 248, 0.72) 15%,
+    rgba(109, 89, 248, 0.24) 22%,
+    transparent 30%,
+    transparent 58%,
+    rgba(109, 89, 248, 0.22) 66%,
+    rgba(109, 89, 248, 0.58) 73%,
+    rgba(109, 89, 248, 0.22) 80%,
+    transparent 88%,
+    transparent 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  animation: signup_border_spin 4.2s linear infinite;
+}
+
+.summary_profile_card.is_active::after {
+  opacity: 1;
+}
+
 .summary_profile_card::before {
   position: absolute;
   inset: 0;
@@ -180,16 +217,47 @@
 
 .summary_profile_card_edit {
   display: inline-flex;
-  width: 16px;
-  height: 16px;
-  flex: 0 0 16px;
+  position: relative;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
   align-items: center;
   justify-content: center;
   padding: 0;
-  border: 0;
-  background: transparent;
+  border: 1px solid rgba(228, 230, 244, 0.92);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(245, 246, 255, 0.88) 100%);
+  box-shadow:
+    0 8px 20px rgba(128, 135, 178, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
   color: #111111;
   cursor: pointer;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    border-color 160ms ease;
+}
+
+.summary_profile_card_edit::before {
+  position: absolute;
+  inset: 1px;
+  border-radius: 11px;
+  border: 1px solid rgba(255, 255, 255, 0.86);
+  pointer-events: none;
+  content: '';
+}
+
+.summary_profile_card_edit:hover {
+  transform: translateY(-1px);
+  border-color: rgba(215, 219, 240, 0.98);
+  box-shadow:
+    0 10px 22px rgba(128, 135, 178, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+.summary_profile_card_edit:focus-visible {
+  outline: 2px solid rgba(122, 87, 255, 0.22);
+  outline-offset: 2px;
 }
 
 .summary_profile_card_edit svg {
@@ -218,6 +286,18 @@
   line-height: 1;
   cursor: pointer;
   animation: summary_profile_card_guide_breathe 1.8s ease-in-out infinite;
+}
+
+.summary_profile_card_guide:disabled {
+  color: #b0b0b8;
+  cursor: default;
+  pointer-events: none;
+  animation: none;
+}
+
+.summary_profile_card_guide:disabled .chevron_icon {
+  color: #b0b0b8;
+  animation: none;
 }
 
 .summary_profile_card_guide .chevron_icon {

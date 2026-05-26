@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router'
 import './Place.css'
 import '../health/HealthHospitalRecommend.css'
@@ -9,6 +9,14 @@ import BackButton from '../../components/html/BackButton'
 import Button from '../../components/html/Button'
 import { showStateBarMessage } from '../../utils/stateBarMessage'
 import { hospitalProfiles, sortHospitalsByStatusAndDistance } from '../health/HealthHospitalData'
+import placeCafeImage from '../../img/place/place_cafe.png'
+import placeGroomingImage from '../../img/place/place_grooming.png'
+import placeHotelCareImage from '../../img/place/place_hotelcare.png'
+import placePensionImage from '../../img/place/place_pension.png'
+import placeRestaurantImage from '../../img/place/place_restaurant.png'
+import placeSuppliesImage from '../../img/place/place_supplies.png'
+import placeTrainingImage from '../../img/place/place_training.png'
+import placeWalkCourseImage from '../../img/place/place_walkcourse.png'
 
 type PlaceCategory = 'all' | 'care' | 'outing' | 'travel' | 'shopping'
 type PlaceSubcategory =
@@ -51,6 +59,19 @@ const hospitalPlaceItems: PlaceListItem[] = hospitalProfiles.map((hospital, inde
   popularity: 98 - index * 4,
   routePath: `/place/hospitals/${hospital.id}`,
 }))
+
+const placeImagesBySubcategory: Partial<Record<Exclude<PlaceSubcategory, 'all' | 'hospital'>, string>> = {
+  grooming: placeGroomingImage,
+  training: placeTrainingImage,
+  'hotel-care': placeHotelCareImage,
+  cafe: placeCafeImage,
+  restaurant: placeRestaurantImage,
+  'walk-course': placeWalkCourseImage,
+  pension: placePensionImage,
+  supplies: placeSuppliesImage,
+  food: placeSuppliesImage,
+  clothing: placeSuppliesImage,
+}
 
 const otherPlaceItems: PlaceListItem[] = [
   {
@@ -344,6 +365,10 @@ const placeItems: PlaceListItem[] = [
   ...hospitalPlaceItems,
   ...otherPlaceItems.map((item) => ({
     ...item,
+    image:
+      item.subcategory === 'hospital'
+        ? item.image
+        : (placeImagesBySubcategory[item.subcategory] ?? item.image),
     statusLabelType: 'business' as const,
   })),
 ]
@@ -371,6 +396,23 @@ function Place() {
   const selectedCategory = (searchParams.get('category') ?? 'all') as PlaceCategory
   const selectedSub = (searchParams.get('sub') ?? 'all') as PlaceSubcategory
   const selectedSort = (searchParams.get('sort') ?? 'popular') as PlaceSort
+
+  useEffect(() => {
+    const isAllowedCategory = selectedCategory === 'all' || selectedCategory === 'care'
+    const isAllowedSub =
+      selectedCategory === 'all'
+        ? selectedSub === 'all'
+        : selectedSub === 'all' || selectedSub === 'hospital'
+
+    if (isAllowedCategory && isAllowedSub) return
+
+    const fallbackCategory = isAllowedCategory ? selectedCategory : 'all'
+    const fallbackSub = fallbackCategory === 'care' ? 'hospital' : 'all'
+
+    navigate(`/place?category=${fallbackCategory}&sub=${fallbackSub}&sort=${selectedSort}`, {
+      replace: true,
+    })
+  }, [navigate, selectedCategory, selectedSort, selectedSub])
 
   const visiblePlaces = useMemo(() => {
     let filtered = [...placeItems]

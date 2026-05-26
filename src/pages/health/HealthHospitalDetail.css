@@ -9,14 +9,24 @@
   margin-inline: calc(var(--layout-inline-padding, 16px) * -1);
 }
 
+.health_hospital_detail_image_frame {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 420px;
+  max-height: 420px;
+  background: #ffffff;
+}
+
 .health_hospital_detail_image {
   display: block;
   width: 100%;
-  height: auto;
-  max-height: 420px;
+  height: 100%;
   border-radius: 0;
-  object-fit: contain;
-  background: #f6f4ef;
+  object-fit: cover;
+  object-position: center;
+  background: transparent;
+  transform: scale(1.04);
 }
 
 .health_hospital_detail_intro {
@@ -166,8 +176,13 @@
 }
 
 @media (max-width: 420px) {
-  .health_hospital_detail_image {
+  .health_hospital_detail_image_frame {
+    height: 280px;
     max-height: 280px;
+  }
+
+  .health_hospital_detail_image {
+    height: 100%;
   }
 
   .health_hospital_detail_title_wrap h1 {
